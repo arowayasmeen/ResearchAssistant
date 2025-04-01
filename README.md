@@ -5,3 +5,14 @@ Users input a research prompt and upload relevant documents, while an advanced L
 state-of-the-art literature and performs gap analysis to pinpoint novel research directions. The system then 
 synthesizes bullet points, summaries, and visualizations to generate an initial LaTeX draft, which is further refined 
 for enhanced clarity, persuasiveness, and compliance with publication formats.
+
+
+## Create a virtual environment
+```
+conda create -n researchassistant python=3.12
+```
+## Set up environment
+```
+pip install -r requirements.txt
+```
+
