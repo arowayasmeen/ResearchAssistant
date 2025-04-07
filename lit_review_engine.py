@@ -4,12 +4,12 @@ from dotenv import load_dotenv
 load_dotenv()
 SERPAPI_KEY = os.getenv("SERPAPI_KEY")
 
-from serpapi import GoogleSearch
+from serpapi import GoogleScholarSearch
 from urllib.parse import urlsplit, parse_qsl
 
 def googlescholar_results(params):
-    # print("extracting organic results..")
-    search = GoogleSearch(params)
+    """This function takes a dictionary of parameters and returns a list of dictionaries containing the results from Google Scholar."""
+    search = GoogleScholarSearch(params)
 
     googlescholar_results_data = []
 
@@ -19,8 +19,6 @@ def googlescholar_results(params):
 
     while loop_is_true:
         results = search.get_dict()
-
-        # print(f"Currently extracting page number {results['serpapi_pagination']['current']}..")
 
         for result in results["organic_results"]:
             position = result["position"]
@@ -78,7 +76,7 @@ def googlescholar_results(params):
             })
             count += 1
 
-        if "next" in results.get("serpapi_pagination", {}) and count < 10:
+        if "next" in results.get("serpapi_pagination", {}) and count < 100:
             search.params_dict.update(dict(parse_qsl(urlsplit(results["serpapi_pagination"]["next"]).query)))
         else:
             loop_is_true = False

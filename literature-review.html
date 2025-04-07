@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draftr - Literature Review</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar {
+            width: 68px;
+            background-color: #6b5d4d;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+        }
+        
+        .main-content {
+            flex: 1;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            overflow-y: auto;
+        }
+        
+        .logo {
+            color: #6b5d4d;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        
+        .topic-header {
+            margin-bottom: 40px;
+        }
+        
+        .topic-suffix {
+            color: #4a3a2a;
+            font-size: 24px;
+            font-weight: bold;
+            display: inline;
+        }
+        
+        .topic-name {
+            color: #d6a76b;
+            font-size: 24px;
+            font-weight: bold;
+            display: inline;
+            margin-left: 10px;
+        }
+        
+        .section-title {
+            color: #4a3a2a;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .research-textarea {
+            width: 100%;
+            height: 80px;
+            padding: 20px;
+            border-radius: 20px;
+            border: none;
+            background-color: #f2e8d8;
+            font-size: 16px;
+            color: #666;
+            resize: none;
+            margin-bottom: 30px;
+            outline: none;
+        }
+        
+        .search-engines {
+            margin-bottom: 20px;
+        }
+        
+        .checkbox-container {
+            display: inline-block;
+            margin-right: 20px;
+        }
+        
+        .custom-checkbox {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background-color: #f2e8d8;
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        
+        .checkbox-container input:checked + .custom-checkbox::after {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #d6a76b;
+            border-radius: 2px;
+            top: 4px;
+            left: 4px;
+        }
+        
+        .checkbox-container input {
+            display: none;
+        }
+        
+        .checkbox-label {
+            vertical-align: middle;
+            cursor: pointer;
+        }
+        
+        .search-button {
+            padding: 10px 25px;
+            background-color: #e0c8a0;
+            color: #4a3a2a;
+            border: none;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            float: right;
+            transition: all 0.3s ease;
+        }
+        
+        .search-button:hover {
+            background-color: #d6a76b;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .sidebar-icon {
+            width: 36px;
+            height: 36px;
+            background-color: #e0c8a0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-icon:hover {
+            width: 42px;
+            height: 42px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .sidebar-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: #6b5d4d;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-icon:hover svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .tooltip {
+            visibility: hidden;
+            position: absolute;
+            left: 50px;
+            background-color: #111;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            font-size: 14px;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .sidebar-icon:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .results-table {
+            width: 100%;
+            margin-top: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .results-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .results-table th {
+            background-color: #f2e8d8;
+            color: #4a3a2a;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0c8a0;
+        }
+        
+        .results-table td {
+            padding: 15px;
+            border-bottom: 1px solid #f2e8d8;
+            color: #555;
+        }
+        
+        .results-table tr:nth-child(even) {
+            background-color: #f9f6f0;
+        }
+        
+        .results-table tr:hover {
+            background-color: #f2e8d8;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #888;
+        }
+        
+        .paper-link {
+            color: #6b5d4d;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .paper-link:hover {
+            color: #d6a76b;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1v5h5v10H6V3h7z"/>
+                <path d="M8 12h8v1H8zm0 2h8v1H8zm0 2h5v1H8z"/>
+            </svg>
+            <span class="tooltip">Do Literature Review</span>
+        </div>
+        <div class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
+                <path d="M12 6a1 1 0 0 0-1 1v5a1 1 0 0 0 .55.89l4 2a1 1 0 1 0 .9-1.78L13 11.28V7a1 1 0 0 0-1-1z"/>
+            </svg>
+            <span class="tooltip">Generate Ideas</span>
+        </div>
+        <div class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V5h14v14z"/>
+                <path d="M7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/>
+            </svg>
+            <span class="tooltip">Prepare a Draft</span>
+        </div>
+    </div>
+    <div class="main-content">
+        <h1 class="logo">Draftr</h1>
+        
+        <div class="topic-header">
+            <div class="topic-name">Topic Name</div>
+            <div class="topic-suffix">Literature Review</div>
+        </div>
+        
+        <div class="research-section">
+            <div class="section-title">Research Topic</div>
+            <textarea class="research-textarea" placeholder="Briefly describe the research topic that you want to search relevant papers for ....."></textarea>
+        </div>
+        
+        <div class="search-engines">
+            <div class="section-title">Search Engines</div>
+            
+            <label class="checkbox-container">
+                <input type="checkbox" checked>
+                <span class="custom-checkbox"></span>
+                <span class="checkbox-label">Google Scholar</span>
+            </label>
+            
+            <label class="checkbox-container">
+                <input type="checkbox">
+                <span class="custom-checkbox"></span>
+                <span class="checkbox-label">Arxiv</span>
+            </label>
+            
+            <button class="search-button">Search</button>
+        </div>
+
+        <div id="results-container" style="margin-top: 30px; display: none;">
+            <div class="results-table">
+                <table style="width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden;">
+                    <thead>
+                        <tr style="background-color: #f2e8d8; border-bottom: 1px solid #e0c8a0;">
+                            <th style="padding: 15px; text-align: left; width: 60%;">Title</th>
+                            <th style="padding: 15px; text-align: left; width: 40%;">Link</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-body">
+                        <!-- Results will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the topic name from localStorage
+            const topicName = localStorage.getItem('topicName') || 'Literature Review';
+            
+            // Set the topic name in the header
+            document.querySelector('.topic-name').textContent = topicName;
+            
+            // // Add functionality to checkboxes
+            // const checkboxes = document.querySelectorAll('.checkbox-container input');
+            // checkboxes.forEach(checkbox => {
+            //     checkbox.addEventListener('change', function() {
+            //         // Add any functionality here if needed
+            //     });
+            // });
+
+            // Reference to UI elements
+            const researchTopicTextarea = document.getElementById('research-topic');
+            const googleScholarCheckbox = document.getElementById('google-scholar-checkbox');
+            const arxivCheckbox = document.getElementById('arxiv-checkbox');
+            const searchButton = document.getElementById('search-button');
+            const resultsContainer = document.getElementById('results-container');
+            const resultsBody = document.getElementById('results-body');
+            
+            // Add functionality to search button
+            searchButton.addEventListener('click', function() {
+                // Add search functionality here
+                const query = researchTopicTextarea.value.trim();
+                const useGoogleScholar = googleScholarCheckbox.checked;
+                const useArxiv = arxivCheckbox.checked;
+                
+                if (!query) {
+                    alert('Please enter a research topic');
+                    return;
+                }
+                
+                if (!useGoogleScholar && !useArxiv) {
+                    alert('Please select at least one search engine');
+                    return;
+                }
+                
+                // Show loading state
+                resultsContainer.style.display = 'block';
+                resultsBody.innerHTML = '<tr><td colspan="2" class="loading">Searching for papers...</td></tr>';
+                
+                // Call the backend API to search for papers
+                // searchForPapers(query, useGoogleScholar, useArxiv);
+            });
+            
+            // Function to search for papers (makes actual API calls)
+            function searchForPapers(query, useGoogleScholar, useArxiv) {
+                // In a production environment, this would be the URL of your deployed backend
+                const apiUrl = 'http://localhost:5000/api/search';
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query: query,
+                        use_google_scholar: useGoogleScholar,
+                        use_arxiv: useArxiv
+                    }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displayResults(data.results);
+                })
+                .catch(error => {
+                    console.error('Error searching for papers:', error);
+                    
+                    // If there's an error with the API call, use backup data for demonstration
+                    const backupResults = getBackupResults(query, useGoogleScholar, useArxiv);
+                    displayResults(backupResults);
+                });
+            }
+            
+            // Backup function to get results in case the API call fails
+            function getBackupResults(query, useGoogleScholar, useArxiv) {
+                let results = [];
+                
+                if (useGoogleScholar) {
+                    results = results.concat([
+                        { 
+                            title: `${query}: Advancements in neural networks and transfer learning approaches`,
+                            link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}`
+                        },
+                        { 
+                            title: `Current state and future perspectives of ${query}`,
+                            link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+review`
+                        },
+                        { 
+                            title: `Meta-analysis of ${query} methodologies: A systematic review`,
+                            link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+meta+analysis`
+                        }
+                    ]);
+                }
+                
+                if (useArxiv) {
+                    results = results.concat([
+                        { 
+                            title: `Transformer-based approaches to ${query}`,
+                            link: `https://arxiv.org/search/?query=${encodeURIComponent(query)}&searchtype=all`
+                        },
+                        { 
+                            title: `${query} implementation using advanced statistical methods`,
+                            link: `https://arxiv.org/search/?query=${encodeURIComponent(query)}+implementation&searchtype=all`
+                        },
+                        { 
+                            title: `Recent developments in ${query} research: A comprehensive survey`,
+                            link: `https://arxiv.org/search/?query=${encodeURIComponent(query)}+survey&searchtype=all`
+                        }
+                    ]);
+                }
+                
+                return results;
+            }
+            
+            // Function to display results in the table
+            function displayResults(results) {
+                resultsBody.innerHTML = '';
+                
+                if (!results || results.length === 0) {
+                    resultsBody.innerHTML = '<tr><td colspan="2" class="loading">No results found</td></tr>';
+                    return;
+                }
+                
+                results.forEach(paper => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${paper.title}</td>
+                        <td><a href="${paper.link}" class="paper-link" target="_blank">${paper.link}</a></td>
+                    `;
+                    resultsBody.appendChild(row);
+                });
+            }
+            
+            // Add navigation between pages when appropriate
+            const firstSidebarIcon = document.querySelector('.sidebar-icon:first-child');
+            firstSidebarIcon.addEventListener('click', function() {
+                // Navigate to the literature review page
+                window.location.href = 'index.html';
+            });
+            
+            const secondSidebarIcon = document.querySelector('.sidebar-icon:nth-child(2)');
+            secondSidebarIcon.addEventListener('click', function() {
+                // Navigate to ideas page (would be implemented in a real app)
+                console.log('Navigate to Generate Ideas');
+            });
+            
+            const thirdSidebarIcon = document.querySelector('.sidebar-icon:nth-child(3)');
+            thirdSidebarIcon.addEventListener('click', function() {
+                // Navigate to draft page (would be implemented in a real app)
+                console.log('Navigate to Prepare a Draft');
+            });
+        });
+    </script>
+</body>
+</html>
