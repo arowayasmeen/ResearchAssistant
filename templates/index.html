@@ -1,0 +1,16 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<section class="fade-up">
+    <h1 class="text-4xl font-bold mb-6">Welcome to Your Website</h1>
+    
+    <div class="glass-card max-w-xl mx-auto p-6 rounded-lg">
+        <p class="mb-4">This is the home page of your Flask application.</p>
+        <button onclick="showToast('Welcome to the site!', 'success')" 
+                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+            Show Welcome Message
+        </button>
+    </div>
+</section>
+{% endblock %}

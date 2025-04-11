@@ -1,0 +1,147 @@
+:root {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 3.9%;
+  --primary: 0 0% 9%;
+  --primary-foreground: 0 0% 98%;
+  --border: 0 0% 89.8%;
+  --input: 0 0% 89.8%;
+  --ring: 0 0% 3.9%;
+}
+
+:root.dark {
+  --background: 0 0% 10%;
+  --foreground: 0 0% 98%;
+  --primary: 0 0% 95%;
+  --primary-foreground: 0 0% 9%;
+  --border: 0 0% 20%;
+  --input: 0 0% 20%;
+  --ring: 0 0% 80%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-feature-settings: "rlig" 1, "calt" 1;
+  font-family: 'Inter', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em rgba(100, 108, 255, 0.67));
+}
+
+.logo.flask:hover {
+  filter: drop-shadow(0 0 2em rgba(65, 105, 225, 0.67));
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+/* Light mode glass card */
+.glass-card {
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Dark mode glass card */
+.dark .glass-card {
+  background-color: rgba(30, 30, 30, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(80, 80, 80, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode input styles */
+.dark input, .dark textarea, .dark select {
+  background-color: rgba(40, 40, 40, 0.7) !important;
+  color: hsl(var(--foreground));
+  border-color: rgba(80, 80, 80, 0.5);
+}
+
+/* Toggle button styling */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  border-radius: 50%;
+  background-color: rgba(200, 200, 200, 0.3);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  transition: background-color 0.3s ease;
+}
+
+.dark .theme-toggle {
+  background-color: rgba(50, 50, 50, 0.5);
+  border: 1px solid rgba(80, 80, 80, 0.3);
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+  stroke: hsl(var(--foreground));
+}
+
+/* Button hover effects */
+.dark button.bg-blue-600 {
+  background-color: #3b82f6;
+}
+
+.dark button.bg-blue-600:hover {
+  background-color: #2563eb;
+}
+
+.dark button.bg-gray-200 {
+  background-color: #374151;
+  color: #e5e7eb;
+}
+
+.dark button.bg-gray-200:hover {
+  background-color: #4b5563;
+}
+
+.dark button.bg-gray-300 {
+  background-color: #4b5563;
+  color: #e5e7eb;
+}
+
+.dark button.bg-gray-300:hover {
+  background-color: #6b7280;
+}

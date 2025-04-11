@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="fade-up">
+    <h1 class="text-4xl font-bold mb-6">Research Papers</h1>
+    
+    <!-- Top toolbar/navigation bar -->
+    <div class="glass-card mb-4 p-2 rounded-lg flex items-center justify-between">
+        <div class="flex space-x-4">
+            <button class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded">File</button>
+            <button class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded">Edit</button>
+            <button class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded">View</button>
+            <button class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded">Format</button>
+        </div>
+        <div>
+            <button class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+        </div>
+    </div>
+    
+    <!-- Paper editing area -->
+    <div class="glass-card max-w-4xl mx-auto p-6 rounded-lg">
+        <!-- Title input -->
+        <input type="text" 
+               placeholder="Paper Title" 
+               class="w-full mb-4 p-2 text-2xl font-bold bg-white/60 border rounded"
+               value="Untitled Research Paper">
+        
+        <!-- Author input -->
+        <input type="text" 
+               placeholder="Author Name(s)" 
+               class="w-full mb-6 p-2 bg-white/60 border rounded"
+               value="Author Name">
+        
+        <!-- Abstract section -->
+        <div class="mb-4">
+            <h3 class="text-left text-xl font-semibold mb-2">Abstract</h3>
+            <textarea 
+                class="w-full p-3 bg-white/60 border rounded min-h-[100px] text-left" 
+                placeholder="Enter your abstract here..."></textarea>
+        </div>
+        
+        <!-- Main content editor -->
+        <div class="mb-4">
+            <h3 class="text-left text-xl font-semibold mb-2">Content</h3>
+            <textarea 
+                class="w-full p-3 bg-white/60 border rounded min-h-[300px] text-left" 
+                placeholder="Type your paper content here..."></textarea>
+        </div>
+        
+        <!-- References section -->
+        <div>
+            <h3 class="text-left text-xl font-semibold mb-2">References</h3>
+            <textarea 
+                class="w-full p-3 bg-white/60 border rounded min-h-[100px] text-left" 
+                placeholder="Enter your references here..."></textarea>
+        </div>
+        
+        <!-- Action buttons -->
+        <div class="mt-6 flex justify-end space-x-3">
+            <button class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition-colors">
+                Cancel
+            </button>
+            <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                Save Paper
+            </button>
+        </div>
+    </div>
+</section>
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Add auto-resize functionality to textareas
+        const textareas = document.querySelectorAll('textarea');
+        textareas.forEach(textarea => {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        });
+        
+        // Save button functionality
+        const saveBtn = document.querySelector('button:contains("Save Paper")');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', () => {
+                showToast('Paper saved successfully!', 'success');
+            });
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}

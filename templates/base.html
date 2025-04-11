@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }} | Your Site</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    {% if page_title == 'Paper' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/paper.css') }}">
+    {% endif %}
+</head>
+<body class="bg-background text-foreground">
+    <!-- Theme toggle button -->
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <div id="root" class="max-w-[1280px] mx-auto p-8 text-center">
+        <header class="mb-8">
+            <nav class="flex justify-center space-x-8 py-4">
+                <a href="{{ url_for('index') }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Home</a>
+                <a href="{{ url_for('literature') }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Literature</a>
+                <a href="{{ url_for('ideas') }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Ideas</a>
+                <a href="{{ url_for('paper') }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Paper</a>
+            </nav>
+        </header>
+        
+        <main class="fade-in">
+            {% block content %}{% endblock %}
+        </main>
+        
+        <footer class="mt-12 text-sm text-gray-500 dark:text-gray-400">
+            <p class="read-the-docs">© 2025 Your Website</p>
+        </footer>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
+    {% if page_title == 'Paper' %}
+    <script src="{{ url_for('static', filename='js/paper.js') }}"></script>
+    {% endif %}
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

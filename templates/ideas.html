@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="fade-up">
+    <h1 class="text-4xl font-bold mb-6">Idea Generation</h1>
+    
+    <div class="glass-card max-w-3xl mx-auto p-6 rounded-lg">
+        <form id="idea-generation-form" class="text-left">
+            <div class="mb-6">
+                <label for="research-topic" class="block mb-2 font-medium">Research Topic or Problem Statement</label>
+                <textarea id="research-topic" 
+                          name="research-topic" 
+                          placeholder="Describe your research topic or problem you're trying to solve"
+                          class="w-full p-3 rounded border bg-white/60 min-h-[100px]" 
+                          required></textarea>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div>
+                    <label for="ai-model" class="block mb-2 font-medium">AI Model</label>
+                    <select id="ai-model" name="ai-model" class="w-full p-3 rounded border bg-white/60">
+                        <option value="claude-3-5-sonnet">Claude 3.5 Sonnet</option>
+                        <option value="claude-3-7-sonnet">Claude 3.7 Sonnet</option>
+                        <option value="claude-3-opus">Claude 3 Opus</option>
+                        <option value="gpt-4o">GPT-4o</option>
+                        <option value="gemini-pro">Gemini Pro</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="idea-count" class="block mb-2 font-medium">Number of Ideas</label>
+                    <input type="number" 
+                           id="idea-count" 
+                           name="idea-count" 
+                           min="1" 
+                           max="20" 
+                           value="5"
+                           class="w-full p-3 rounded border bg-white/60">
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <label for="idea-type" class="block mb-2 font-medium">Idea Type</label>
+                <select id="idea-type" name="idea-type" class="w-full p-3 rounded border bg-white/60">
+                    <option value="research-questions">Research Questions</option>
+                    <option value="hypotheses">Hypotheses</option>
+                    <option value="experiments">Experimental Designs</option>
+                    <option value="innovations">Innovative Approaches</option>
+                    <option value="applications">Practical Applications</option>
+                </select>
+            </div>
+            
+            <div class="flex justify-center">
+                <button type="submit" class="px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                    Generate Ideas
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Results section (initially hidden) -->
+    <div id="ideas-results" class="mt-8 hidden">
+        <div class="glass-card max-w-4xl mx-auto p-6 rounded-lg text-left">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold">Generated Ideas</h2>
+                <div>
+                    <button id="export-ideas" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded text-sm">
+                        Export Ideas
+                    </button>
+                </div>
+            </div>
+            
+            <div id="ideas-content" class="space-y-4">
+                <!-- Ideas will be populated here via JavaScript -->
+            </div>
+            
+            <div id="loading-indicator" class="py-8 text-center hidden">
+                <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
+                <p class="mt-2">Generating ideas...</p>
+            </div>
+            
+            <div class="mt-6 pt-4 border-t flex justify-between items-center">
+                <div>
+                    <button id="regenerate-ideas" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">
+                        Regenerate Ideas
+                    </button>
+                </div>
+                <div>
+                    <button id="save-to-paper" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm">
+                        Save to Paper
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const generationForm = document.getElementById('idea-generation-form');
+        const resultsSection = document.getElementById('ideas-results');
+        const ideasContent = document.getElementById('ideas-content');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        
+        generationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Show loading state
+            resultsSection.classList.remove('hidden');
+            loadingIndicator.classList.remove('hidden');
+            ideasContent.innerHTML = '';
+            
+            // Get form data
+            const topic = document.getElementById('research-topic').value;
+            const model = document.getElementById('ai-model').value;
+            const count = document.getElementById('idea-count').value;
+            const ideaType = document.getElementById('idea-type').value;
+            
+            // Simulate API call with timeout
+            setTimeout(() => {
+                // In your actual implementation, this would be where you make
+                // a fetch request to your Flask backend
+                
+                loadingIndicator.classList.add('hidden');
+                
+                // This is a placeholder message
+                showToast('Ready to populate with real data from your AI sources', 'info');
+                
+                // Add a placeholder message in the ideas content area
+                ideasContent.innerHTML = `
+                    <div class="p-4 border border-dashed rounded">
+                        <p class="italic text-center">This section will display AI-generated ideas based on your input:</p>
+                        <p class="font-semibold mt-2">Topic: "${topic}"</p>
+                        <p>Model: ${model}</p>
+                        <p>Idea Type: ${formatIdeaType(ideaType)}</p>
+                        <p>Number of Ideas: ${count}</p>
+                    </div>
+                `;
+            }, 1500);
+        });
+        
+        // Format the idea type for display
+        function formatIdeaType(type) {
+            return type.split('-').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+        }
+        
+        // Add export functionality
+        document.getElementById('export-ideas').addEventListener('click', () => {
+            showToast('Exporting ideas...', 'info');
+            // Implement actual export functionality here
+        });
+        
+        // Add regenerate functionality
+        document.getElementById('regenerate-ideas').addEventListener('click', () => {
+            loadingIndicator.classList.remove('hidden');
+            ideasContent.innerHTML = '';
+            
+            setTimeout(() => {
+                loadingIndicator.classList.add('hidden');
+                showToast('Ideas regenerated with new variations', 'success');
+                
+                // Similar placeholder as above
+                const topic = document.getElementById('research-topic').value;
+                ideasContent.innerHTML = `
+                    <div class="p-4 border border-dashed rounded">
+                        <p class="italic text-center">Regenerated ideas will appear here</p>
+                        <p class="font-semibold mt-2">Topic: "${topic}"</p>
+                    </div>
+                `;
+            }, 1500);
+        });
+        
+        // Add save to paper functionality
+        document.getElementById('save-to-paper').addEventListener('click', () => {
+            showToast('Ideas saved to paper draft', 'success');
+            // In a real implementation, this would save the ideas to the paper page
+            // or redirect to the paper page with the ideas pre-populated
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}

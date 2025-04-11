@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="fade-up">
+    <h1 class="text-4xl font-bold mb-6">Literature Search</h1>
+    
+    <div class="glass-card max-w-3xl mx-auto p-6 rounded-lg">
+        <form id="literature-search-form" class="text-left">
+            <div class="mb-6">
+                <label for="research-topic" class="block mb-2 font-medium">Research Topic</label>
+                <input type="text" 
+                       id="research-topic" 
+                       name="research-topic" 
+                       placeholder="Enter your research topic or keywords"
+                       class="w-full p-3 rounded border bg-white/60" 
+                       required>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div>
+                    <label for="ai-model" class="block mb-2 font-medium">AI Model</label>
+                    <select id="ai-model" name="ai-model" class="w-full p-3 rounded border bg-white/60">
+                        <option value="claude-3-5-sonnet">Claude 3.5 Sonnet</option>
+                        <option value="claude-3-7-sonnet">Claude 3.7 Sonnet</option>
+                        <option value="claude-3-opus">Claude 3 Opus</option>
+                        <option value="gpt-4o">GPT-4o</option>
+                        <option value="gemini-pro">Gemini Pro</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="search-engine" class="block mb-2 font-medium">Search Engine</label>
+                    <select id="search-engine" name="search-engine" class="w-full p-3 rounded border bg-white/60">
+                        <option value="google-scholar">Google Scholar</option>
+                        <option value="pubmed">PubMed</option>
+                        <option value="arxiv">arXiv</option>
+                        <option value="semantic-scholar">Semantic Scholar</option>
+                        <option value="web-of-science">Web of Science</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <label for="publication-years" class="block mb-2 font-medium">Publication Years</label>
+                <div class="flex gap-4">
+                    <input type="number" 
+                           id="year-from" 
+                           name="year-from" 
+                           placeholder="From"
+                           min="1900" 
+                           max="2025"
+                           class="w-full p-3 rounded border bg-white/60">
+                    <input type="number" 
+                           id="year-to" 
+                           name="year-to" 
+                           placeholder="To"
+                           min="1900" 
+                           max="2025"
+                           class="w-full p-3 rounded border bg-white/60">
+                </div>
+            </div>
+            
+            <div class="flex justify-center">
+                <button type="submit" class="px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                    Search Literature
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Results section (initially hidden) -->
+    <div id="literature-results" class="mt-8 hidden">
+        <div class="glass-card max-w-4xl mx-auto p-6 rounded-lg text-left">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold">Results</h2>
+                <div class="flex gap-2">
+                    <button id="export-results" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded text-sm">
+                        Export Results
+                    </button>
+                    <select id="sort-results" class="p-1 text-sm rounded border bg-white/60">
+                        <option value="relevance">Sort by Relevance</option>
+                        <option value="date-desc">Newest First</option>
+                        <option value="date-asc">Oldest First</option>
+                        <option value="citations">Most Cited</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table id="literature-table" class="min-w-full">
+                    <thead>
+                        <tr class="border-b">
+                            <th class="py-2 px-4 text-left">Title</th>
+                            <th class="py-2 px-4 text-left">Authors</th>
+                            <th class="py-2 px-4 text-left">Year</th>
+                            <th class="py-2 px-4 text-left">Journal/Source</th>
+                            <th class="py-2 px-4 text-left">Citations</th>
+                        </tr>
+                    </thead>
+                    <tbody id="literature-results-body">
+                        <!-- Results will be populated here via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="loading-indicator" class="py-8 text-center hidden">
+                <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
+                <p class="mt-2">Searching for literature...</p>
+            </div>
+            
+            <div id="no-results" class="py-8 text-center hidden">
+                <p>No results found for your search criteria. Please try different keywords or filters.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchForm = document.getElementById('literature-search-form');
+        const resultsSection = document.getElementById('literature-results');
+        const resultsTable = document.getElementById('literature-table');
+        const resultsBody = document.getElementById('literature-results-body');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const noResults = document.getElementById('no-results');
+        
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Show loading state
+            resultsSection.classList.remove('hidden');
+            loadingIndicator.classList.remove('hidden');
+            resultsTable.classList.add('hidden');
+            noResults.classList.add('hidden');
+            
+            // Get form data
+            const topic = document.getElementById('research-topic').value;
+            const model = document.getElementById('ai-model').value;
+            const engine = document.getElementById('search-engine').value;
+            const yearFrom = document.getElementById('year-from').value;
+            const yearTo = document.getElementById('year-to').value;
+            
+            // Simulate API call with timeout
+            setTimeout(() => {
+                // In your actual implementation, this would be where you make
+                // a fetch request to your Flask backend to get literature results
+                
+                // For now, we're just showing the empty state
+                loadingIndicator.classList.add('hidden');
+                
+                // This is a placeholder. In your actual implementation, you would
+                // check if there are results and display them or show the no-results message
+                if (topic.length > 0) {
+                    showToast('Ready to populate with real data from your AI sources', 'info');
+                    resultsTable.classList.remove('hidden');
+                    // resultsBody would be populated with real data here
+                } else {
+                    noResults.classList.remove('hidden');
+                }
+            }, 1500);
+        });
+        
+        // Add export functionality
+        document.getElementById('export-results').addEventListener('click', () => {
+            showToast('Exporting results...', 'info');
+            // Implement actual export functionality here
+        });
+        
+        // Add sorting functionality
+        document.getElementById('sort-results').addEventListener('change', (e) => {
+            const sortBy = e.target.value;
+            showToast(`Sorting by ${sortBy}...`, 'info');
+            // Implement actual sorting functionality here
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}
