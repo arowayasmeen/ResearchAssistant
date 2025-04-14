@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Draftr - Literature Review</title>
+    <title>ResearchAssistant - Literature Review</title>
     <style>
         * {
             margin: 0;
@@ -275,7 +275,7 @@
         </div>
     </div>
     <div class="main-content">
-        <h1 class="logo">Draftr</h1>
+        <h1 class="logo">ResearchAssistant</h1>
         
         <div class="topic-header">
             <div class="topic-name">Topic Name</div>
@@ -368,13 +368,13 @@
                 resultsBody.innerHTML = '<tr><td colspan="2" class="loading">Searching for papers...</td></tr>';
                 
                 // Call the backend API to search for papers
-                // searchForPapers(query, useGoogleScholar, useArxiv);
+                searchForPapers(query, useGoogleScholar, useArxiv);
             });
             
             // Function to search for papers (makes actual API calls)
             function searchForPapers(query, useGoogleScholar, useArxiv) {
                 // In a production environment, this would be the URL of your deployed backend
-                const apiUrl = 'http://localhost:5000/api/search';
+                const apiUrl = 'http://localhost:5500/api/search';
                 fetch(apiUrl, {
                     method: 'POST',
                     headers: {
