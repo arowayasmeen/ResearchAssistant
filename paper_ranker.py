@@ -1,5 +1,6 @@
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
 def get_paper_embeddings(papers, query, model_name='allenai/scibert_scivocab_uncased'):
     """
@@ -51,11 +52,18 @@ def rank_papers_by_relevance(papers, query):
     # Calculate similarity scores
     similarities = cosine_similarity([query_embedding], paper_embeddings)[0]
     
-    # Add similarity scores to paper dictionaries
+    # Add scores to paper dictionaries
     ranked_papers = []
     for i, paper in enumerate(papers):
         paper_copy = paper.copy()
-        paper_copy['relevance_score'] = float(similarities[i])
+        paper_copy['similarity_score'] = float(similarities[i])
+        paper_copy['citation_score'] = float(np.log1p(paper.get('citations', 0)/10)) # Citation score is based on the logarithmic scale, falls back to 0 if no citations
+        # Recency score based on the year of publication (favours recent publications)
+        if paper.get('year') == '':
+            paper_copy['recency_score'] = 0
+        else:
+            paper_copy['recency_score'] = float(1 / 1 + 0.1 * (2025 - int(paper.get('year'))))
+        paper_copy['relevance_score'] = 0.6 * paper_copy['similarity_score'] + 0.25 * paper_copy['citation_score'] + 0.15 * paper_copy['recency_score']
         ranked_papers.append(paper_copy)
     
     # Sort by relevance score (descending)
