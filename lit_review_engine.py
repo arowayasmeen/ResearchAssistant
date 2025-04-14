@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 from SearchSemanticScholar import get_semantic_scholar_results
 from SearchGoogleScholar import get_googlescholar_results
+from paper_ranker import rank_papers_by_relevance
 
 def search_papers(query, max_results=10):
     logger.info(f"Searching papers for query: '{query}'")
@@ -49,10 +50,13 @@ def export_results(results, base_filename="papers"):
             writer.writerows(results)
 
     print(f"✅ Exported results to:\n  • {json_path}\n  • {csv_path}")
+    
 def main(query, max_results=10):
     results = search_papers(query, max_results)
+    ranked_results = rank_papers_by_relevance(results, query)
     # Export to JSON and CSV
     export_results(results, base_filename=query.replace(" ", "_"))
+    export_results(ranked_results, base_filename=f"{query.replace(' ', '_')}_ranked")
     return
 
 if __name__ == "__main__":

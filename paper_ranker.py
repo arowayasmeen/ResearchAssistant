@@ -1,0 +1,64 @@
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+
+def get_paper_embeddings(papers, query, model_name='allenai/scibert_scivocab_uncased'):
+    """
+    Generate embeddings for papers and query using a BERT model.
+    
+    Args:
+        papers (list): List of paper dictionaries
+        query (str): Original search query
+        model_name (str): Name of the BERT model to use
+        
+    Returns:
+        tuple: (query_embedding, paper_embeddings, model)
+    """
+    
+    # Load model
+    model = SentenceTransformer(model_name)
+    
+    # Prepare text content from papers
+    paper_texts = []
+    for paper in papers:
+        # Combine title and abstract for better semantic representation
+        text = f"{paper.get('title', '')}. {paper.get('abstract', '')}"
+        paper_texts.append(text)
+    
+    # Generate embeddings
+    query_embedding = model.encode([query])[0]
+    paper_embeddings = model.encode(paper_texts)
+    
+    return query_embedding, paper_embeddings
+
+def rank_papers_by_relevance(papers, query):
+    """
+    Rank papers by relevance to the query using BERT embeddings.
+    
+    Args:
+        papers (list): List of paper dictionaries
+        query (str): Original search query
+        
+    Returns:
+        list: Ranked list of paper dictionaries with added relevance scores
+    """
+    if not papers:
+        print("No papers to rank")
+        return []
+    
+    # Get embeddings
+    query_embedding, paper_embeddings = get_paper_embeddings(papers, query)
+    
+    # Calculate similarity scores
+    similarities = cosine_similarity([query_embedding], paper_embeddings)[0]
+    
+    # Add similarity scores to paper dictionaries
+    ranked_papers = []
+    for i, paper in enumerate(papers):
+        paper_copy = paper.copy()
+        paper_copy['relevance_score'] = float(similarities[i])
+        ranked_papers.append(paper_copy)
+    
+    # Sort by relevance score (descending)
+    ranked_papers.sort(key=lambda x: x['relevance_score'], reverse=True)
+    
+    return ranked_papers
