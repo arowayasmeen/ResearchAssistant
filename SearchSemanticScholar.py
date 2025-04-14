@@ -12,7 +12,7 @@ def get_semantic_scholar_results(query, max_results=10):
     params = {
         "query": query,
         "limit": max_results,
-        "fields": "title, year, venue, authors, url, abstract, citationCount"
+        "fields": "title,year,venue,authors,url,abstract,citationCount"
     }
     try:
         response = requests.get(url, params=params)
