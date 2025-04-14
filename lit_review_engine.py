@@ -1,84 +1,61 @@
+# imports
 import os
-from dotenv import load_dotenv
+import json
+import csv
+import logging
 
-load_dotenv()
-SERPAPI_KEY = os.getenv("SERPAPI_KEY")
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-from serpapi import GoogleScholarSearch
-from urllib.parse import urlsplit, parse_qsl
+from SearchSemanticScholar import get_semantic_scholar_results
+from SearchGoogleScholar import get_googlescholar_results
 
-def googlescholar_results(params):
-    """This function takes a dictionary of parameters and returns a list of dictionaries containing the results from Google Scholar."""
-    search = GoogleScholarSearch(params)
+def search_papers(query, max_results=10):
+    logger.info(f"Searching papers for query: '{query}'")
+    sem_results = get_semantic_scholar_results(query, max_results)
+    gs_results = get_googlescholar_results(query, max_results, sem_results)
+    return sem_results + gs_results
 
-    googlescholar_results_data = []
+def export_to_json(papers, filename):
+    with open(filename, 'w', encoding='utf-8') as f:
+        json.dump(papers, f, indent=2, ensure_ascii=False)
 
-    loop_is_true = True
+def export_to_csv(papers, filename):
+    if not papers:
+        return
+    keys = ["title", "url", "year", "venue", "authors", "citations", "abstract"]
+    with open(filename, 'w', encoding='utf-8', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=keys)
+        writer.writeheader()
+        writer.writerows(papers)
 
-    count = 0
+def export_results(results, base_filename="papers"):
+    # Ensure folder exists
+    os.makedirs("exports", exist_ok=True)
 
-    while loop_is_true:
-        results = search.get_dict()
+    json_path = f"exports/{base_filename}.json"
+    csv_path = f"exports/{base_filename}.csv"
 
-        for result in results["organic_results"]:
-            position = result["position"]
-            title = result["title"]
-            publication_info_summary = result["publication_info"]["summary"]
-            result_id = result["result_id"]
-            link = result.get("link")
-            result_type = result.get("type")
-            snippet = result.get("snippet")
-  
-            try:
-              file_title = result["resources"][0]["title"]
-            except: file_title = None
-  
-            try:
-              file_link = result["resources"][0]["link"]
-            except: file_link = None
-  
-            try:
-              file_format = result["resources"][0]["file_format"]
-            except: file_format = None
-  
-            try:
-              cited_by_count = int(result["inline_links"]["cited_by"]["total"])
-            except: cited_by_count = None
-  
-            cited_by_id = result.get("inline_links", {}).get("cited_by", {}).get("cites_id", {})
-            cited_by_link = result.get("inline_links", {}).get("cited_by", {}).get("link", {})
-  
-            try:
-              total_versions = int(result["inline_links"]["versions"]["total"])
-            except: total_versions = None
-  
-            all_versions_link = result.get("inline_links", {}).get("versions", {}).get("link", {})
-            all_versions_id = result.get("inline_links", {}).get("versions", {}).get("cluster_id", {})
-  
-            googlescholar_results_data.append({
-              "page_number": results["serpapi_pagination"]["current"],
-              "position": position + 1,
-              "result_type": result_type,
-              "title": title,
-              "link": link,
-              "result_id": result_id,
-              "publication_info_summary": publication_info_summary,
-              "snippet": snippet,
-              "cited_by_count": cited_by_count,
-              "cited_by_link": cited_by_link,
-              "cited_by_id": cited_by_id,
-              "total_versions": total_versions,
-              "all_versions_link": all_versions_link,
-              "all_versions_id": all_versions_id,
-              "file_format": file_format,
-              "file_title": file_title,
-              "file_link": file_link,
-            })
-            count += 1
+    # Export JSON
+    with open(json_path, "w", encoding="utf-8") as f_json:
+        json.dump(results, f_json, indent=2, ensure_ascii=False)
 
-        if "next" in results.get("serpapi_pagination", {}) and count < 100:
-            search.params_dict.update(dict(parse_qsl(urlsplit(results["serpapi_pagination"]["next"]).query)))
-        else:
-            loop_is_true = False
+    # Export CSV
+    if results:
+        keys = results[0].keys()
+        with open(csv_path, "w", newline='', encoding="utf-8") as f_csv:
+            writer = csv.DictWriter(f_csv, fieldnames=keys)
+            writer.writeheader()
+            writer.writerows(results)
 
-    return googlescholar_results_data
+    print(f"✅ Exported results to:\n  • {json_path}\n  • {csv_path}")
+def main(query, max_results=10):
+    results = search_papers(query, max_results)
+    # Export to JSON and CSV
+    export_results(results, base_filename=query.replace(" ", "_"))
+    return
+
+if __name__ == "__main__":
+    query = "Anti-UAV"
+    max_results = 20
+    main(query, max_results)
