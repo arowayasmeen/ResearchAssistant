@@ -1,17 +1,24 @@
 import requests
 
 def get_semantic_scholar_results(query, max_results=10):
-    url = f"https://api.semanticscholar.org/graph/v1/paper/search"
+    '''Search Semantic Scholar for research papers matching the query.
+    Args:
+        query (str): The search query.
+        max_results (int): The maximum number of results to return.
+    Returns:
+        list: A list of dictionaries containing paper details.
+    '''
+    url = f"https://api.semanticscholar.org/graph/v1/paper/search" # Semantic Scholar API endpoint
     params = {
         "query": query,
         "limit": max_results,
-        "fields": "title,year,venue,authors,url,abstract,citationCount"
+        "fields": "title, year, venue, authors, url, abstract, citationCount"
     }
-    response = requests.get(url, params=params)
-    papers = []
-    if response.status_code == 200:
-        data = response.json()
-        for paper in data.get("data", []):
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        papers = []
+        for paper in response.json().get("data", []):
             papers.append({
                 "title": paper.get("title", ""),
                 "url": paper.get("url", ""),
@@ -21,4 +28,7 @@ def get_semantic_scholar_results(query, max_results=10):
                 "citations": paper.get("citationCount", ""),
                 "abstract": paper.get("abstract", "")
             })
-    return papers
+        return papers
+    except Exception as e:
+        print(f"Error searching Semantic Scholar: {e}")
+        return []
