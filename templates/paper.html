@@ -1,92 +1,164 @@
 {% extends "base.html" %}
-
 {% block content %}
 <section class="fade-up">
-    <h1 class="text-4xl font-bold mb-6">Research Papers</h1>
-    
-    <!-- Top toolbar/navigation bar -->
-    <div class="glass-card mb-4 p-2 rounded-lg flex items-center justify-between">
-        <div class="flex space-x-4">
-            <button class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded">File</button>
-            <button class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded">Edit</button>
-            <button class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded">View</button>
-            <button class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded">Format</button>
-        </div>
-        <div>
-            <button class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
-        </div>
-    </div>
-    
-    <!-- Paper editing area -->
-    <div class="glass-card max-w-4xl mx-auto p-6 rounded-lg">
-        <!-- Title input -->
-        <input type="text" 
-               placeholder="Paper Title" 
-               class="w-full mb-4 p-2 text-2xl font-bold bg-white/60 border rounded"
-               value="Untitled Research Paper">
-        
-        <!-- Author input -->
-        <input type="text" 
-               placeholder="Author Name(s)" 
-               class="w-full mb-6 p-2 bg-white/60 border rounded"
-               value="Author Name">
-        
-        <!-- Abstract section -->
-        <div class="mb-4">
-            <h3 class="text-left text-xl font-semibold mb-2">Abstract</h3>
-            <textarea 
-                class="w-full p-3 bg-white/60 border rounded min-h-[100px] text-left" 
-                placeholder="Enter your abstract here..."></textarea>
-        </div>
-        
-        <!-- Main content editor -->
-        <div class="mb-4">
-            <h3 class="text-left text-xl font-semibold mb-2">Content</h3>
-            <textarea 
-                class="w-full p-3 bg-white/60 border rounded min-h-[300px] text-left" 
-                placeholder="Type your paper content here..."></textarea>
-        </div>
-        
-        <!-- References section -->
-        <div>
-            <h3 class="text-left text-xl font-semibold mb-2">References</h3>
-            <textarea 
-                class="w-full p-3 bg-white/60 border rounded min-h-[100px] text-left" 
-                placeholder="Enter your references here..."></textarea>
-        </div>
-        
-        <!-- Action buttons -->
-        <div class="mt-6 flex justify-end space-x-3">
-            <button class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition-colors">
-                Cancel
-            </button>
-            <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
-                Save Paper
-            </button>
-        </div>
-    </div>
-</section>
+    <h1 class="text-4xl font-bold mb-6">Scribe</h1>
 
-{% block extra_scripts %}
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Add auto-resize functionality to textareas
-        const textareas = document.querySelectorAll('textarea');
-        textareas.forEach(textarea => {
-            textarea.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
-            });
-        });
+<!-- Split Layout: Outline Creator and Document Editor -->
+<div class="glass-card max-w-6xl mx-auto rounded-lg">
+    <div class="flex flex-col md:flex-row">
+        <!-- Left Side: Outline Creator -->
+        <div class="w-full md:w-1/3 p-4 border-r border-gray-200 dark:border-gray-700">
+            <h3 class="text-left text-xl font-semibold mb-3">Paper Outline</h3>
+            
+            <input type="text" 
+            placeholder="Paper Title" 
+            id="paper-title"
+            class="w-full mb-2 p-2 text-2xl font-bold bg-white/60 border rounded"
+            value="Untitled Research Paper">
+     
+     <input type="text" 
+            placeholder="Author Name(s)" 
+            id="paper-author"
+            class="w-full p-2 bg-white/60 border rounded"
+            value="Author Name">
+            
+            <!-- Abstract Section -->
+            <div class="mb-4">
+                <label class="block text-left text-sm font-medium mb-1">Abstract</label>
+                <textarea 
+                    id="abstract-input"
+                    class="w-full p-2 bg-white/60 border rounded min-h-[80px] text-left text-sm" 
+                    placeholder="Enter your abstract here..."></textarea>
+            </div>
+            
+            <!-- Sections -->
+            <div class="mb-4">
+                <div class="flex justify-between items-center mb-1">
+                    <label class="block text-left text-sm font-medium">Sections</label>
+                    <button id="add-section-btn" class="text-sm px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">+ Add</button>
+                </div>
+                
+                <div id="sections-container" class="space-y-2">
+                    <!-- Default sections -->
+                    <div class="section-item border rounded p-2 bg-white/60 dark:bg-gray-800/60">
+                        <div class="flex justify-between items-center">
+                            <input type="text" class="section-title w-full p-1 bg-transparent border-b border-gray-200 dark:border-gray-700 text-sm" value="Introduction">
+                            <button class="remove-section-btn text-red-500 hover:text-red-700 px-1">×</button>
+                        </div>
+                        <textarea class="section-notes w-full p-1 text-xs mt-1 bg-transparent" placeholder="Section notes..."></textarea>
+                    </div>
+                    
+                    <div class="section-item border rounded p-2 bg-white/60 dark:bg-gray-800/60">
+                        <div class="flex justify-between items-center">
+                            <input type="text" class="section-title w-full p-1 bg-transparent border-b border-gray-200 dark:border-gray-700 text-sm" value="Methodology">
+                            <button class="remove-section-btn text-red-500 hover:text-red-700 px-1">×</button>
+                        </div>
+                        <textarea class="section-notes w-full p-1 text-xs mt-1 bg-transparent" placeholder="Section notes..."></textarea>
+                    </div>
+                    
+                    <div class="section-item border rounded p-2 bg-white/60 dark:bg-gray-800/60">
+                        <div class="flex justify-between items-center">
+                            <input type="text" class="section-title w-full p-1 bg-transparent border-b border-gray-200 dark:border-gray-700 text-sm" value="Results">
+                            <button class="remove-section-btn text-red-500 hover:text-red-700 px-1">×</button>
+                        </div>
+                        <textarea class="section-notes w-full p-1 text-xs mt-1 bg-transparent" placeholder="Section notes..."></textarea>
+                    </div>
+                    
+                    <div class="section-item border rounded p-2 bg-white/60 dark:bg-gray-800/60">
+                        <div class="flex justify-between items-center">
+                            <input type="text" class="section-title w-full p-1 bg-transparent border-b border-gray-200 dark:border-gray-700 text-sm" value="Discussion">
+                            <button class="remove-section-btn text-red-500 hover:text-red-700 px-1">×</button>
+                        </div>
+                        <textarea class="section-notes w-full p-1 text-xs mt-1 bg-transparent" placeholder="Section notes..."></textarea>
+                    </div>
+                    
+                    <div class="section-item border rounded p-2 bg-white/60 dark:bg-gray-800/60">
+                        <div class="flex justify-between items-center">
+                            <input type="text" class="section-title w-full p-1 bg-transparent border-b border-gray-200 dark:border-gray-700 text-sm" value="Conclusion">
+                            <button class="remove-section-btn text-red-500 hover:text-red-700 px-1">×</button>
+                        </div>
+                        <textarea class="section-notes w-full p-1 text-xs mt-1 bg-transparent" placeholder="Section notes..."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- References Section -->
+            <div class="mb-4">
+                <label class="block text-left text-sm font-medium mb-1">References</label>
+                <div id="references-container" class="space-y-2">
+                    <div class="reference-item flex items-center">
+                        <input type="text" class="reference-text w-full p-2 bg-white/60 dark:bg-gray-800/60 border rounded text-sm" placeholder="Add reference...">
+                        <button class="remove-reference-btn text-red-500 hover:text-red-700 px-2 ml-1">×</button>
+                    </div>
+                    <button id="add-reference-btn" class="text-sm px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 mt-1">+ Add Reference</button>
+                </div>
+            </div>
+            
+            <!-- Apply to Document button -->
+            <button id="apply-outline-btn" class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                Apply to Document
+            </button>
+        </div>
         
-        // Save button functionality
-        const saveBtn = document.querySelector('button:contains("Save Paper")');
-        if (saveBtn) {
-            saveBtn.addEventListener('click', () => {
-                showToast('Paper saved successfully!', 'success');
-            });
-        }
-    });
-</script>
+        <!-- Right Side: Document Editor -->
+        <div class="w-full md:w-2/3 p-4">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-left text-xl font-semibold">Document Editor</h3>
+                
+                <!-- Formatting toolbar -->
+                <div class="format-toolbar hidden md:flex">
+                    <button class="format-btn" data-format="bold" title="Bold">B</button>
+                    <button class="format-btn" data-format="italic" title="Italic"><i>I</i></button>
+                    <button class="format-btn" data-format="underline" title="Underline"><u>U</u></button>
+                    <button class="format-btn" data-format="heading" title="Heading">H</button>
+                    <button class="format-btn" data-format="list" title="List">•</button>
+                </div>
+            </div>
+            
+            <!-- Document content area with rich text editor -->
+            <div id="document-editor" class="w-full min-h-[500px] p-4 bg-white/80 dark:bg-gray-800/80 border rounded text-left overflow-y-auto" contenteditable="true">
+                <h2>Introduction</h2>
+                <p>Start writing your paper here. Click on any of the formatting buttons above to format your text.</p>
+                <p>You can use the outline on the left to organize your thoughts and structure your paper.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Action buttons -->
+<div class="max-w-6xl mx-auto mt-4 flex justify-end space-x-3">
+    <div class="export-options dropdown">
+        <button class="px-4 py-2 bg-gray-300 dark:bg-gray-700 rounded hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Export
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#" onclick="return false;">Export as PDF</a></li>
+            <li><a class="dropdown-item" href="#" onclick="document.getElementById('export-form').submit(); return false;">Export as Word</a></li>
+        </ul>
+    </div>
+    
+    <button id="preview-paper-btn" class="px-4 py-2 bg-gray-300 dark:bg-gray-700 rounded hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors">
+        Preview
+    </button>
+    
+    <button id="save-paper-full-btn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+        Save Paper
+    </button>
+</div>
+
+<!-- Hidden form for document export -->
+<form id="export-form" action="{{ url_for('export_doc') }}" method="POST" style="display:none;">
+    <input type="hidden" id="hidden-editor-content" name="document_content" value="">
+</form>
+
+<!-- Hidden form for PDF export -->
+<form id="export-pdf-form" action="{{ url_for('export_pdf') }}" method="POST" style="display:none;">
+    <input type="hidden" id="hidden-pdf-content" name="document_content" value="">
+</form>
+
+</section>
+{% block extra_scripts %}
+<!-- Add your custom scripts for the paper page -->
+<script src="{{ url_for('static', filename='js/paper.js') }}"></script>
 {% endblock %}
 {% endblock %}

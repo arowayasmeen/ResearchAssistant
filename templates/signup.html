@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="fade-up">
+    <h1 class="text-4xl font-bold mb-6">Sign Up</h1>
+    
+    <div class="glass-card max-w-md mx-auto p-6 rounded-lg">
+        <form method="POST" action="{{ url_for('signup') }}" class="text-left">
+            <div class="mb-4">
+                <label for="name" class="block mb-2 font-medium">Full Name</label>
+                <input type="text" 
+                       id="name" 
+                       name="name" 
+                       placeholder="Enter your full name"
+                       class="w-full p-3 rounded border bg-white/60" 
+                       required>
+            </div>
+            
+            <div class="mb-4">
+                <label for="email" class="block mb-2 font-medium">Email Address</label>
+                <input type="email" 
+                       id="email" 
+                       name="email" 
+                       placeholder="Enter your email address"
+                       class="w-full p-3 rounded border bg-white/60" 
+                       required>
+            </div>
+            
+            <div class="mb-6">
+                <label for="password" class="block mb-2 font-medium">Password</label>
+                <input type="password" 
+                       id="password" 
+                       name="password" 
+                       placeholder="Choose a password"
+                       class="w-full p-3 rounded border bg-white/60" 
+                       required>
+                <p class="text-sm text-gray-500 mt-1">Password must be at least 8 characters</p>
+            </div>
+            
+            <div class="flex justify-center">
+                <button type="submit" class="px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                    Create Account
+                </button>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <p class="text-sm">Already have an account? <a href="{{ url_for('login') }}" class="text-blue-600 hover:underline">Log In</a></p>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

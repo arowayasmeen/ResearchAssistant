@@ -13,33 +13,45 @@
     {% endif %}
 </head>
 <body class="bg-background text-foreground">
-    <!-- Theme toggle button -->
-    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
-        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-    </button>
-
     <div id="root" class="max-w-[1280px] mx-auto p-8 text-center">
         <header class="mb-8">
-            <nav class="flex justify-center space-x-8 py-4">
-                <a href="{{ url_for('index') }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Home</a>
-                <a href="{{ url_for('literature') }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Literature</a>
-                <a href="{{ url_for('ideas') }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Ideas</a>
-                <a href="{{ url_for('paper') }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Paper</a>
-            </nav>
+            <div class="flex justify-between items-center">
+                <nav class="flex space-x-8 py-4">
+                    <a href="{{ url_for('index') }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300 transition-colors">AI Scribe</a>
+                    <a href="{{ url_for('literature') }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Literature</a>
+                    <a href="{{ url_for('ideas') }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Ideas</a>
+                    <a href="{{ url_for('paper') }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Paper</a>
+                </nav>
+                
+                <div class="flex space-x-4 items-center">
+                    {% if 'user_email' in session %}
+                    <a href="{{ url_for('profile') }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                        Profile
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded transition-colors">
+                        Log Out
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('login') }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                        Log In
+                    </a>
+                    <a href="{{ url_for('signup') }}" class="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded transition-colors">
+                        Sign Up
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
         </header>
+        
+        {% if get_flashed_messages() %}
+        <div class="flash-messages mb-4">
+            {% for category, message in get_flashed_messages(with_categories=true) %}
+            <div class="p-4 mb-2 rounded-md {% if category == 'error' %}bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300{% else %}bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
         
         <main class="fade-in">
             {% block content %}{% endblock %}

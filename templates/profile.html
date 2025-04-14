@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="fade-up">
+    <h1 class="text-4xl font-bold mb-6">Your Profile</h1>
+    
+    <div class="glass-card max-w-3xl mx-auto p-6 rounded-lg">
+        <div class="flex flex-col md:flex-row">
+            <!-- Profile sidebar -->
+            <div class="w-full md:w-1/3 md:border-r md:pr-6 mb-6 md:mb-0">
+                <div class="flex flex-col items-center text-center mb-6">
+                    <div class="h-24 w-24 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-xl font-semibold mb-3">
+                        {{ session.user_name[:1] }}
+                    </div>
+                    <h2 class="text-xl font-semibold">{{ session.user_name }}</h2>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">{{ session.user_email }}</p>
+                </div>
+                
+                <div class="space-y-2 text-left">
+                    <a href="#" class="block p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        Account Settings
+                    </a>
+                    <a href="#" class="block p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        Saved Papers
+                    </a>
+                    <a href="#" class="block p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        Research History
+                    </a>
+                    <a href="#" class="block p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        Notifications
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="block p-2 text-red-600 dark:text-red-400 rounded hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                        Log Out
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Profile content -->
+            <div class="w-full md:w-2/3 md:pl-6 text-left">
+                <h3 class="text-2xl font-semibold mb-4">Recent Activity</h3>
+                
+                <div class="space-y-4">
+                    <!-- Activity cards -->
+                    <div class="border rounded-lg p-4 bg-white/50 dark:bg-gray-800/50">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-semibold">Paper Created</h4>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">You created a new research paper: "Untitled Research Paper"</p>
+                            </div>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">Today</span>
+                        </div>
+                        <div class="mt-2">
+                            <a href="{{ url_for('paper') }}" class="text-sm text-blue-600 hover:underline">Continue editing</a>
+                        </div>
+                    </div>
+                    
+                    <div class="border rounded-lg p-4 bg-white/50 dark:bg-gray-800/50">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-semibold">Literature Search</h4>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">You searched for: "Machine Learning in Healthcare"</p>
+                            </div>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">Yesterday</span>
+                        </div>
+                        <div class="mt-2">
+                            <a href="{{ url_for('literature') }}" class="text-sm text-blue-600 hover:underline">View results</a>
+                        </div>
+                    </div>
+                    
+                    <div class="border rounded-lg p-4 bg-white/50 dark:bg-gray-800/50">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-semibold">Ideas Generated</h4>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">You generated research ideas on: "Sustainable Energy"</p>
+                            </div>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">3 days ago</span>
+                        </div>
+                        <div class="mt-2">
+                            <a href="{{ url_for('ideas') }}" class="text-sm text-blue-600 hover:underline">View ideas</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold mb-4">Your Statistics</h3>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="border rounded-lg p-4 text-center bg-white/50 dark:bg-gray-800/50">
+                            <div class="text-2xl font-bold">3</div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">Papers Created</div>
+                        </div>
+                        
+                        <div class="border rounded-lg p-4 text-center bg-white/50 dark:bg-gray-800/50">
+                            <div class="text-2xl font-bold">12</div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">Literature Searches</div>
+                        </div>
+                        
+                        <div class="border rounded-lg p-4 text-center bg-white/50 dark:bg-gray-800/50">
+                            <div class="text-2xl font-bold">8</div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">Ideas Generated</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
