@@ -67,9 +67,5 @@ def search_papers():
     return jsonify({"results": results})
 
 if __name__ == '__main__':
-    # To run this backend server:
-    # 1. Install requirements: pip install flask flask-cors python-dotenv requests serpapi
-    # 2. Make sure SearchArxiv.py and SearchGoogleScholar.py are in the same directory
-    # 3. Create .env file with SERPAPI_KEY=your_api_key
-    # 4. Run this file: python app.py
+
     app.run(debug=True)
