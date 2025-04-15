@@ -2,7 +2,7 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
-def get_paper_embeddings(papers, query, model_name='allenai/scibert_scivocab_uncased'):
+def get_paper_embeddings(papers, query, model_name='all-MiniLM-L6-v2'):
     """
     Generate embeddings for papers and query using a BERT model.
     
@@ -62,7 +62,7 @@ def rank_papers_by_relevance(papers, query):
         if paper.get('year') == '':
             paper_copy['recency_score'] = 0
         else:
-            paper_copy['recency_score'] = float(1 / 1 + 0.1 * (2025 - int(paper.get('year'))))
+            paper_copy['recency_score'] = float(1 / (1 + 0.1 * (2025 - int(paper.get('year')))))
         paper_copy['relevance_score'] = 0.6 * paper_copy['similarity_score'] + 0.25 * paper_copy['citation_score'] + 0.15 * paper_copy['recency_score']
         ranked_papers.append(paper_copy)
     
