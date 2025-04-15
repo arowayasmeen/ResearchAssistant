@@ -26,7 +26,6 @@ pip install -r requirements.txt
 
 ```env
 SERPAPI_KEY=your_serpapi_key_here
-HF_TOKEN=your_hugging_face_access_token_here
 ```
 
-You can get a SerpAPI key by signing up at [serpapi.com](https://serpapi.com). Similarly, you can get your Hugging Face Access Token by signing up at [huggingface.co](https://huggingface.co)
+You can get a SerpAPI key by signing up at [serpapi.com](https://serpapi.com).
