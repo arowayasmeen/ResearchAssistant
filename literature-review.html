@@ -287,21 +287,7 @@
             <textarea class="research-textarea" placeholder="Briefly describe the research topic that you want to search relevant papers for ....."></textarea>
         </div>
         
-        <div class="search-engines">
-            <div class="section-title">Search Engines</div>
-            
-            <label class="checkbox-container">
-                <input type="checkbox" checked>
-                <span class="custom-checkbox"></span>
-                <span class="checkbox-label">Google Scholar</span>
-            </label>
-            
-            <label class="checkbox-container">
-                <input type="checkbox">
-                <span class="custom-checkbox"></span>
-                <span class="checkbox-label">Arxiv</span>
-            </label>
-            
+        <div class="search-engines">            
             <button class="search-button">Search</button>
         </div>
 
@@ -310,14 +296,25 @@
                 <table style="width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden;">
                     <thead>
                         <tr style="background-color: #f2e8d8; border-bottom: 1px solid #e0c8a0;">
-                            <th style="padding: 15px; text-align: left; width: 60%;">Title</th>
-                            <th style="padding: 15px; text-align: left; width: 40%;">Link</th>
+                            <th style="padding: 15px; text-align: left; width: 30%;">Title</th>
+                            <th style="padding: 15px; text-align: left; width: 20%;">Authors</th>
+                            <th style="padding: 15px; text-align: center; width: 8%;">Year</th>
+                            <th style="padding: 15px; text-align: left; width: 15%;">Venue</th>
+                            <th style="padding: 15px; text-align: center; width: 12%;">Relevance</th>
+                            <th style="padding: 15px; text-align: left; width: 15%;">Link</th>
                         </tr>
                     </thead>
                     <tbody id="results-body">
                         <!-- Results will be populated here -->
                     </tbody>
                 </table>
+            </div>
+            <div style="text-align: right; margin-top: 20px;">
+                <button id="export-button" class="export-button">Export Results</button>
+                <div id="export-options" class="export-options">
+                    <button id="export-csv" class="export-button" style="margin-right: 10px;">CSV</button>
+                    <button id="export-json" class="export-button">JSON</button>
+                </div>
             </div>
         </div>
     </div>
@@ -329,50 +326,44 @@
             
             // Set the topic name in the header
             document.querySelector('.topic-name').textContent = topicName;
-            
-            // // Add functionality to checkboxes
-            // const checkboxes = document.querySelectorAll('.checkbox-container input');
-            // checkboxes.forEach(checkbox => {
-            //     checkbox.addEventListener('change', function() {
-            //         // Add any functionality here if needed
-            //     });
-            // });
 
             // Reference to UI elements
-            const researchTopicTextarea = document.getElementById('research-topic');
-            const googleScholarCheckbox = document.getElementById('google-scholar-checkbox');
-            const arxivCheckbox = document.getElementById('arxiv-checkbox');
-            const searchButton = document.getElementById('search-button');
+            const researchTopicTextarea = document.querySelector('.research-textarea');
+            const searchButton = document.querySelector('.search-button');
             const resultsContainer = document.getElementById('results-container');
             const resultsBody = document.getElementById('results-body');
+            const exportButton = document.getElementById('export-button');
+            const exportOptions = document.getElementById('export-options');
+            const exportCSV = document.getElementById('export-csv');
+            const exportJSON = document.getElementById('export-json');
+
+            // Variable to store the current results
+            let currentResults = [];
             
             // Add functionality to search button
             searchButton.addEventListener('click', function() {
                 // Add search functionality here
                 const query = researchTopicTextarea.value.trim();
-                const useGoogleScholar = googleScholarCheckbox.checked;
-                const useArxiv = arxivCheckbox.checked;
                 
                 if (!query) {
                     alert('Please enter a research topic');
                     return;
                 }
                 
-                if (!useGoogleScholar && !useArxiv) {
-                    alert('Please select at least one search engine');
-                    return;
-                }
-                
                 // Show loading state
                 resultsContainer.style.display = 'block';
-                resultsBody.innerHTML = '<tr><td colspan="2" class="loading">Searching for papers...</td></tr>';
+                resultsBody.innerHTML = '<tr><td colspan="6" class="loading">Searching for papers...</td></tr>';
                 
                 // Call the backend API to search for papers
-                searchForPapers(query, useGoogleScholar, useArxiv);
+                searchForPapers(query);
             });
             
             // Function to search for papers (makes actual API calls)
-            function searchForPapers(query, useGoogleScholar, useArxiv) {
+            function searchForPapers(query) {
+                // Show loading state
+                resultsContainer.style.display = 'block';
+                resultsBody.innerHTML = '<tr><td colspan="6" class="loading">Searching for papers...</td></tr>';
+                
                 // In a production environment, this would be the URL of your deployed backend
                 const apiUrl = 'http://localhost:5500/api/search';
                 fetch(apiUrl, {
@@ -381,68 +372,82 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        query: query,
-                        use_google_scholar: useGoogleScholar,
-                        use_arxiv: useArxiv
+                        query: query
                     }),
                 })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        return response.json().then(errorData => {
+                            throw new Error(`Server error: ${errorData.error || response.statusText}`);
+                        });
                     }
                     return response.json();
                 })
                 .then(data => {
+                    currentResults = data.results;
                     displayResults(data.results);
                 })
                 .catch(error => {
                     console.error('Error searching for papers:', error);
+
+                    // Display the error in the UI
+                    resultsBody.innerHTML = `<tr><td colspan="6" class="loading" style="color: #F44336;">
+                        Error: ${error.message}. Using backup data instead.</td></tr>`;
+        
                     
                     // If there's an error with the API call, use backup data for demonstration
-                    const backupResults = getBackupResults(query, useGoogleScholar, useArxiv);
-                    displayResults(backupResults);
+                    setTimeout(() => {
+                        const backupResults = getBackupResults(query);
+                        currentResults = backupResults;
+                        displayResults(backupResults);
+                    }, 2000);
                 });
             }
             
             // Backup function to get results in case the API call fails
-            function getBackupResults(query, useGoogleScholar, useArxiv) {
-                let results = [];
-                
-                if (useGoogleScholar) {
-                    results = results.concat([
-                        { 
-                            title: `${query}: Advancements in neural networks and transfer learning approaches`,
-                            link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}`
-                        },
-                        { 
-                            title: `Current state and future perspectives of ${query}`,
-                            link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+review`
-                        },
-                        { 
-                            title: `Meta-analysis of ${query} methodologies: A systematic review`,
-                            link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+meta+analysis`
-                        }
-                    ]);
-                }
-                
-                if (useArxiv) {
-                    results = results.concat([
-                        { 
-                            title: `Transformer-based approaches to ${query}`,
-                            link: `https://arxiv.org/search/?query=${encodeURIComponent(query)}&searchtype=all`
-                        },
-                        { 
-                            title: `${query} implementation using advanced statistical methods`,
-                            link: `https://arxiv.org/search/?query=${encodeURIComponent(query)}+implementation&searchtype=all`
-                        },
-                        { 
-                            title: `Recent developments in ${query} research: A comprehensive survey`,
-                            link: `https://arxiv.org/search/?query=${encodeURIComponent(query)}+survey&searchtype=all`
-                        }
-                    ]);
-                }
-                
-                return results;
+            function getBackupResults(query) {
+                return [
+                    { 
+                        title: `${query}: Advancements in neural networks and transfer learning approaches`,
+                        authors: "Smith J., Johnson M.",
+                        year: "2023",
+                        venue: "Journal of AI Research",
+                        score: 95,
+                        link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}`
+                    },
+                    { 
+                        title: `Current state and future perspectives of ${query}`,
+                        authors: "Williams A., Brown R.",
+                        year: "2022",
+                        venue: "IEEE Transactions",
+                        score: 87,
+                        link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+review`
+                    },
+                    { 
+                        title: `Meta-analysis of ${query} methodologies: A systematic review`,
+                        authors: "Garcia L., et al.",
+                        year: "2021",
+                        venue: "arXiv",
+                        score: 82,
+                        link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+meta+analysis`
+                    },
+                    { 
+                        title: `Experimental evaluation of ${query} systems`,
+                        authors: "Chen P., Wang Y.",
+                        year: "2020",
+                        venue: "Conference on Computer Vision",
+                        score: 78,
+                        link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+experimental`
+                    },
+                    { 
+                        title: `${query} in real-world applications: A case study`,
+                        authors: "Kim H., Lee S.",
+                        year: "2021",
+                        venue: "Applied Sciences",
+                        score: 75,
+                        link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+case+study`
+                    }
+                ];
             }
             
             // Function to display results in the table
@@ -450,19 +455,92 @@
                 resultsBody.innerHTML = '';
                 
                 if (!results || results.length === 0) {
-                    resultsBody.innerHTML = '<tr><td colspan="2" class="loading">No results found</td></tr>';
+                    resultsBody.innerHTML = '<tr><td colspan="6" class="loading">No results found</td></tr>';
                     return;
                 }
                 
                 results.forEach(paper => {
                     const row = document.createElement('tr');
+                    
+                    // Create relevance score display with color coding
+                    const scoreColor = getScoreColor(paper.score);
+                    const scoreDisplay = `<div class="relevance-badge" style="background-color: ${scoreColor};">${paper.score}%</div>`;
+                    
                     row.innerHTML = `
                         <td>${paper.title}</td>
-                        <td><a href="${paper.link}" class="paper-link" target="_blank">${paper.link}</a></td>
+                        <td>${paper.authors || 'N/A'}</td>
+                        <td style="text-align: center;">${paper.year || 'N/A'}</td>
+                        <td>${paper.venue || 'N/A'}</td>
+                        <td style="text-align: center;">${scoreDisplay}</td>
+                        <td><a href="${paper.link}" class="paper-link" target="_blank">View Paper</a></td>
                     `;
                     resultsBody.appendChild(row);
                 });
             }
+            
+            // Function to get color based on score
+            function getScoreColor(score) {
+                if (score >= 90) return '#4CAF50'; // Green
+                if (score >= 75) return '#2196F3'; // Blue
+                if (score >= 60) return '#FF9800'; // Orange
+                return '#F44336'; // Red
+            }
+            
+            // Export button functionality
+            exportButton.addEventListener('click', function() {
+                if (exportOptions.style.display === 'block') {
+                    exportOptions.style.display = 'none';
+                } else {
+                    exportOptions.style.display = 'block';
+                }
+            });
+            
+            // Export to CSV
+            exportCSV.addEventListener('click', function() {
+                if (currentResults.length === 0) {
+                    alert('No results to export');
+                    return;
+                }
+                
+                let csvContent = "data:text/csv;charset=utf-8,";
+                
+                // Add headers
+                csvContent += "Title,Authors,Year,Venue,Relevance Score,Link\n";
+                
+                // Add rows
+                currentResults.forEach(paper => {
+                    csvContent += `"${paper.title}","${paper.authors || ''}","${paper.year || ''}","${paper.venue || ''}","${paper.score}","${paper.link}"\n`;
+                });
+                
+                // Create download link
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "research_papers.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                exportOptions.style.display = 'none';
+            });
+            
+            // Export to JSON
+            exportJSON.addEventListener('click', function() {
+                if (currentResults.length === 0) {
+                    alert('No results to export');
+                    return;
+                }
+                
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentResults, null, 2));
+                const downloadAnchorNode = document.createElement('a');
+                downloadAnchorNode.setAttribute("href", dataStr);
+                downloadAnchorNode.setAttribute("download", "research_papers.json");
+                document.body.appendChild(downloadAnchorNode);
+                downloadAnchorNode.click();
+                downloadAnchorNode.remove();
+                
+                exportOptions.style.display = 'none';
+            });
             
             // Add navigation between pages when appropriate
             const firstSidebarIcon = document.querySelector('.sidebar-icon:first-child');
