@@ -28,7 +28,7 @@ def api_search():
                 "year": paper.get("year", ""),
                 "venue": paper.get("venue", ""),
                 "link": paper.get("url", ""),
-                "score": round(paper.get("relevance_score", 0) * 100)  # Convert to percentage
+                "score": round(paper.get("relevance_score", 0))
             })
         
         return jsonify({"results": simplified_results})
