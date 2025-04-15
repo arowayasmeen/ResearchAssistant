@@ -1,4 +1,6 @@
 import requests
+import time
+import random
 
 def get_semantic_scholar_results(query, max_results=10):
     '''Search Semantic Scholar for research papers matching the query.
@@ -8,6 +10,8 @@ def get_semantic_scholar_results(query, max_results=10):
     Returns:
         list: A list of dictionaries containing paper details.
     '''
+    # Add a random delay between 1-3 seconds to avoid rate limiting
+    time.sleep(random.uniform(1, 3))
     url = f"https://api.semanticscholar.org/graph/v1/paper/search" # Semantic Scholar API endpoint
     params = {
         "query": query,
