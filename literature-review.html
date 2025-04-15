@@ -365,7 +365,7 @@
                 resultsBody.innerHTML = '<tr><td colspan="6" class="loading">Searching for papers...</td></tr>';
                 
                 // In a production environment, this would be the URL of your deployed backend
-                const apiUrl = 'http://localhost:5500/api/search';
+                const apiUrl = 'http://localhost:5000/api/search';
                 fetch(apiUrl, {
                     method: 'POST',
                     headers: {
