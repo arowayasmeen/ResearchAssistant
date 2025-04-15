@@ -1,0 +1,238 @@
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputField = document.querySelector('.research-input');
+        const submitButton = document.querySelector('.submit-button');
+        
+        // Function to check if input has text and update button styling
+        function updateButtonState() {
+            if (inputField.value.trim() !== '') {
+                submitButton.classList.add('active');
+            } else {
+                submitButton.classList.remove('active');
+            }
+        }
+        
+        // Add event listeners
+        inputField.addEventListener('input', updateButtonState);
+        inputField.addEventListener('change', updateButtonState);
+        inputField.addEventListener('keyup', updateButtonState);
+        
+        // Initial check in case there's a value already
+        updateButtonState();
+        
+        // Add navigation to literature review page when submit button is clicked
+        submitButton.addEventListener('click', function() {
+            if (inputField.value.trim() !== '') {
+                // Store the input value in localStorage to pass to the next page
+                localStorage.setItem('topicName', inputField.value.trim());
+                window.location.href = 'literature-review.html';
+            }
+        });
+        
+        // Also allow Enter key to submit
+        inputField.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && inputField.value.trim() !== '') {
+                // Store the input value in localStorage to pass to the next page
+                localStorage.setItem('topicName', inputField.value.trim());
+                window.location.href = 'literature-review.html';
+            }
+        });
+    });
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResearchAssistant</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    
+    body {
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+    }
+    
+    .sidebar {
+        width: 68px;
+        background-color: #6b5d4d;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+    }
+    
+    .main-content {
+        flex: 1;
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 40px;
+    }
+    
+    .logo {
+        color: #6b5d4d;
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 80px;
+    }
+    
+    .welcome-message {
+        font-size: 36px;
+        color: #3a3a3a;
+        font-weight: bold;
+        margin-bottom: 50px;
+    }
+    
+    .input-container {
+        width: 80%;
+        max-width: 700px;
+        position: relative;
+    }
+    
+    .research-input {
+        width: 100%;
+        padding: 20px;
+        border-radius: 50px;
+        border: none;
+        background-color: #f2e8d8;
+        font-size: 16px;
+        color: #666;
+        outline: none;
+    }
+    
+    .submit-button {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #e0c8a0;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: none;
+        transition: all 0.3s ease;
+    }
+    
+    .submit-button.active {
+        background-color: #c7a570;
+    }
+    
+    .submit-button.active:hover {
+        width: 46px;
+        height: 46px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        transform: translateY(-50%) scale(1.05);
+    }
+    
+    .submit-button svg {
+        width: 20px;
+        height: 20px;
+        fill: #6b5d4d;
+    }
+    
+    .sidebar-icon {
+        width: 36px;
+        height: 36px;
+        background-color: #e0c8a0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .sidebar-icon:hover {
+        width: 42px;
+        height: 42px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+    }
+    
+    .sidebar-icon svg {
+        width: 20px;
+        height: 20px;
+        fill: #6b5d4d;
+        transition: all 0.3s ease;
+    }
+    
+    .sidebar-icon:hover svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .tooltip {
+        visibility: hidden;
+        position: absolute;
+        left: 50px;
+        background-color: #111;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 20px;
+        white-space: nowrap;
+        font-size: 14px;
+        z-index: 1;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    
+    .sidebar-icon:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
+</head>
+<body>
+<div class="sidebar">
+    <div class="sidebar-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1v5h5v10H6V3h7z"/>
+            <path d="M8 12h8v1H8zm0 2h8v1H8zm0 2h5v1H8z"/>
+        </svg>
+        <span class="tooltip">Do Literature Review</span>
+    </div>
+    <div class="sidebar-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
+            <path d="M12 6a1 1 0 0 0-1 1v5a1 1 0 0 0 .55.89l4 2a1 1 0 1 0 .9-1.78L13 11.28V7a1 1 0 0 0-1-1z"/>
+        </svg>
+        <span class="tooltip">Generate Ideas</span>
+    </div>
+    <div class="sidebar-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V5h14v14z"/>
+            <path d="M7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/>
+        </svg>
+        <span class="tooltip">Prepare a Draft</span>
+    </div>
+</div>
+<div class="main-content">
+    <h1 class="logo">ResearchAssistant</h1>
+    <h2 class="welcome-message">Hi, tell me your Research Topic!</h2>
+    <div class="input-container">
+        <input type="text" class="research-input" placeholder="What do you want to explore today?">
+        <button class="submit-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6a.9959.9959 0 0 0-1.41 0c-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/>
+            </svg>
+        </button>
+    </div>
+</div>
+</body>
+</html>
