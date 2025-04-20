@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS  # This helps with cross-origin requests
 
-from lit_review_engine import search_papers, rank_papers_by_relevance
+from lit_review_engine import search_papers
+from paper_ranker import rank_papers_by_relevance
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes

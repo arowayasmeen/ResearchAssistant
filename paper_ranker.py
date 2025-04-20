@@ -13,7 +13,8 @@ def get_paper_embeddings(papers, query, model_name='all-MiniLM-L6-v2'):
         model_name (str): Name of the BERT model to use
         
     Returns:
-        tuple: (query_embedding, paper_embeddings, model)
+        query_embedding (array): BERT embedding for the query
+        paper_embeddings (array): BERT embeddings for the papers
     """
     
     # Load model
@@ -32,7 +33,17 @@ def get_paper_embeddings(papers, query, model_name='all-MiniLM-L6-v2'):
     
     return query_embedding, paper_embeddings
 
-def get_paper_vectors(papers, query,):
+def get_paper_vectors(papers, query):
+    """
+    Generate TF-IDF vectors for papers and query.
+    Args:
+        papers (list): List of paper dictionaries
+        query (str): Original search query
+    Returns:
+        query_vec (array): TF-IDF vector for the query
+        tfidf_matrix (array): TF-IDF matrix for the papers
+    """
+    
     # Load model
     tfidf_vectorizer = TfidfVectorizer(
             max_features=5000,
