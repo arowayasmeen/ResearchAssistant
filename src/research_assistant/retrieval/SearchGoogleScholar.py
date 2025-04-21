@@ -63,7 +63,7 @@ def enrich_gs_results_parallel(gs_raw_results, sem_results, max_workers=5):
         enriched_results = list(executor.map(enrich_with_semantic_scholar, unique_gs))
     return enriched_results
 
-def get_googlescholar_results(query, max_results=10, sem_results=None):
+def get_googlescholar_results(query, max_results=3, sem_results=None):
     """This function takes a dictionary of parameters and returns a list of dictionaries containing the results from Google Scholar.
     Args:
         query (str): The search query.

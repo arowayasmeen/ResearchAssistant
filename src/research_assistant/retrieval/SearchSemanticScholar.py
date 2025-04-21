@@ -2,7 +2,7 @@ import requests
 import time
 import random
 
-def get_semantic_scholar_results(query, max_results=10):
+def get_semantic_scholar_results(query, max_results=3):
     '''Search Semantic Scholar for research papers matching the query.
     Args:
         query (str): The search query.
