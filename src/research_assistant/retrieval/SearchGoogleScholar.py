@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 # Loading environment variables
 load_dotenv()
-SERPAPI_KEY = os.getenv("SERPAPI_KEY")
+SERPAPI_KEY = os.environ.get("SERPAPI_KEY").strip('=')[1:-1]
 
 # Add the project root to the Python path to ensure package imports work correctly
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
