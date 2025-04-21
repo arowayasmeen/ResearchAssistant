@@ -41,8 +41,7 @@ pip install -e .
 1. Start the backend API server:
 
 ```bash
-cd src/api
-python app.py
+python run.py
 ```
 
 2. Open the UI in your broswer:
