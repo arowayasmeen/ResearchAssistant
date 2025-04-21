@@ -112,13 +112,13 @@ def rank_papers_by_relevance(papers, query):
     for i, paper in enumerate(papers):
         paper_copy = paper.copy()
         paper_copy['similarity_score'] = float((semantic_weight * semantic_similarities[i]) + (lexical_weight * lexical_similarities[i]))
-        paper_copy['citation_score'] = float(np.log1p(paper.get('citations', 0)/10)) # Citation score is based on the logarithmic scale, falls back to 0 if no citations
+        paper_copy['citation_score'] = float(np.log1p(int(paper.get('citations', 0))/10)) # Citation score is based on the logarithmic scale, falls back to 0 if no citations
         # Recency score based on the year of publication (favours recent publications)
         if paper.get('year') == '':
             paper_copy['recency_score'] = 0
         else:
             paper_copy['recency_score'] = float(1 / (1 + 0.1 * (2025 - int(paper.get('year')))))
-        paper_copy['relevance_score'] = 0.6 * paper_copy['similarity_score'] + 0.25 * paper_copy['citation_score'] + 0.15 * paper_copy['recency_score']
+        paper_copy['relevance_score'] = (0.6 * paper_copy['similarity_score'] + 0.25 * paper_copy['citation_score'] + 0.15 * paper_copy['recency_score'])  * 100
         ranked_papers.append(paper_copy)
     
     # Sort by relevance score (descending)
