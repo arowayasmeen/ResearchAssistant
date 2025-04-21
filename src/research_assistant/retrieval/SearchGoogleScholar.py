@@ -1,18 +1,23 @@
 # Environment imports
 import os
+import sys
 from dotenv import load_dotenv
 
 # Loading environment variables
 load_dotenv()
 SERPAPI_KEY = os.getenv("SERPAPI_KEY")
 
+# Add the project root to the Python path to ensure package imports work correctly
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+
 # Other imports
 from serpapi import GoogleScholarSearch
 import time
 import random
-from SearchSemanticScholar import get_semantic_scholar_results
-from utils import is_duplicate, similar
 from concurrent.futures import ThreadPoolExecutor
+
+from research_assistant.retrieval.SearchSemanticScholar import get_semantic_scholar_results
+from research_assistant.utils.utils import is_duplicate, similar
 
 def enrich_with_semantic_scholar(gs_result):
     '''
@@ -24,7 +29,7 @@ def enrich_with_semantic_scholar(gs_result):
     '''
     time.sleep(random.uniform(0.8, 1.5)) # Random sleep to avoid hitting the API too fast
     query_title = gs_result.get("title", "")
-    sem_results = get_semantic_scholar_results(query_title, limit=1)
+    sem_results = get_semantic_scholar_results(query_title, max_results=1)
     if sem_results:
         top_result = sem_results[0]
         if similar(top_result["title"], query_title) >= 0.9:

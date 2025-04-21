@@ -3,22 +3,35 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
 
-def get_paper_embeddings(papers, query, model_name='all-MiniLM-L6-v2'):
+# Add the project root to the Python path
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+
+
+def get_paper_embeddings(papers, query, model_path=None):
     """
     Generate embeddings for papers and query using a BERT model.
     
     Args:
         papers (list): List of paper dictionaries
         query (str): Original search query
-        model_name (str): Name of the BERT model to use
+        model_path (str): Path to the local BERT model directory
         
     Returns:
         query_embedding (array): BERT embedding for the query
         paper_embeddings (array): BERT embeddings for the papers
     """
+    # Set default model path if not provided
+    if model_path is None:
+        # Path relative to project root
+        model_path = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), 
+            '../../../data/all-MiniLM-L6-v2'
+        ))
     
     # Load model
-    model = SentenceTransformer(model_name)
+    model = SentenceTransformer(model_path)
     
     # Prepare text content from papers
     paper_texts = []
@@ -53,10 +66,13 @@ def get_paper_vectors(papers, query):
     
     # Prepare text content from papers
     paper_texts = [f"{p.get('title', '')}. {p.get('abstract', '')}" for p in papers]
+
+    # FIT the vectorizer on paper_texts first
+    tfidf_vectorizer.fit(paper_texts)
     
     # Generate vectors
     query_vec = tfidf_vectorizer.transform([query])
-    tfidf_matrix = tfidf_vectorizer.fit_transform(paper_texts)
+    tfidf_matrix = tfidf_vectorizer.transform(paper_texts)
 
     return query_vec, tfidf_matrix
 
