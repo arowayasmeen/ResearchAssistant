@@ -14,6 +14,7 @@ git clone https://github.com/arowayasmeen/ResearchAssistant.git
 
 ```bash
 conda create -n researchassistant python=3.12
+conda activate researchassistant
 ```
 
 ## Set up dependencies
@@ -29,3 +30,20 @@ SERPAPI_KEY=your_serpapi_key_here
 ```
 
 You can get a SerpAPI key by signing up at [serpapi.com](https://serpapi.com).
+
+## (Optional) Install the Research-Assistant package in development mode if you want to edit
+```bash
+pip install -e .
+```
+
+## Running the application
+
+1. Start the backend API server:
+
+```bash
+python run.py
+```
+
+2. Open the UI in your broswer:
+
+Open <code>ui/index.html</code> in your web browser to use the application.
