@@ -172,4 +172,5 @@ cython_debug/
 
 # Sample output checks
 exports/
-*.Zone.Identifier
+data/*/*.Zone.Identifier
+data/*/*/*.Zone.Identifier
