@@ -172,3 +172,4 @@ cython_debug/
 
 # Sample output checks
 exports/
+*.Zone.Identifier
