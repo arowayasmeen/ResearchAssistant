@@ -254,11 +254,17 @@
     <div class="sidebar">
         <div class="sidebar-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            <span class="tooltip">Home</span>
+        </div>
+        <!-- <div class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1v5h5v10H6V3h7z"/>
                 <path d="M8 12h8v1H8zm0 2h8v1H8zm0 2h5v1H8z"/>
             </svg>
             <span class="tooltip">Do Literature Review</span>
-        </div>
+        </div> -->
         <div class="sidebar-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
@@ -276,7 +282,7 @@
     </div>
     <div class="main-content">
         <h1 class="logo">ResearchAssistant</h1>
-        
+
         <div class="topic-header">
             <div class="topic-name">Topic Name</div>
             <div class="topic-suffix">Literature Review</div>
@@ -436,7 +442,7 @@
                         authors: "Chen P., Wang Y.",
                         year: "2020",
                         venue: "Conference on Computer Vision",
-                        score: 78,
+                        score: 72,
                         link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+experimental`
                     },
                     { 
@@ -444,7 +450,7 @@
                         authors: "Kim H., Lee S.",
                         year: "2021",
                         venue: "Applied Sciences",
-                        score: 75,
+                        score: 65,
                         link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+case+study`
                     }
                 ];
@@ -543,22 +549,22 @@
             });
             
             // Add navigation between pages when appropriate
-            const firstSidebarIcon = document.querySelector('.sidebar-icon:first-child');
-            firstSidebarIcon.addEventListener('click', function() {
-                // Navigate to the literature review page
+            const homeIcon = document.querySelector('.sidebar-icon:first-child');
+            homeIcon.addEventListener('click', function() {
+                // Navigate to home page
                 window.location.href = 'index.html';
             });
             
             const secondSidebarIcon = document.querySelector('.sidebar-icon:nth-child(2)');
             secondSidebarIcon.addEventListener('click', function() {
-                // Navigate to ideas page (would be implemented in a real app)
-                console.log('Navigate to Generate Ideas');
+                // Navigate to ideas page
+                window.location.href = 'idea-generation.html';
             });
             
             const thirdSidebarIcon = document.querySelector('.sidebar-icon:nth-child(3)');
             thirdSidebarIcon.addEventListener('click', function() {
-                // Navigate to draft page (would be implemented in a real app)
-                console.log('Navigate to Prepare a Draft');
+                // Navigate to draft page
+                window.location.href = 'draft-preparation.html';
             });
         });
     </script>

@@ -23,7 +23,7 @@ def api_search():
     
     try:
         # Use the existing functions
-        results = search_papers(query, max_results=10)
+        results = search_papers(query, max_results=3)
         ranked_papers = rank_papers_by_relevance(papers=results, query=query)
         
         # Return only the fields needed for the table
@@ -35,7 +35,7 @@ def api_search():
                 "year": paper.get("year", ""),
                 "venue": paper.get("venue", ""),
                 "link": paper.get("url", ""),
-                "score": round(paper.get("relevance_score", 0))
+                "score": round(paper.get("relevance_score", 0),2)
             })
         
         return jsonify({"results": simplified_results})

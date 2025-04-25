@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResearchAssistant - Idea Generation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar {
+            width: 68px;
+            background-color: #6b5d4d;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+        }
+        
+        .main-content {
+            flex: 1;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            overflow-y: auto;
+        }
+        
+        .logo {
+            color: #6b5d4d;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        
+        .topic-header {
+            margin-bottom: 40px;
+        }
+        
+        .topic-suffix {
+            color: #4a3a2a;
+            font-size: 24px;
+            font-weight: bold;
+            display: inline;
+        }
+        
+        .topic-name {
+            color: #d6a76b;
+            font-size: 24px;
+            font-weight: bold;
+            display: inline;
+            margin-right: 10px;
+        }
+        
+        .section-title {
+            color: #4a3a2a;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .research-textarea {
+            width: 100%;
+            height: 80px;
+            padding: 20px;
+            border-radius: 20px;
+            border: none;
+            background-color: #f2e8d8;
+            font-size: 16px;
+            color: #666;
+            resize: none;
+            margin-bottom: 30px;
+            outline: none;
+        }
+        
+        .sidebar-icon {
+            width: 36px;
+            height: 36px;
+            background-color: #e0c8a0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-icon:hover {
+            width: 42px;
+            height: 42px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .sidebar-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: #6b5d4d;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-icon:hover svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .tooltip {
+            visibility: hidden;
+            position: absolute;
+            left: 50px;
+            background-color: #111;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            font-size: 14px;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .sidebar-icon:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .action-button {
+            padding: 10px 25px;
+            background-color: #e0c8a0;
+            color: #4a3a2a;
+            border: none;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+        
+        .action-button:hover {
+            background-color: #d6a76b;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .upload-area {
+            width: 100%;
+            min-height: 200px;
+            border: 2px dashed #e0c8a0;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+        
+        .upload-area:hover {
+            border-color: #d6a76b;
+            background-color: #f9f6f0;
+        }
+        
+        .upload-area input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .upload-icon {
+            width: 60px;
+            height: 60px;
+            fill: #e0c8a0;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            color: #6b5d4d;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .upload-subtext {
+            color: #888;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .file-list {
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #f9f6f0;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .file-icon {
+            width: 24px;
+            height: 32px;
+            margin-right: 15px;
+            fill: #d6a76b;
+        }
+        
+        .file-info {
+            flex: 1;
+        }
+        
+        .file-name {
+            font-size: 16px;
+            color: #4a3a2a;
+            margin-bottom: 5px;
+        }
+        
+        .file-size {
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .file-remove {
+            width: 20px;
+            height: 20px;
+            fill: #888;
+            cursor: pointer;
+            transition: fill 0.2s;
+        }
+        
+        .file-remove:hover {
+            fill: #F44336;
+        }
+        
+        .ideas-container {
+            margin-top: 40px;
+            display: none;
+        }
+        
+        .idea-card {
+            background-color: #f9f6f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .idea-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        .idea-title {
+            font-size: 18px;
+            color: #4a3a2a;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .idea-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .idea-tags {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .idea-tag {
+            background-color: #e0c8a0;
+            color: #4a3a2a;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 30px;
+            margin-right: 8px;
+            margin-bottom: 5px;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #d6a76b;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: #4a3a2a;
+            font-size: 18px;
+        }
+        
+        .shown {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            <span class="tooltip">Home</span>
+        </div>
+        <div class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1v5h5v10H6V3h7z"/>
+                <path d="M8 12h8v1H8zm0 2h8v1H8zm0 2h5v1H8z"/>
+            </svg>
+            <span class="tooltip">Do Literature Review</span>
+        </div>
+        <!-- <div class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
+                <path d="M12 6a1 1 0 0 0-1 1v5a1 1 0 0 0 .55.89l4 2a1 1 0 1 0 .9-1.78L13 11.28V7a1 1 0 0 0-1-1z"/>
+            </svg>
+            <span class="tooltip">Generate Ideas</span>
+        </div> -->
+        <div class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V5h14v14z"/>
+                <path d="M7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/>
+            </svg>
+            <span class="tooltip">Prepare a Draft</span>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <h1 class="logo">ResearchAssistant</h1>
+        
+        <div class="topic-header">
+            <div class="topic-name">Topic Name</div>
+            <div class="topic-suffix">Idea Generation</div>
+        </div>
+        
+        <div class="research-section">
+            <div class="section-title">Research Topic</div>
+            <textarea class="research-textarea" placeholder="Briefly describe your research topic to help generate research ideas..."></textarea>
+        </div>
+        
+        <div class="section-title">Upload PDFs for Analysis</div>
+        <div class="upload-area">
+            <input type="file" id="pdf-upload" multiple accept=".pdf">
+            <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+            </svg>
+            <p class="upload-text">Drag & Drop PDF files here or click to browse</p>
+            <p class="upload-subtext">You can upload multiple PDF files for analysis (research papers, articles, etc.)</p>
+        </div>
+        
+        <div class="file-list" id="file-list">
+            <!-- Files will be listed here -->
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <button id="generate-button" class="action-button">Generate Research Ideas</button>
+            <button id="clear-button" class="action-button" style="background-color: #f2e8d8;">Clear All</button>
+        </div>
+        
+        <div id="ideas-container" class="ideas-container">
+            <div class="section-title">Generated Research Ideas</div>
+            
+            <!-- Ideas will be populated here -->
+        </div>
+        
+        <div class="loading-overlay" id="loading-overlay">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Analyzing PDFs & Generating Ideas...</p>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get elements
+            const topicNameElement = document.querySelector('.topic-name');
+            const researchTextarea = document.querySelector('.research-textarea');
+            const fileUpload = document.getElementById('pdf-upload');
+            const fileList = document.getElementById('file-list');
+            const generateButton = document.getElementById('generate-button');
+            const clearButton = document.getElementById('clear-button');
+            const ideasContainer = document.getElementById('ideas-container');
+            const loadingOverlay = document.getElementById('loading-overlay');
+            
+            // Get the topic name from localStorage
+            const topicName = localStorage.getItem('topicName') || 'Research Topic';
+            topicNameElement.textContent = topicName;
+            
+            // Store uploaded files
+            let uploadedFiles = [];
+            
+            // Handle file upload
+            fileUpload.addEventListener('change', function(e) {
+                const files = e.target.files;
+                
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    
+                    // Check if it's a PDF
+                    if (file.type !== 'application/pdf') {
+                        alert('Only PDF files are allowed');
+                        continue;
+                    }
+                    
+                    // Add to array
+                    uploadedFiles.push(file);
+                    
+                    // Add to UI
+                    addFileToList(file);
+                }
+            });
+            
+            // Add file to the list
+            function addFileToList(file) {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                // Format file size
+                const fileSize = formatFileSize(file.size);
+                
+                fileItem.innerHTML = `
+                    <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                        <path d="M14 3v5h5M16 13H8v-1h8v1zm0 2H8v-1h8v1zm-3 2H8v-1h5v1z"/>
+                    </svg>
+                    <div class="file-info">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${fileSize}</div>
+                    </div>
+                    <svg class="file-remove" data-name="${file.name}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                `;
+                
+                fileList.appendChild(fileItem);
+                
+                // Add remove event
+                const removeButton = fileItem.querySelector('.file-remove');
+                removeButton.addEventListener('click', function() {
+                    const fileName = this.getAttribute('data-name');
+                    removeFile(fileName);
+                    fileItem.remove();
+                });
+            }
+            
+            // Remove file from array
+            function removeFile(fileName) {
+                uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
+            }
+            
+            // Format file size
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            // Generate ideas button
+            generateButton.addEventListener('click', function() {
+                if (uploadedFiles.length === 0) {
+                    alert('Please upload at least one PDF file');
+                    return;
+                }
+                
+                // Show loading
+                loadingOverlay.classList.add('shown');
+                
+                // Simulate processing (in a real app, this would send files to backend)
+                setTimeout(function() {
+                    // Hide loading
+                    loadingOverlay.classList.remove('shown');
+                    
+                    // Generate mock ideas based on topic
+                    const topic = researchTextarea.value.trim() || topicName;
+                    generateIdeas(topic);
+                    
+                    // Show ideas
+                    ideasContainer.style.display = 'block';
+                    
+                    // Scroll to ideas
+                    ideasContainer.scrollIntoView({ behavior: 'smooth' });
+                }, 3000);
+            });
+            
+            // Clear button
+            clearButton.addEventListener('click', function() {
+                // Clear files
+                uploadedFiles = [];
+                fileList.innerHTML = '';
+                
+                // Clear textarea
+                researchTextarea.value = '';
+                
+                // Hide ideas
+                ideasContainer.style.display = 'none';
+                ideasContainer.innerHTML = '<div class="section-title">Generated Research Ideas</div>';
+            });
+            
+            // Generate ideas based on topic
+            function generateIdeas(topic) {
+                ideasContainer.innerHTML = '<div class="section-title">Generated Research Ideas</div>';
+                
+                // Create mock ideas (in a real app, these would come from analyzed PDFs)
+                const ideas = [
+                    {
+                        title: `Exploring ${topic} through Meta-Analysis`,
+                        description: `Conduct a comprehensive meta-analysis of existing studies on ${topic} to identify patterns, gaps, and future research directions.`,
+                        tags: ['Meta-Analysis', 'Literature Review', 'Research Gaps']
+                    },
+                    {
+                        title: `${topic} in Different Cultural Contexts`,
+                        description: `Investigate how ${topic} manifests in various cultural contexts and what factors influence these differences.`,
+                        tags: ['Cross-Cultural', 'Comparative Analysis', 'Global Perspective']
+                    },
+                    {
+                        title: `Technological Innovations in ${topic}`,
+                        description: `Explore recent technological advancements that have impacted ${topic} and propose new applications or improvements.`,
+                        tags: ['Technology', 'Innovation', 'Applications']
+                    },
+                    {
+                        title: `Ethical Considerations in ${topic} Research`,
+                        description: `Analyze ethical challenges and considerations when conducting research on ${topic}, including privacy concerns, consent issues, and potential societal impacts.`,
+                        tags: ['Ethics', 'Research Methods', 'Policy']
+                    },
+                    {
+                        title: `${topic} in Educational Settings`,
+                        description: `Investigate the applications and implications of ${topic} in educational contexts, from primary education to higher learning institutions.`,
+                        tags: ['Education', 'Pedagogy', 'Learning']
+                    }
+                ];
+                
+                // Add ideas to container
+                ideas.forEach(idea => {
+                    const ideaCard = document.createElement('div');
+                    ideaCard.className = 'idea-card';
+                    
+                    let tagsHTML = '';
+                    idea.tags.forEach(tag => {
+                        tagsHTML += `<span class="idea-tag">${tag}</span>`;
+                    });
+                    
+                    ideaCard.innerHTML = `
+                        <div class="idea-title">${idea.title}</div>
+                        <div class="idea-description">${idea.description}</div>
+                        <div class="idea-tags">
+                            ${tagsHTML}
+                        </div>
+                    `;
+                    
+                    ideasContainer.appendChild(ideaCard);
+                });
+            }
+            
+            // Add navigation between pages
+            const homeIcon = document.querySelector('.sidebar-icon:first-child');
+            homeIcon.addEventListener('click', function() {
+                // Navigate to home page
+                window.location.href = 'index.html';
+            });
+            
+            const literatureReviewIcon = document.querySelector('.sidebar-icon:nth-child(2)');
+            literatureReviewIcon.addEventListener('click', function() {
+                // Navigate to literature review page
+                window.location.href = 'literature-review.html';
+            });
+            
+            const draftIcon = document.querySelector('.sidebar-icon:nth-child(3)');
+            draftIcon.addEventListener('click', function() {
+                // Navigate to draft page (would be implemented in a real app)
+                window.location.href = 'draft-preparation.html';
+            });
+            
+            // Also allow drag and drop
+            const uploadArea = document.querySelector('.upload-area');
+            
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#d6a76b';
+                this.style.backgroundColor = '#f9f6f0';
+            });
+            
+            uploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#e0c8a0';
+                this.style.backgroundColor = 'transparent';
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#e0c8a0';
+                this.style.backgroundColor = 'transparent';
+                
+                const files = e.dataTransfer.files;
+                
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    
+                    // Check if it's a PDF
+                    if (file.type !== 'application/pdf') {
+                        alert('Only PDF files are allowed');
+                        continue;
+                    }
+                    
+                    // Add to array
+                    uploadedFiles.push(file);
+                    
+                    // Add to UI
+                    addFileToList(file);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

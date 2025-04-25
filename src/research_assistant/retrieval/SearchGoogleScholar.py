@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 # Loading environment variables
 load_dotenv()
-SERPAPI_KEY = os.getenv("SERPAPI_KEY")
+SERPAPI_KEY = os.environ.get("SERPAPI_KEY").strip('=')[1:-1]
 
 # Add the project root to the Python path to ensure package imports work correctly
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
@@ -63,7 +63,7 @@ def enrich_gs_results_parallel(gs_raw_results, sem_results, max_workers=5):
         enriched_results = list(executor.map(enrich_with_semantic_scholar, unique_gs))
     return enriched_results
 
-def get_googlescholar_results(query, max_results=10, sem_results=None):
+def get_googlescholar_results(query, max_results=3, sem_results=None):
     """This function takes a dictionary of parameters and returns a list of dictionaries containing the results from Google Scholar.
     Args:
         query (str): The search query.
