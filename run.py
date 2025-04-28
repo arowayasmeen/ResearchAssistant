@@ -6,7 +6,6 @@ import os
 import sys
 import subprocess
 import time
-from pathlib import Path
 
 # Add the project root to the Python path to ensure imports work correctly
 sys.path.insert(0, os.path.abspath('.'))
@@ -24,10 +23,10 @@ def check_environment():
         print("The application may still work if the directory structure is correct.")
     
     required_dirs = [
-        Path("src") / "research_assistant" / "retrieval",
-        Path("src") / "research_assistant" / "ranking",
-        Path("src") / "research_assistant" / "api",
-        Path("src") / "research_assistant" / "utils"
+        "src/research_assistant/retrieval",
+        "src/research_assistant/ranking",
+        "src/research_assistant/api",
+        "src/research_assistant/utils"
     ]
 
     for directory in required_dirs:
@@ -36,9 +35,9 @@ def check_environment():
             return False
         
     required_files = [
-        Path("src") / "research_assistant" / "api" / "app.py",
-        Path("ui") / "index.html",
-        Path("requirements.txt")
+        "src/research_assistant/api/app.py",
+        "ui/index.html",
+        "requirements.txt"
     ]
 
     for file_path in required_files:
@@ -57,9 +56,8 @@ def start_api_server():
     python_exec = sys.executable
 
     # Use subprocess to start the server in the background
-    api_path = Path("src") / "research_assistant" / "api" / "app.py"
     api_process = subprocess.Popen(
-        [python_exec, api_path],
+        [python_exec, "src/research_assistant/api/app.py"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True
