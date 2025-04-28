@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResearchAssistant - Draft Preparation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar {
+            width: 68px;
+            background-color: #6b5d4d;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+        }
+        
+        .main-content {
+            flex: 1;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            overflow-y: auto;
+        }
+        
+        .logo {
+            color: #6b5d4d;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        
+        .research-header {
+            margin-bottom: 40px;
+        }
+        
+        .topic-suffix {
+            color: #4a3a2a;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .topic-name {
+            color: #d6a76b;
+            font-size: 24px;
+            font-weight: bold;
+            display: inline;
+            margin-right: 10px;
+        }
+        
+        .section-title {
+            color: #4a3a2a;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            margin-top: 30px;
+        }
+        
+        .sidebar-icon {
+            width: 36px;
+            height: 36px;
+            background-color: #e0c8a0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-icon:hover {
+            width: 42px;
+            height: 42px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .sidebar-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: #6b5d4d;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-icon:hover svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .tooltip {
+            visibility: hidden;
+            position: absolute;
+            left: 50px;
+            background-color: #111;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            font-size: 14px;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .sidebar-icon:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .action-button {
+            padding: 10px 25px;
+            background-color: #e0c8a0;
+            color: #4a3a2a;
+            border: none;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        
+        .action-button:hover {
+            background-color: #d6a76b;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e0c8a0;
+            font-size: 16px;
+            margin-bottom: 20px;
+            outline: none;
+        }
+        
+        .input-field:focus {
+            border-color: #d6a76b;
+            box-shadow: 0 0 5px rgba(214, 167, 107, 0.3);
+        }
+        
+        .button-container {
+            display: flex;
+            margin-top: 10px;
+        }
+        
+        .title-buttons {
+            display: flex;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .draft-section {
+            margin-top: 40px;
+        }
+        
+        .outline-area {
+            width: 100%;
+            min-height: 300px;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e0c8a0;
+            font-size: 16px;
+            margin-bottom: 20px;
+            outline: none;
+            display: none;
+        }
+        
+        .outline-area:focus {
+            border-color: #d6a76b;
+            box-shadow: 0 0 5px rgba(214, 167, 107, 0.3);
+        }
+        
+        .paper-section {
+            margin-top: 40px;
+            display: none;
+        }
+        
+        .latex-editor {
+            width: 100%;
+            min-height: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e0c8a0;
+            font-size: 14px;
+            font-family: monospace;
+            margin-bottom: 20px;
+            outline: none;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+        
+        .latex-editor:focus {
+            border-color: #d6a76b;
+            box-shadow: 0 0 5px rgba(214, 167, 107, 0.3);
+        }
+        
+        .preview-section {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .pdf-preview {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #e0c8a0;
+            border-radius: 10px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .pdf-preview iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .preview-placeholder {
+            text-align: center;
+            color: #888;
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            background-color: #f2e8d8;
+            border: 1px solid #e0c8a0;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            margin-right: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #6b5d4d;
+        }
+        
+        .tab.active {
+            background-color: #d6a76b;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            <span class="tooltip">Home</span>
+        </div>
+        <div class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1v5h5v10H6V3h7z"/>
+                <path d="M8 12h8v1H8zm0 2h8v1H8zm0 2h5v1H8z"/>
+            </svg>
+            <span class="tooltip">Do Literature Review</span>
+        </div>
+        <div class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
+                <path d="M12 6a1 1 0 0 0-1 1v5a1 1 0 0 0 .55.89l4 2a1 1 0 1 0 .9-1.78L13 11.28V7a1 1 0 0 0-1-1z"/>
+            </svg>
+            <span class="tooltip">Generate Ideas</span>
+        </div>
+        <!-- <div class="sidebar-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V5h14v14z"/>
+                <path d="M7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/>
+            </svg>
+            <span class="tooltip">Prepare a Draft</span>
+        </div> -->
+    </div>
+    
+    <div class="main-content">
+        <h1 class="logo">ResearchAssistant</h1>
+        
+        <div class="research-header">
+            <h2>Prepare a Research Paper Draft on <span class="topic-name">Topic Name</span></h2>
+        </div>
+        
+        <div class="paper-title-section">
+            <div class="section-title">Paper Title</div>
+            <div id="title-display"></div>
+            
+            <div class="title-buttons">
+                <button id="brainstorm-button" class="action-button">Brainstorm Paper Title Ideas?</button>
+                <button id="enter-title-button" class="action-button">Enter a Paper Title</button>
+            </div>
+            
+            <div id="title-input-container" style="display: none;">
+                <input type="text" id="title-input" class="input-field" placeholder="Enter your paper title here...">
+                <button id="save-title-button" class="action-button">Save Title</button>
+            </div>
+            
+            <div id="title-suggestions" style="display: none; margin-top: 20px;">
+                <div class="section-title">Suggested Titles</div>
+                <div id="suggestions-container">
+                    <!-- Title suggestions will be added here -->
+                </div>
+                <button id="refresh-titles-button" class="action-button" style="margin-top: 10px;">Refresh Suggestions</button>
+            </div>
+        </div>
+        
+        <div class="draft-section" id="draft-section" style="display: none;">
+            <div class="section-title">Paper Outline</div>
+            <textarea id="outline-area" class="outline-area" placeholder="Your paper outline will appear here..."></textarea>
+            
+            <div class="button-container">
+                <button id="generate-outline-button" class="action-button">Generate Outline</button>
+                <button id="edit-outline-button" class="action-button">Edit Outline</button>
+                <button id="save-outline-button" class="action-button" style="display: none;">Save Outline</button>
+                <button id="generate-paper-button" class="action-button" style="background-color: #d6a76b; color: white;">Generate Full Paper</button>
+            </div>
+        </div>
+        
+        <div class="paper-section" id="paper-section">
+            <div class="section-title">Research Paper Draft</div>
+            
+            <div class="tab-container">
+                <div class="tab active" data-tab="latex">LaTeX Source</div>
+                <div class="tab" data-tab="preview">PDF Preview</div>
+            </div>
+            
+            <div class="tab-content active" id="latex-tab">
+                <textarea id="latex-editor" class="latex-editor" placeholder="LaTeX source will appear here..."></textarea>
+                <div class="button-container">
+                    <button id="edit-latex-button" class="action-button">Edit LaTeX</button>
+                    <button id="save-latex-button" class="action-button" style="display: none;">Save Changes</button>
+                    <button id="compile-button" class="action-button">Compile to PDF</button>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="preview-tab">
+                <div class="pdf-preview" id="pdf-preview">
+                    <div class="preview-placeholder" id="preview-placeholder">
+                        <p>PDF preview will appear here after compilation</p>
+                    </div>
+                    <!-- PDF iframe will be injected here -->
+                </div>
+                <div class="button-container">
+                    <button id="download-pdf-button" class="action-button">Download PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get elements
+            const topicName = document.querySelector('.topic-name');
+            const brainstormButton = document.getElementById('brainstorm-button');
+            const enterTitleButton = document.getElementById('enter-title-button');
+            const titleInputContainer = document.getElementById('title-input-container');
+            const titleInput = document.getElementById('title-input');
+            const saveTitleButton = document.getElementById('save-title-button');
+            const titleSuggestions = document.getElementById('title-suggestions');
+            const suggestionsContainer = document.getElementById('suggestions-container');
+            const refreshTitlesButton = document.getElementById('refresh-titles-button');
+            const titleDisplay = document.getElementById('title-display');
+            const draftSection = document.getElementById('draft-section');
+            const outlineArea = document.getElementById('outline-area');
+            const generateOutlineButton = document.getElementById('generate-outline-button');
+            const editOutlineButton = document.getElementById('edit-outline-button');
+            const saveOutlineButton = document.getElementById('save-outline-button');
+            const generatePaperButton = document.getElementById('generate-paper-button');
+            const paperSection = document.getElementById('paper-section');
+            const latexEditor = document.getElementById('latex-editor');
+            const editLatexButton = document.getElementById('edit-latex-button');
+            const saveLatexButton = document.getElementById('save-latex-button');
+            const compileButton = document.getElementById('compile-button');
+            const pdfPreview = document.getElementById('pdf-preview');
+            const previewPlaceholder = document.getElementById('preview-placeholder');
+            const downloadPdfButton = document.getElementById('download-pdf-button');
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            // Load topic name from local storage
+            const storedTopicName = localStorage.getItem('topicName');
+            if (storedTopicName) {
+                topicName.textContent = storedTopicName;
+            }
+            
+            // Load saved title if exists
+            const savedTitle = localStorage.getItem('paperTitle');
+            if (savedTitle) {
+                titleDisplay.textContent = savedTitle;
+                draftSection.style.display = 'block';
+            }
+            
+            // Load saved LaTeX if exists
+            const savedLatex = localStorage.getItem('paperLatex');
+            if (savedLatex) {
+                latexEditor.value = savedLatex;
+                paperSection.style.display = 'block';
+                latexEditor.readOnly = true;
+            }
+            
+            // Tab functionality
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all tab content
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Show corresponding tab content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId + '-tab').classList.add('active');
+                });
+            });
+            
+            // Brainstorm button click
+            brainstormButton.addEventListener('click', function() {
+                titleInputContainer.style.display = 'none';
+                titleSuggestions.style.display = 'block';
+                
+                // Generate mock title suggestions based on topic
+                generateTitleSuggestions(topicName.textContent);
+            });
+            
+            // Enter title button click
+            enterTitleButton.addEventListener('click', function() {
+                titleSuggestions.style.display = 'none';
+                titleInputContainer.style.display = 'block';
+            });
+            
+            // Save title button click
+            saveTitleButton.addEventListener('click', function() {
+                const title = titleInput.value.trim();
+                if (title) {
+                    titleDisplay.textContent = title;
+                    localStorage.setItem('paperTitle', title);
+                    titleInputContainer.style.display = 'none';
+                    draftSection.style.display = 'block';
+                } else {
+                    alert('Please enter a title');
+                }
+            });
+            
+            // Refresh title suggestions
+            refreshTitlesButton.addEventListener('click', function() {
+                generateTitleSuggestions(topicName.textContent);
+            });
+            
+            // Generate title suggestions
+            function generateTitleSuggestions(topic) {
+                suggestionsContainer.innerHTML = '';
+                
+                // Mock title suggestions (would be AI-generated in a real app)
+                const suggestions = [
+                    `Advances in ${topic}: A Comprehensive Review`,
+                    `The Impact of ${topic} on Modern Research`,
+                    `Exploring New Frontiers in ${topic}`,
+                    `${topic}: Challenges and Opportunities`,
+                    `A Novel Approach to ${topic} Research`
+                ];
+                
+                suggestions.forEach(suggestion => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.className = 'suggestion-item';
+                    suggestionItem.style.padding = '15px';
+                    suggestionItem.style.margin = '10px 0';
+                    suggestionItem.style.backgroundColor = '#f9f6f0';
+                    suggestionItem.style.borderRadius = '10px';
+                    suggestionItem.style.cursor = 'pointer';
+                    
+                    suggestionItem.textContent = suggestion;
+                    
+                    suggestionItem.addEventListener('click', function() {
+                        titleDisplay.textContent = suggestion;
+                        localStorage.setItem('paperTitle', suggestion);
+                        titleSuggestions.style.display = 'none';
+                        draftSection.style.display = 'block';
+                    });
+                    
+                    suggestionsContainer.appendChild(suggestionItem);
+                });
+            }
+            
+            // Generate outline button
+            generateOutlineButton.addEventListener('click', function() {
+                const title = titleDisplay.textContent;
+                if (!title) {
+                    alert('Please enter a paper title first');
+                    return;
+                }
+                
+                // Generate mock outline (would be AI-generated in a real app)
+                const outline = generateMockOutline(title, topicName.textContent);
+                
+                outlineArea.value = outline;
+                outlineArea.style.display = 'block';
+                localStorage.setItem('paperOutline', outline);
+            });
+            
+            // Edit outline button
+            editOutlineButton.addEventListener('click', function() {
+                outlineArea.readOnly = false;
+                outlineArea.style.backgroundColor = '#fff';
+                editOutlineButton.style.display = 'none';
+                saveOutlineButton.style.display = 'inline-block';
+            });
+            
+            // Save outline button
+            saveOutlineButton.addEventListener('click', function() {
+                outlineArea.readOnly = true;
+                outlineArea.style.backgroundColor = '#f9f6f0';
+                saveOutlineButton.style.display = 'none';
+                editOutlineButton.style.display = 'inline-block';
+                
+                localStorage.setItem('paperOutline', outlineArea.value);
+            });
+            
+            // Generate full paper button
+            generatePaperButton.addEventListener('click', function() {
+                const title = titleDisplay.textContent;
+                const outline = outlineArea.value;
+                
+                if (!outline) {
+                    alert('Please generate an outline first');
+                    return;
+                }
+                
+                // Generate LaTeX document based on outline
+                const latexDoc = generateLaTeXPaper(title, outline, topicName.textContent);
+                
+                latexEditor.value = latexDoc;
+                paperSection.style.display = 'block';
+                latexEditor.readOnly = true;
+                
+                localStorage.setItem('paperLatex', latexDoc);
+                
+                // Scroll to paper section
+                paperSection.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Edit LaTeX button
+            editLatexButton.addEventListener('click', function() {
+                latexEditor.readOnly = false;
+                latexEditor.style.backgroundColor = '#fff';
+                editLatexButton.style.display = 'none';
+                saveLatexButton.style.display = 'inline-block';
+            });
+            
+            // Save LaTeX button
+            saveLatexButton.addEventListener('click', function() {
+                latexEditor.readOnly = true;
+                latexEditor.style.backgroundColor = '#f9f9f9';
+                saveLatexButton.style.display = 'none';
+                editLatexButton.style.display = 'inline-block';
+                
+                localStorage.setItem('paperLatex', latexEditor.value);
+            });
+            
+            // Compile to PDF button
+            compileButton.addEventListener('click', function() {
+                // Here we simulate compilation 
+                // In a real application, this would connect to a LaTeX compiler service
+                
+                // Show a loading indicator
+                previewPlaceholder.innerHTML = '<p>Compiling LaTeX to PDF...</p>';
+                previewPlaceholder.style.display = 'block';
+                
+                // Simulate compilation delay
+                setTimeout(function() {
+                    // Hide placeholder
+                    previewPlaceholder.style.display = 'none';
+                    
+                    // Create a simulated PDF viewer (in a real app, this would be an iframe to a real PDF)
+                    const pdfViewer = document.createElement('div');
+                    pdfViewer.style.width = '100%';
+                    pdfViewer.style.height = '100%';
+                    pdfViewer.style.backgroundColor = 'white';
+                    pdfViewer.style.overflow = 'auto';
+                    pdfViewer.style.padding = '40px';
+                    pdfViewer.style.boxSizing = 'border-box';
+                    
+                    // Parse LaTeX and create a complete HTML representation
+                    const title = titleDisplay.textContent;
+                    const topic = topicName.textContent;
+                    
+                    pdfViewer.innerHTML = `
+                        <div style="font-family: serif; max-width: 800px; margin: 0 auto; line-height: 1.5;">
+                            <h1 style="text-align: center; margin-bottom: 30px;">${title}</h1>
+                            <p style="text-align: center; margin-bottom: 40px;">Author Name<br>Institution<br>${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                            
+                            <h2 style="margin-top: 20px;">Abstract</h2>
+                            <p style="text-align: justify;">This paper explores recent developments in ${topic}, presenting a comprehensive analysis of current trends and future directions. Our findings indicate significant implications for researchers and practitioners in the field.</p>
+                            
+                            <h2 style="margin-top: 30px;">1. Introduction</h2>
+                            <p style="text-align: justify;">The field of ${topic} has seen remarkable growth in recent years. This paper aims to address the current research gaps and provide valuable insights into this evolving domain.</p>
+                            
+                            <h3 style="margin-top: 20px;">1.1 Background</h3>
+                            <p style="text-align: justify;">${topic} emerged as a critical area of study in recent decades, with various applications across multiple disciplines. The growing interest in this field reflects its significance in addressing contemporary challenges and creating opportunities for innovation.</p>
+                            
+                            <h3 style="margin-top: 20px;">1.2 Research Gap</h3>
+                            <p style="text-align: justify;">Despite extensive research, significant gaps remain in our understanding of ${topic}, particularly regarding specific methodological approaches and theoretical frameworks. This study addresses these gaps by offering a novel perspective that integrates diverse disciplinary insights.</p>
+                            
+                            <h3 style="margin-top: 20px;">1.3 Research Objectives</h3>
+                            <p style="text-align: justify;">This study aims to:</p>
+                            <ul>
+                                <li>Analyze current trends in ${topic}</li>
+                                <li>Identify key challenges in the field</li>
+                                <li>Propose innovative solutions to address existing limitations</li>
+                            </ul>
+                            
+                            <h2 style="margin-top: 30px;">2. Literature Review</h2>
+                            <p style="text-align: justify;">Previous studies in ${topic} have established a foundation for understanding key concepts. Authors such as Smith (2023) and Johnson (2024) have contributed significantly to theoretical frameworks in this area.</p>
+                            
+                            <h3 style="margin-top: 20px;">2.1 Historical Perspective</h3>
+                            <p style="text-align: justify;">The evolution of ${topic} can be traced back to pioneering work by early researchers in the field, who established the fundamental principles that guide modern research. These early contributions laid the groundwork for subsequent theoretical and methodological advancements.</p>
+                            
+                            <h3 style="margin-top: 20px;">2.2 Current State of Research</h3>
+                            <p style="text-align: justify;">Recent studies have expanded our understanding through empirical investigations and theoretical advancements. Notable contributions include improved methodological approaches, refined conceptual frameworks, and innovative applications in various contexts.</p>
+                            
+                            <h3 style="margin-top: 20px;">2.3 Theoretical Frameworks</h3>
+                            <p style="text-align: justify;">Several theoretical models have been proposed to explain ${topic}, including:</p>
+                            <ul>
+                                <li>Integrative Framework Model</li>
+                                <li>Process-Oriented Approach</li>
+                                <li>Systems Dynamics Perspective</li>
+                            </ul>
+                            
+                            <h2 style="margin-top: 30px;">3. Methodology</h2>
+                            <p style="text-align: justify;">This research employs a mixed-methods approach to investigate ${topic}, combining quantitative and qualitative data to provide a comprehensive understanding of the research questions.</p>
+                            
+                            <h3 style="margin-top: 20px;">3.1 Research Design</h3>
+                            <p style="text-align: justify;">We utilized a sequential explanatory design, combining quantitative data collection with qualitative follow-up to provide deeper insights. This approach allowed us to identify patterns in the quantitative data and explore the underlying mechanisms through qualitative inquiry.</p>
+                            
+                            <h3 style="margin-top: 20px;">3.2 Data Collection</h3>
+                            <p style="text-align: justify;">Data was gathered through multiple sources to ensure triangulation and comprehensive coverage of the research questions:</p>
+                            <ul>
+                                <li>Surveys of key stakeholders and domain experts</li>
+                                <li>In-depth interviews with leading researchers in the field</li>
+                                <li>Analysis of secondary data from published studies and reports</li>
+                            </ul>
+                            
+                            <h3 style="margin-top: 20px;">3.3 Analytical Approach</h3>
+                            <p style="text-align: justify;">The data was analyzed using multivariate statistical methods for quantitative components and thematic analysis for qualitative data. This integrated analytical approach enabled a holistic examination of patterns, relationships, and contextual factors.</p>
+                            
+                            <h2 style="margin-top: 30px;">4. Results</h2>
+                            <p style="text-align: justify;">Our analysis revealed several significant findings regarding ${topic} that contribute to the existing knowledge base and address the identified research gaps.</p>
+                            
+                            <h3 style="margin-top: 20px;">4.1 Key Finding 1</h3>
+                            <p style="text-align: justify;">The analysis identified a significant correlation between conceptual understanding and practical application in ${topic}. Specifically, organizations that demonstrated a thorough theoretical grounding showed 35% higher implementation success rates compared to those with limited conceptual knowledge.</p>
+                            
+                            <h3 style="margin-top: 20px;">4.2 Key Finding 2</h3>
+                            <p style="text-align: justify;">Interdisciplinary approaches to ${topic} yielded more comprehensive solutions than single-discipline perspectives. Teams incorporating diverse expertise developed solutions that addressed 40% more contextual factors than homogeneous teams.</p>
+                            
+                            <h3 style="margin-top: 20px;">4.3 Statistical Analysis</h3>
+                            <p style="text-align: justify;">Statistical tests confirmed the significance of our findings (p < 0.05), with effect sizes ranging from medium to large across the different variables examined. Regression analyses indicated that contextual factors accounted for 47% of the variance in implementation outcomes.</p>
+                            
+                            <h2 style="margin-top: 30px;">5. Discussion</h2>
+                            <p style="text-align: justify;">The results of this study provide valuable insights into ${topic} and extend previous research in several important ways, offering both theoretical contributions and practical implications.</p>
+                            
+                            <h3 style="margin-top: 20px;">5.1 Interpretation of Results</h3>
+                            <p style="text-align: justify;">Our findings suggest that an integrated approach to ${topic} that combines theoretical understanding with practical application yields the most effective outcomes. This challenges the prevailing view that emphasizes implementation over conceptual grounding and supports the need for balanced competency development.</p>
+                            
+                            <h3 style="margin-top: 20px;">5.2 Theoretical and Practical Implications</h3>
+                            <p style="text-align: justify;">This research has implications for both theory development and practical applications in ${topic}. Theoretically, it contributes to an enhanced understanding of the mechanisms that connect knowledge with implementation. Practically, these findings can inform training programs, organizational structures, and policy frameworks that support effective integration of theory and practice.</p>
+                            
+                            <h3 style="margin-top: 20px;">5.3 Limitations</h3>
+                            <p style="text-align: justify;">Several limitations should be acknowledged, including the cross-sectional nature of the data, potential regional biases in the sample, and the focus on specific sectors that may limit generalizability. These limitations provide avenues for future research using longitudinal designs and broader sampling approaches.</p>
+                            
+                            <h2 style="margin-top: 30px;">6. Conclusion</h2>
+                            <p style="text-align: justify;">This study has expanded our understanding of ${topic} through a comprehensive investigation that combines quantitative and qualitative methods. The findings highlight the importance of integrated approaches and suggest new directions for research and practice.</p>
+                            
+                            <h3 style="margin-top: 20px;">6.1 Summary of Findings</h3>
+                            <p style="text-align: justify;">The key findings of this research include:</p>
+                            <ul>
+                                <li>The critical role of theoretical understanding in successful implementation</li>
+                                <li>The advantages of interdisciplinary approaches to complex challenges</li>
+                                <li>The influence of contextual factors on outcomes and effectiveness</li>
+                            </ul>
+                            
+                            <h3 style="margin-top: 20px;">6.2 Contributions to the Field</h3>
+                            <p style="text-align: justify;">This research contributes to the field of ${topic} by providing an integrated framework that connects theoretical perspectives with practical applications, offering a more nuanced understanding of the complexities involved in effective implementation.</p>
+                            
+                            <h3 style="margin-top: 20px;">6.3 Future Research Directions</h3>
+                            <p style="text-align: justify;">Future studies should explore longitudinal patterns in the development and application of ${topic}, investigate cross-cultural variations in implementation approaches, and examine the role of emerging technologies in enhancing effectiveness and scalability.</p>
+                            
+                            <h2 style="margin-top: 30px;">References</h2>
+                            <p style="text-align: left; margin-left: 40px; text-indent: -40px; margin-bottom: 10px;">Smith, J. (2023). <i>Advances in ${topic}: Theoretical Foundations and Practical Applications</i>. Journal of ${topic} Studies, 45(2), 112-128.</p>
+                            <p style="text-align: left; margin-left: 40px; text-indent: -40px; margin-bottom: 10px;">Johnson, M. (2024). <i>Integrative Approaches to ${topic}</i>. In H. Williams (Ed.), <i>Advances in ${topic}</i> (pp. 78-96). Academic Publisher.</p>
+                            <p style="text-align: left; margin-left: 40px; text-indent: -40px; margin-bottom: 10px;">Davis, R., & Thompson, E. (2024). <i>Implementation Challenges in ${topic}: A Comparative Analysis</i>. International Journal of ${topic}, 12(3), 215-234.</p>
+                        </div>
+                    `;
+                    
+                    // Clear previous content
+                    pdfPreview.innerHTML = '';
+                    pdfPreview.appendChild(pdfViewer);
+                    
+                    // Switch to preview tab
+                    document.querySelector('.tab[data-tab="preview"]').click();
+                    
+                    // Store a flag indicating compilation is complete
+                    localStorage.setItem('pdfCompiled', 'true');
+                }, 2000);
+            });
+            
+            // Download PDF button
+            downloadPdfButton.addEventListener('click', function() {
+                const isPdfCompiled = localStorage.getItem('pdfCompiled') === 'true';
+                
+                if (!isPdfCompiled) {
+                    alert('Please compile the LaTeX document first');
+                    return;
+                }
+                
+                // In a real app, this would download the actual PDF
+                alert('In a real application, this would download the compiled PDF file.');
+            });
+            
+            // Load saved outline if exists
+            const savedOutline = localStorage.getItem('paperOutline');
+            if (savedOutline) {
+                outlineArea.value = savedOutline;
+                outlineArea.style.display = 'block';
+                outlineArea.readOnly = true;
+                outlineArea.style.backgroundColor = '#f9f6f0';
+            }
+            
+            // Generate mock outline
+            function generateMockOutline(title, topic) {
+                return `# ${title}
+
+## 1. Abstract
+- Brief overview of the research
+- Key findings and implications
+- Importance in the field of ${topic}
+
+## 2. Introduction
+- Background of ${topic}
+- Problem statement and research gap
+- Research questions and objectives
+- Significance of the study
+
+## 3. Literature Review
+- Historical perspective of ${topic}
+- Current state of research
+- Theoretical frameworks
+- Research gaps identified
+
+## 4. Methodology
+- Research design
+- Data collection methods
+- Analytical approaches
+- Ethical considerations
+
+## 5. Results
+- Key findings
+- Data analysis
+- Statistical significance
+- Visual representations of data
+
+## 6. Discussion
+- Interpretation of results
+- Comparison with existing literature
+- Theoretical and practical implications
+- Limitations of the study
+
+## 7. Conclusion
+- Summary of findings
+- Contribution to the field
+- Recommendations for future research
+
+## 8. References`;
+            }
+            
+            // Generate LaTeX document
+            function generateLaTeXPaper(title, outline, topic) {
+                return `\\documentclass[12pt,a4paper]{article}
+\\usepackage{amsmath}
+\\usepackage{graphicx}
+\\usepackage{hyperref}
+\\usepackage[utf8]{inputenc}
+\\usepackage[margin=1in]{geometry}
+
+\\title{${title}}
+\\author{Author Name}
+\\date{\\today}
+
+\\begin{document}
+
+\\maketitle
+
+\\begin{abstract}
+This paper explores recent developments in ${topic}, presenting a comprehensive analysis of current trends and future directions. Our findings indicate significant implications for researchers and practitioners in the field.
+\\end{abstract}
+
+\\section{Introduction}
+The field of ${topic} has seen remarkable growth in recent years. This paper aims to address the current research gaps and provide valuable insights into this evolving domain.
+
+\\subsection{Background}
+${topic} emerged as a critical area of study in recent decades, with various applications across multiple disciplines.
+
+\\subsection{Research Gap}
+Despite extensive research, significant gaps remain in our understanding of ${topic}, particularly regarding [specific aspect].
+
+\\subsection{Research Objectives}
+This study aims to:
+\\begin{itemize}
+    \\item Analyze current trends in ${topic}
+    \\item Identify key challenges in the field
+    \\item Propose innovative solutions to address existing limitations
+\\end{itemize}
+
+\\section{Literature Review}
+Previous studies in ${topic} have established a foundation for understanding key concepts. Authors such as Smith (2023) and Johnson (2024) have contributed significantly to theoretical frameworks in this area.
+
+\\subsection{Historical Perspective}
+The evolution of ${topic} can be traced back to pioneering work by [early researchers], who established the fundamental principles that guide modern research.
+
+\\subsection{Current State of Research}
+Recent studies have expanded our understanding through empirical investigations and theoretical advancements. Notable contributions include [specific advances].
+
+\\subsection{Theoretical Frameworks}
+Several theoretical models have been proposed to explain ${topic}, including:
+\\begin{itemize}
+    \\item [Theory 1]
+    \\item [Theory 2]
+    \\item [Theory 3]
+\\end{itemize}
+
+\\section{Methodology}
+This research employs a mixed-methods approach to investigate ${topic}.
+
+\\subsection{Research Design}
+We utilized a sequential explanatory design, combining quantitative data collection with qualitative follow-up to provide deeper insights.
+
+\\subsection{Data Collection}
+Data was gathered through:
+\\begin{itemize}
+    \\item Surveys of [population]
+    \\item In-depth interviews with [experts]
+    \\item Analysis of [secondary data sources]
+\\end{itemize}
+
+\\subsection{Analytical Approach}
+The data was analyzed using [specific statistical methods] for quantitative components and [qualitative analysis approach] for interview data.
+
+\\section{Results}
+Our analysis revealed several significant findings regarding ${topic}.
+
+\\subsection{Key Finding 1}
+[Description of first major finding]
+
+\\subsection{Key Finding 2}
+[Description of second major finding]
+
+\\subsection{Statistical Analysis}
+Statistical tests confirmed the significance of our findings ($p < 0.05$), with effect sizes ranging from [range].
+
+\\section{Discussion}
+The results of this study provide valuable insights into ${topic} and extend previous research in several important ways.
+
+\\subsection{Interpretation of Results}
+Our findings suggest that [interpretation], which challenges/supports existing theories about ${topic}.
+
+\\subsection{Theoretical and Practical Implications}
+This research has implications for both theory development and practical applications in ${topic}. Theoretically, it contributes to [specific theoretical contribution]. Practically, these findings can inform [practical applications].
+
+\\subsection{Limitations}
+Several limitations should be acknowledged, including [limitations]. These limitations provide avenues for future research.
+
+\\section{Conclusion}
+This study has expanded our understanding of ${topic} through [summary of approach]. The findings highlight the importance of [key insights] and suggest new directions for research and practice.
+
+\\subsection{Summary of Findings}
+The key findings of this research include:
+\\begin{itemize}
+    \\item [Key finding 1 summary]
+    \\item [Key finding 2 summary]
+    \\item [Key finding 3 summary]
+\\end{itemize}
+
+\\subsection{Contributions to the Field}
+This research contributes to the field of ${topic} by [specific contributions].
+
+\\subsection{Future Research Directions}
+Future studies should explore [suggested research directions] to further advance our understanding of ${topic}.
+
+\\begin{thebibliography}{99}
+\\bibitem{smith2023} Smith, J. (2023). \\textit{Title of Smith's work}. Journal of ${topic}, 45(2), 112-128.
+\\bibitem{johnson2024} Johnson, M. (2024). \\textit{Title of Johnson's work}. In Advances in ${topic} (pp. 78-96). Publisher Name.
+\\end{thebibliography}
+
+\\end{document}`;
+            }
+            
+            // Navigation between pages
+            const homeIcon = document.querySelector('.sidebar-icon:nth-child(1)');
+            homeIcon.addEventListener('click', function() {
+                window.location.href = 'index.html';
+            });
+            
+            const literatureReviewIcon = document.querySelector('.sidebar-icon:nth-child(2)');
+            literatureReviewIcon.addEventListener('click', function() {
+                window.location.href = 'literature-review.html';
+            });
+            
+            const ideaGenerationIcon = document.querySelector('.sidebar-icon:nth-child(3)');
+            ideaGenerationIcon.addEventListener('click', function() {
+                window.location.href = 'idea-generation.html';
+            });
+        });
+    </script>
+    </script>
+</body>
+</html>
