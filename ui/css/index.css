@@ -1,0 +1,70 @@
+@import url('base.css');
+
+.main-content {
+    flex: 1;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 40px;
+}
+
+.welcome-message {
+    font-size: 36px;
+    color: #3a3a3a;
+    font-weight: bold;
+    margin-bottom: 50px;
+}
+
+.input-container {
+    width: 80%;
+    max-width: 700px;
+    position: relative;
+}
+
+.research-input {
+    width: 100%;
+    padding: 20px;
+    border-radius: 50px;
+    border: none;
+    background-color: #f2e8d8;
+    font-size: 16px;
+    color: #666;
+    outline: none;
+}
+
+.submit-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #e0c8a0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.submit-button.active {
+    background-color: #c7a570;
+}
+
+.submit-button.active:hover {
+    width: 46px;
+    height: 46px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(-50%) scale(1.05);
+}
+
+.submit-button svg {
+    width: 20px;
+    height: 20px;
+    fill: #6b5d4d;
+}
+

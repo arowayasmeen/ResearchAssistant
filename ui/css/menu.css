@@ -1,0 +1,88 @@
+@import url('base.css');
+
+body {
+
+    flex-direction: column;
+    align-items: center;
+
+}
+.main-content {
+    flex: 1;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 40px;
+}
+
+.question-text {
+    font-size: 32px;
+    color: #3a3a3a;
+    font-weight: bold;
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+.topic-name {
+    color: #d6a76b;
+}
+
+.icons-container {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.icon-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    height: 165px; /* Fixed height to accommodate icon + button */
+}
+
+.icon {
+    width: 100px;
+    height: 100px;
+    background-color: #e0c8a0;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.icon svg {
+    width: 50px;
+    height: 50px;
+    fill: #6b5d4d;
+}
+
+.action-button {
+    background-color: #000;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 30px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+    height: 45px; /* Fixed height to prevent layout shift */
+}
+
+.action-button:hover {
+    background-color: #333;
+    transform: translateY(-2px);
+}

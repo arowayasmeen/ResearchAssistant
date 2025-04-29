@@ -106,7 +106,7 @@ def main():
     print("\nResearchAssistant is now running!")
     print("API server: http://localhost:5000")
     print("To use the UI, manually open the file:")
-    print("  file://" + os.path.abspath("ui/index.html"))
+    print("  file://" + os.path.abspath("ui\index.html"))
     print("\nPress Ctrl+C to stop the application")
 
     try:

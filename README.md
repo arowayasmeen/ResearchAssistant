@@ -17,6 +17,11 @@ conda create -n researchassistant python=3.12
 conda activate researchassistant
 ```
 
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
 ## Set up dependencies
 
 ```bash
