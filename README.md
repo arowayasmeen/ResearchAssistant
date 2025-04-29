@@ -32,6 +32,7 @@ pip install -r requirements.txt
 
 ```env
 SERPAPI_KEY=your_serpapi_key_here
+GOOGLE_API_KEY=your_api_key_here
 ```
 
 You can get a SerpAPI key by signing up at [serpapi.com](https://serpapi.com).
