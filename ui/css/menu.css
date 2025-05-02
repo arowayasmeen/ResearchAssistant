@@ -1,11 +1,11 @@
 @import url('base.css');
 
 body {
-
     flex-direction: column;
     align-items: center;
-
+    background-color: #e6f7ff; /* Light ocean blue background */
 }
+
 .main-content {
     flex: 1;
     background-color: #fff;
@@ -14,18 +14,50 @@ body {
     align-items: center;
     justify-content: flex-start;
     padding-top: 40px;
+    background-image: linear-gradient(to bottom, #ffffff, #f0f8ff);
+    position: relative;
+    overflow: hidden;
+}
+
+
+
+@keyframes wave {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.logo {
+    color: #0a4d7c; /* Deep ocean blue */
+    font-size: 36px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.logo::after {
+    content: "⚓"; /* Anchor emoji */
+    font-size: 24px;
+    position: absolute;
+    margin-left: 10px;
+    top: 5px;
 }
 
 .question-text {
     font-size: 32px;
-    color: #3a3a3a;
+    color: #0a4d7c; /* Deep ocean blue */
     font-weight: bold;
     margin-bottom: 60px;
     text-align: center;
+    z-index: 1;
 }
 
 .topic-name {
-    color: #d6a76b;
+    color: #3a8bbd; /* Medium ocean blue */
 }
 
 .icons-container {
@@ -34,6 +66,7 @@ body {
     gap: 50px;
     margin-bottom: 40px;
     flex-wrap: wrap;
+    z-index: 1;
 }
 
 .icon-wrapper {
@@ -41,13 +74,13 @@ body {
     flex-direction: column;
     align-items: center;
     position: relative;
-    height: 165px; /* Fixed height to accommodate icon + button */
+    height: 180px; /* Fixed height to accommodate icon + button */
 }
 
 .icon {
-    width: 100px;
-    height: 100px;
-    background-color: #e0c8a0;
+    width: 120px;
+    height: 120px;
+    background-color: #8ecae6; /* Light ocean blue */
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -55,21 +88,30 @@ body {
     margin-bottom: 20px;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(10, 77, 124, 0.2);
+    overflow: hidden; /* Keep images contained */
 }
 
 .icon:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+    background-color: #3a8bbd; /* Medium ocean blue */
+    box-shadow: 0 6px 12px rgba(10, 77, 124, 0.3);
 }
 
-.icon svg {
-    width: 50px;
-    height: 50px;
-    fill: #6b5d4d;
+.icon img {
+    width: 100%; /* Make the image fill the container */
+    height: 100%;
+    object-fit: contain; /* Maintain aspect ratio */
+    padding: 15px; /* Add some padding around the image */
+    transition: all 0.3s ease;
+}
+
+.icon:hover img {
+    transform: scale(1.1); /* Slightly enlarge image on hover */
 }
 
 .action-button {
-    background-color: #000;
+    background-color: #0a4d7c; /* Deep ocean blue */
     color: #fff;
     padding: 12px 24px;
     border-radius: 30px;
@@ -80,9 +122,47 @@ body {
     opacity: 0;
     visibility: hidden;
     height: 45px; /* Fixed height to prevent layout shift */
+    box-shadow: 0 2px 5px rgba(10, 77, 124, 0.2);
 }
 
 .action-button:hover {
-    background-color: #333;
+    background-color: #073f68; /* Darker ocean blue */
     transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(10, 77, 124, 0.3);
+}
+
+/* Port styles */
+#literature-review-icon {
+    border: 2px solid #0a4d7c;
+}
+
+#generate-ideas-icon {
+    border: 2px solid #0a4d7c;
+}
+
+#prepare-draft-icon {
+    border: 2px solid #0a4d7c;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .icons-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .icon {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .icon svg {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .question-text {
+        font-size: 24px;
+        margin-bottom: 40px;
+    }
 }

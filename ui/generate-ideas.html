@@ -16,24 +16,15 @@
             <span class="tooltip">Home</span>
         </div>
         <div class="sidebar-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1v5h5v10H6V3h7z"/>
-                <path d="M8 12h8v1H8zm0 2h8v1H8zm0 2h5v1H8z"/>
-            </svg>
-            <span class="tooltip">Do Literature Review</span>
-        </div>
-        <!-- <div class="sidebar-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
-                <path d="M12 6a1 1 0 0 0-1 1v5a1 1 0 0 0 .55.89l4 2a1 1 0 1 0 .9-1.78L13 11.28V7a1 1 0 0 0-1-1z"/>
-            </svg>
-            <span class="tooltip">Generate Ideas</span>
-        </div> -->
+            <img src="images/spyglass.png" alt="spyglass" class="icon-image">
+            <span class="tooltip">Literature Review</span>
+        </div> 
         <div class="sidebar-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V5h14v14z"/>
-                <path d="M7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/>
-            </svg>
+            <img src="images/helm.png" alt="helm" class="icon-image">
+            <span class="tooltip">Generate Ideas</span>
+        </div>
+        <div class="sidebar-icon">
+            <img src="images/quill.png" alt="quill" class="icon-image">
             <span class="tooltip">Prepare a Draft</span>
         </div>
     </div>
@@ -267,23 +258,22 @@
                 });
             }
             
-            // Add navigation between pages
-            const homeIcon = document.querySelector('.sidebar-icon:first-child');
-            homeIcon.addEventListener('click', function() {
-                // Navigate to home page
-                window.location.href = 'index.html';
-            });
-            
-            const literatureReviewIcon = document.querySelector('.sidebar-icon:nth-child(2)');
-            literatureReviewIcon.addEventListener('click', function() {
-                // Navigate to literature review page
-                window.location.href = 'literature-review.html';
-            });
-            
-            const draftIcon = document.querySelector('.sidebar-icon:nth-child(3)');
-            draftIcon.addEventListener('click', function() {
-                // Navigate to draft page (would be implemented in a real app)
-                window.location.href = 'draft-preparation.html';
+            // Map tooltips (or any identifier) to page URLs
+            const pageMap = {
+                "Home": "index.html",
+                "Literature Review": "literature-review.html",
+                "Generate Ideas": "idea-generation.html",
+                "Prepare a Draft": "draft-preparation.html"
+            };
+
+            // Select all sidebar icons
+            document.querySelectorAll('.sidebar-icon').forEach(icon => {
+                const tooltip = icon.querySelector('.tooltip');
+                if (tooltip && pageMap[tooltip.textContent]) {
+                    icon.addEventListener('click', () => {
+                        window.location.href = pageMap[tooltip.textContent];
+                    });
+                }
             });
             
             // Also allow drag and drop

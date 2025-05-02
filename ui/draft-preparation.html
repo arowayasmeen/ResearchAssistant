@@ -15,25 +15,24 @@
             <span class="tooltip">Home</span>
         </div>
         <div class="sidebar-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1v5h5v10H6V3h7z"/>
-                <path d="M8 12h8v1H8zm0 2h8v1H8zm0 2h5v1H8z"/>
-            </svg>
-            <span class="tooltip">Do Literature Review</span>
+            <img src="images/spyglass.png" alt="spyglass" class="icon-image">
+            <span class="tooltip">Literature Review</span>
+        </div> 
+        <div class="sidebar-icon">
+            <img src="images/helm.png" alt="helm" class="icon-image">
+            <span class="tooltip">Generate Ideas</span>
         </div>
         <div class="sidebar-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
-                <path d="M12 6a1 1 0 0 0-1 1v5a1 1 0 0 0 .55.89l4 2a1 1 0 1 0 .9-1.78L13 11.28V7a1 1 0 0 0-1-1z"/>
-            </svg>
-            <span class="tooltip">Generate Ideas</span>
+            <img src="images/quill.png" alt="quill" class="icon-image">
+            <span class="tooltip">Prepare a Draft</span>
         </div>
     </div>
 
     <div class="main-container">
         <!-- Fixed Header -->
         <div class="fixed-header">
-            <h1 class="logo">ResearchAssistant</h1>
+            <h1 class="logo">ResearchAssistant<span class="logo-emoji"></span></h1>
+            <div class="slogan">Navigate the seas of academic knowledge</div>
             <div class="research-header">
                 <h2>Prepare a Research Paper Draft on <span class="topic-name">Chemistry</span></h2>
             </div>
@@ -48,19 +47,19 @@
                     <div id="title-display"></div>
 
                     <div class="title-buttons">
-                        <button id="brainstorm-button" class="action-button">Brainstorm Paper Title Ideas?</button>
-                        <button id="enter-title-button" class="action-button">Enter a Paper Title</button>
+                        <button id="brainstorm-button" class="nautical-button">Brainstorm Paper Title Ideas</button>
+                        <button id="enter-title-button" class="nautical-button secondary">Enter a Paper Title</button>
                     </div>
 
                     <div id="title-input-container" style="display: none;">
-                        <input type="text" id="title-input" class="input-field" placeholder="Enter your paper title here...">
-                        <button id="save-title-button" class="action-button">Save Title</button>
+                        <input type="text" id="title-input" class="research-input" placeholder="Enter your paper title here...">
+                        <button id="save-title-button" class="nautical-button">Save Title</button>
                     </div>
 
                     <div id="title-suggestions" style="display: none; margin-top: 20px;">
                         <div class="section-title">Suggested Titles</div>
                         <div id="suggestions-container"></div>
-                        <button id="refresh-titles-button" class="action-button" style="margin-top: 10px;">Refresh Suggestions</button>
+                        <button id="refresh-titles-button" class="nautical-button secondary" style="margin-top: 10px;">Refresh Suggestions</button>
                     </div>
                 </div>
 
@@ -77,7 +76,7 @@
                             <input type="text" id="author-institution" class="input-field" placeholder="Enter your institution...">
                         </div>
                     </div>
-                    <button id="update-author-info-button" class="action-button">Update Author Information</button>
+                    <button id="update-author-info-button" class="nautical-button">Update Author Information</button>
                 </div>
 
                 <!-- Draft Section -->
@@ -86,10 +85,10 @@
                     <textarea id="outline-area" class="outline-area" placeholder="Your paper outline will appear here..."></textarea>
 
                     <div class="button-container">
-                        <button id="generate-outline-button" class="action-button">Generate Outline</button>
-                        <button id="edit-outline-button" class="action-button">Edit Outline</button>
-                        <button id="save-outline-button" class="action-button" style="display: none;">Save Outline</button>
-                        <button id="generate-paper-button" class="action-button" style="background-color: #d6a76b; color: white;">Generate Full Paper</button>
+                        <button id="generate-outline-button" class="nautical-button">Generate Outline</button>
+                        <button id="edit-outline-button" class="nautical-button secondary">Edit Outline</button>
+                        <button id="save-outline-button" class="nautical-button" style="display: none;">Save Outline</button>
+                        <button id="generate-paper-button" class="nautical-button" style="background-color: #0a4d7c; color: white;">Generate Full Paper</button>
                     </div>
                 </div>
             </div>
@@ -109,39 +108,82 @@
                     </div>
                 </div>
                 
-                <!-- LaTeX Section -->
+                <!-- LaTeX Section (Collapsible) -->
                 <div class="latex-section" id="paper-section" style="display: none;">
-                    <div class="section-title">Research Paper Draft</div>
+                    <div class="section-header collapsible-header" id="latex-section-header">
+                        <div class="section-title">Research Paper Draft</div>
+                        <button class="collapse-button" id="toggle-latex-section">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="collapse-icon">
+                                <path d="M7 10l5 5 5-5z"/>
+                            </svg>
+                        </button>
+                    </div>
                     
-                    <div class="tab-container">
-                        <div class="tab active" data-tab="latex">LaTeX Source</div>
-                        <div class="tab" data-tab="preview">PDF Preview</div>
-                    </div>
-
-                    <div class="tab-content active" id="latex-tab">
-                        <textarea id="latex-editor" class="latex-editor" placeholder="LaTeX source will appear here..."></textarea>
-                        <div class="button-container">
-                            <button id="edit-latex-button" class="action-button">Edit LaTeX</button>
-                            <button id="save-latex-button" class="action-button" style="display: none;">Save Changes</button>
-                            <button id="compile-button" class="action-button">Compile to PDF</button>
+                    <div class="collapsible-content" id="latex-section-content">
+                        <div class="tab-container">
+                            <div class="tab active" data-tab="latex">LaTeX Source</div>
+                            <div class="tab" data-tab="preview">PDF Preview</div>
                         </div>
-                    </div>
 
-                    <div class="tab-content" id="preview-tab">
-                        <div class="pdf-preview" id="pdf-preview">
-                            <div class="preview-placeholder" id="preview-placeholder">
-                                <p>PDF preview will appear here after compilation</p>
+                        <div class="tab-content active" id="latex-tab">
+                            <textarea id="latex-editor" class="latex-editor" placeholder="LaTeX source will appear here..."></textarea>
+                            <div class="button-container">
+                                <button id="edit-latex-button" class="nautical-button">Edit LaTeX</button>
+                                <button id="save-latex-button" class="nautical-button" style="display: none;">Save Changes</button>
+                                <button id="compile-button" class="nautical-button">Compile to PDF</button>
                             </div>
                         </div>
-                        <div class="button-container">
-                            <button id="download-pdf-button" class="action-button">Download PDF</button>
+
+                        <div class="tab-content" id="preview-tab">
+                            <div class="pdf-preview" id="pdf-preview">
+                                <div class="preview-placeholder" id="preview-placeholder">
+                                    <p>PDF preview will appear here after compilation</p>
+                                </div>
+                            </div>
+                            <div class="button-container">
+                                <button id="download-pdf-button" class="nautical-button">Download PDF</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
+    <script src="js/latex.js"></script>
     <script src="js/paper.js"></script>
+    <script>
+        // Add JavaScript for collapsible sections
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleLatexSection = document.getElementById('toggle-latex-section');
+            const latexSectionContent = document.getElementById('latex-section-content');
+            
+            if (toggleLatexSection && latexSectionContent) {
+                toggleLatexSection.addEventListener('click', function() {
+                    latexSectionContent.classList.toggle('collapsed');
+                    toggleLatexSection.classList.toggle('collapsed');
+                });
+            }
+
+            // Map tooltips (or any identifier) to page URLs
+            const pageMap = {
+                "Home": "index.html",
+                "Literature Review": "literature-review.html",
+                "Generate Ideas": "generate-ideas.html",
+                "Prepare a Draft": "draft-preparation.html"
+            };
+
+            // Select all sidebar icons
+            document.querySelectorAll('.sidebar-icon').forEach(icon => {
+                const tooltip = icon.querySelector('.tooltip');
+                if (tooltip && pageMap[tooltip.textContent]) {
+                    icon.addEventListener('click', () => {
+                        window.location.href = pageMap[tooltip.textContent];
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
