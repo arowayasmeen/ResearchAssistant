@@ -46,55 +46,10 @@
 }
 
 .latex-section {
-    flex: 0; /* Start collapsed */
-    padding: 0 20px;
-    overflow-y: hidden;
-    border-top: 1px solid #e6f2ff;
-    transition: all 0.3s ease;
-}
-
-/* Collapsible section styles */
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 0;
-    cursor: pointer;
-}
-
-.collapsible-header {
-    position: relative;
-}
-
-.collapse-button {
-    background: none;
-    border: none;
-    color: #3a8bbd;
-    cursor: pointer;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.collapse-icon {
-    width: 24px;
-    height: 24px;
-    transition: transform 0.3s ease;
-}
-
-.collapse-button.collapsed .collapse-icon {
-    transform: rotate(180deg);
-}
-
-.collapsible-content {
-    max-height: 1000px; /* Arbitrary large value */
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-}
-
-.collapsible-content.collapsed {
-    max-height: 0;
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    border-top: 1px solid #e0e0e0;
 }
 
 .research-header {
@@ -288,6 +243,7 @@
     cursor: pointer;
     font-weight: bold;
     color: #0a4d7c; /* Deep ocean blue */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .tab.active {
@@ -409,3 +365,11 @@
     box-shadow: 0 4px 8px rgba(10, 77, 124, 0.1);
 }
 
+@media (max-width: 768px) {
+    .content-area {
+        flex-direction: column;
+    }
+    .left-pane, .right-pane {
+        min-width: 100%;
+    }
+}

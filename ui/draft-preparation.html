@@ -93,68 +93,62 @@
                 </div>
             </div>
             
-            <!-- Right Pane: Editor and LaTeX -->
+            <!-- Right Pane: Editor -->
             <div class="right-pane">
-                <!-- Document Editor Section -->
-                <div class="editor-section">
-                    <div class="section-title">Live Document Editor</div>
-                    <div id="document-editor" contenteditable="true" class="document-editor">
-                        <h2>Start Writing</h2>
-                        <p>This is your editable paper preview. You can apply outline data or LaTeX source here.</p>
-                    </div>
-                    <div class="editor-footer">
-                        <button class="secondary-button">Export</button>
-                        <button class="primary-button">Save</button>
-                    </div>
-                </div>
-                
-                <!-- LaTeX Section (Collapsible) -->
+                <!-- LaTeX Section -->
                 <div class="latex-section" id="paper-section" style="display: none;">
-                    <div class="section-header collapsible-header" id="latex-section-header">
-                        <div class="section-title">Research Paper Draft</div>
-                        <button class="collapse-button" id="toggle-latex-section">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="collapse-icon">
-                                <path d="M7 10l5 5 5-5z"/>
-                            </svg>
-                        </button>
+                    <div class="section-title">Research Paper Draft</div>
+                    
+                    <div class="tab-container">
+                        <div class="tab active" data-tab="doc">Doc Editor</div>
+                        <div class="tab" data-tab="latex">LaTeX Source</div>
+                        <div class="tab" data-tab="preview">PDF Preview</div>
                     </div>
                     
-                    <div class="collapsible-content" id="latex-section-content">
-                        <div class="tab-container">
-                            <div class="tab active" data-tab="latex">LaTeX Source</div>
-                            <div class="tab" data-tab="preview">PDF Preview</div>
-                        </div>
-
-                        <div class="tab-content active" id="latex-tab">
-                            <textarea id="latex-editor" class="latex-editor" placeholder="LaTeX source will appear here..."></textarea>
-                            <div class="button-container">
-                                <button id="edit-latex-button" class="nautical-button">Edit LaTeX</button>
-                                <button id="save-latex-button" class="nautical-button" style="display: none;">Save Changes</button>
-                                <button id="compile-button" class="nautical-button">Compile to PDF</button>
+                    <!-- Document Editor Section -->
+                    <div class="tab-content active" id="doc-tab">
+                        <div class="document-editor-container">
+                            <div id="document-editor" contenteditable="true" class="document-editor">
+                                <h2>Start Writing</h2>
+                                <p>This is your editable paper preview. You can apply outline data or LaTeX source here.</p>
+                            </div>
+                            <div class="editor-footer">
+                                <button class="secondary-button">Export</button>
+                                <button class="primary-button">Save</button>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="tab-content" id="preview-tab">
-                            <div class="pdf-preview" id="pdf-preview">
-                                <div class="preview-placeholder" id="preview-placeholder">
-                                    <p>PDF preview will appear here after compilation</p>
-                                </div>
+                    <!-- LaTeX Editor Section -->
+                    <div class="tab-content" id="latex-tab">
+                        <textarea id="latex-editor" class="latex-editor" placeholder="LaTeX source will appear here..."></textarea>
+                        <div class="button-container">
+                            <button id="edit-latex-button" class="action-button">Edit LaTeX</button>
+                            <button id="save-latex-button" class="action-button" style="display: none;">Save Changes</button>
+                            <button id="compile-button" class="action-button">Compile to PDF</button>
+                        </div>
+                    </div>
+
+                    <!-- Preview Section -->
+                    <div class="tab-content" id="preview-tab">
+                        <div class="pdf-preview" id="pdf-preview">
+                            <div class="preview-placeholder" id="preview-placeholder">
+                                <p>PDF preview will appear here after compilation</p>
                             </div>
-                            <div class="button-container">
-                                <button id="download-pdf-button" class="nautical-button">Download PDF</button>
-                            </div>
+                        </div>
+                        <div class="button-container">
+                            <button id="download-pdf-button" class="action-button">Download PDF</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 
     <script src="js/latex.js"></script>
     <script src="js/paper.js"></script>
     <script>
-        // Add JavaScript for collapsible sections
+        // Add JavaScript for collapsible sections and tab switching
         document.addEventListener('DOMContentLoaded', function() {
             const toggleLatexSection = document.getElementById('toggle-latex-section');
             const latexSectionContent = document.getElementById('latex-section-content');
@@ -183,6 +177,31 @@
                     });
                 }
             });
+            
+            // Tab switching functionality
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    tab.classList.add('active');
+                    
+                    // Show corresponding content
+                    const tabId = tab.getAttribute('data-tab');
+                    const activeContent = document.getElementById(tabId + '-tab');
+                    if (activeContent) {
+                        activeContent.classList.add('active');
+                    }
+                });
+            });
+            
+            // Make paper section visible by default for testing
+            document.getElementById('paper-section').style.display = 'block';
         });
     </script>
 </body>
