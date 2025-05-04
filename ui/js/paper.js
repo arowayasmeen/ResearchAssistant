@@ -229,29 +229,23 @@ document.addEventListener('DOMContentLoaded', function() {
         const loader = showLoading(suggestionsContainer, 'Generating title suggestions...');
         
         try {
-            // Use the API to generate title suggestions
-            const response = await fetch(GENERATE_SECTION_ENDPOINT, {
+            // Use the dedicated title generation endpoint
+            const response = await fetch(`${API_BASE_URL}/generate-titles`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     research_topic: topic,
-                    section_type: 'title_suggestions'
+                    count: 7  // Request 7 title suggestions
                 })
             });
             
             const data = await response.json();
             
             if (data.success) {
-                // Parse the generated titles (assuming they come as a list in the content)
-                let suggestions = data.content.split('\n')
-                    .filter(line => line.trim().length > 0)
-                    .map(line => line.replace(/^\d+\.\s*/, '').trim())
-                    .slice(0, 5);
-                                
                 // Display the suggestions
-                suggestions.forEach(suggestion => {
+                data.titles.forEach(suggestion => {
                     const suggestionItem = document.createElement('div');
                     suggestionItem.className = 'suggestion-item';
                     suggestionItem.style.padding = '15px';
@@ -259,14 +253,27 @@ document.addEventListener('DOMContentLoaded', function() {
                     suggestionItem.style.backgroundColor = '#f9f6f0';
                     suggestionItem.style.borderRadius = '10px';
                     suggestionItem.style.cursor = 'pointer';
+                    suggestionItem.style.transition = 'background-color 0.3s';
                     
                     suggestionItem.textContent = suggestion;
+                    
+                    // Hover effect
+                    suggestionItem.addEventListener('mouseover', function() {
+                        this.style.backgroundColor = '#efe8d9';
+                    });
+                    
+                    suggestionItem.addEventListener('mouseout', function() {
+                        this.style.backgroundColor = '#f9f6f0';
+                    });
                     
                     suggestionItem.addEventListener('click', function() {
                         titleDisplay.textContent = suggestion;
                         localStorage.setItem('paperTitle', suggestion);
                         titleSuggestions.style.display = 'none';
                         draftSection.style.display = 'block';
+                        
+                        // Show notification
+                        showNotification('Title selected!');
                     });
                     
                     suggestionsContainer.appendChild(suggestionItem);
@@ -276,7 +283,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } catch (error) {
             console.error('Error generating title suggestions:', error);
-
+            suggestionsContainer.innerHTML = `
+                <div style="color: #d9534f; padding: 15px; text-align: center;">
+                    <p>Sorry, we couldn't generate title suggestions at this time.</p>
+                    <p>Please try again later or enter a title manually.</p>
+                </div>
+            `;
         } finally {
             hideLoading(loader);
         }
