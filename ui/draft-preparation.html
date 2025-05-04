@@ -178,27 +178,7 @@
                 }
             });
             
-            // Tab switching functionality
-            const tabs = document.querySelectorAll('.tab');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // Remove active class from all tabs and contents
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    
-                    // Add active class to clicked tab
-                    tab.classList.add('active');
-                    
-                    // Show corresponding content
-                    const tabId = tab.getAttribute('data-tab');
-                    const activeContent = document.getElementById(tabId + '-tab');
-                    if (activeContent) {
-                        activeContent.classList.add('active');
-                    }
-                });
-            });
+
             
             // Make paper section visible by default for testing
             document.getElementById('paper-section').style.display = 'block';

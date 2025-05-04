@@ -2,12 +2,10 @@ import asyncio
 import os
 from src.research_assistant.draft.generator import ResearchDraftGenerator
 
-# Set the API key
-os.environ["GOOGLE_API_KEY"] = "AIzaSyCGFE6Od2rH6ri_cvetXserZC4FBr2pK6w"
 
 async def test_generator():
     # Initialize without fallback to use the actual Google API
-    generator = ResearchDraftGenerator(use_fallback=False)
+    generator = ResearchDraftGenerator()
     
     # Define a simple research topic
     research_topic = "The Impact of Artificial Intelligence on Education"
