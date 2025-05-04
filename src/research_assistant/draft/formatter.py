@@ -168,7 +168,7 @@ class LaTeXFormatter:
 
 \\title{{{metadata.get('title', 'Research Paper')}}}
 \\author{{{metadata.get('authors', 'Author')}}}
-\\date{{{metadata.get('date', '\\today')}}}
+\\date{{{metadata.get('date', 'today')}}}
 
 \\begin{{document}}
 

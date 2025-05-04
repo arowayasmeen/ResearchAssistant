@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const documentEditor = document.getElementById('document-editor');
     
     // Backend API endpoints
-    const API_BASE_URL = '/api/draft';
+    const API_BASE_URL = 'http://localhost:5000/api/draft';
     const GENERATE_SECTION_ENDPOINT = `${API_BASE_URL}/generate-section`;
     const GENERATE_PAPER_ENDPOINT = `${API_BASE_URL}/generate-paper`;
     const FORMAT_LATEX_ENDPOINT = `${API_BASE_URL}/format-latex`;
@@ -223,12 +223,13 @@ document.addEventListener('DOMContentLoaded', function() {
         generateTitleSuggestions(topicName.textContent);
     });
     
-    // Generate title suggestions
     async function generateTitleSuggestions(topic) {
         suggestionsContainer.innerHTML = '';
         const loader = showLoading(suggestionsContainer, 'Generating title suggestions...');
         
         try {
+            console.log('Sending request to generate titles for topic:', topic);
+            
             // Use the dedicated title generation endpoint
             const response = await fetch(`${API_BASE_URL}/generate-titles`, {
                 method: 'POST',
@@ -241,7 +242,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
             });
             
+            console.log('Response status:', response.status);
             const data = await response.json();
+            console.log('Response data:', data);
             
             if (data.success) {
                 // Display the suggestions
@@ -287,6 +290,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div style="color: #d9534f; padding: 15px; text-align: center;">
                     <p>Sorry, we couldn't generate title suggestions at this time.</p>
                     <p>Please try again later or enter a title manually.</p>
+                    <p style="font-size: 0.9em; color: #777; margin-top: 10px;">Error: ${error.message}</p>
                 </div>
             `;
         } finally {

@@ -25,47 +25,18 @@ except Exception as e:
     logger.error(f"Failed to initialize Google Generative AI: {str(e)}")
     model = None
 
-# Fallback model for when API is unavailable
-class FallbackGenerator:
-    """Simple text generator for when API is unavailable"""
-    
-    @staticmethod
-    def generate_content_async(prompt):
-        """Generate fallback content based on simple patterns in the prompt"""
-        class FallbackResponse:
-            @property
-            def text(self):
-                if "abstract" in prompt.lower():
-                    return "This research paper examines important developments in the field, addressing significant gaps through comprehensive analysis. The methodology combines established approaches with novel techniques, yielding insights that advance our understanding of key phenomena. Implications for theory and practice are discussed."
-                elif "introduction" in prompt.lower():
-                    return "# Introduction\n\nIn recent years, significant attention has been directed toward understanding the complex dynamics of this research area. Despite considerable progress, several crucial questions remain unaddressed. This paper aims to bridge existing knowledge gaps by proposing a novel framework that integrates multiple perspectives.\n\nThe significance of this work lies in its potential to enhance our theoretical understanding while offering practical applications. By addressing the limitations of previous studies, we contribute to the evolving discourse in this field."
-                elif "literature_review" in prompt.lower():
-                    return "# Literature Review\n\nScholarly work in this domain has evolved through several distinct phases. Early research by Smith et al. (2018) established foundational concepts, while subsequent studies by Johnson (2019) and Williams (2020) expanded methodological approaches. Recent contributions from Garcia and Lee (2022) have challenged conventional paradigms, suggesting alternative frameworks for analysis.\n\nDespite these valuable contributions, critical gaps persist. Specifically, the integration of theoretical models across subdisciplines remains underdeveloped, and empirical validation in diverse contexts is limited. These limitations inform the research direction of the current study."
-                elif "methodology" in prompt.lower():
-                    return "# Methodology\n\nThis study employs a mixed-methods approach to address the research questions. The research design incorporates both quantitative analysis of structured data and qualitative examination of contextual factors.\n\n## Data Collection\nData was collected from multiple sources, including surveys, interviews, and existing datasets. Participants were selected using a stratified sampling technique to ensure representation across relevant demographics.\n\n## Analysis Techniques\nQuantitative data was analyzed using statistical methods including regression analysis and ANOVA. Qualitative content underwent thematic analysis following established protocols for coding and interpretation."
-                elif "discussion" in prompt.lower():
-                    return "# Discussion\n\nThe findings of this study contribute to our understanding in several ways. First, they confirm previous theoretical propositions while extending their applicability to new contexts. Second, they reveal previously unidentified relationships between key variables. Third, they suggest practical implications for stakeholders in this field.\n\nThese results should be interpreted with consideration of certain limitations. The sample, while representative, may not capture all relevant populations. Additionally, the cross-sectional nature of the data limits causal inferences. Future research should address these limitations through longitudinal designs and expanded sampling strategies."
-                elif "conclusion" in prompt.lower():
-                    return "# Conclusion\n\nThis paper has addressed significant gaps in our understanding of key phenomena in the field. Through a comprehensive analysis of relevant literature and application of rigorous methods, we have demonstrated important relationships that advance theoretical and practical knowledge. The findings contribute to ongoing scholarly discourse while opening new avenues for investigation.\n\nFuture research should build upon these foundations by exploring additional contextual factors and testing the generalizability of our findings across diverse settings. The implications extend beyond academic inquiry to inform practice and policy in meaningful ways."
-                else:
-                    return "This section explores key aspects of the research topic, analyzing important factors and their relationships. The discussion builds upon established literature while contributing new insights to advance understanding in this field."
-        
-        return FallbackResponse()
 
 class ResearchDraftGenerator:
     """
     Generates research paper drafts based on literature review and idea generation.
     """
     
-    def __init__(self, use_fallback=False):
+    def __init__(self):
         """Initialize the draft generator."""
         self.model = model
-        self.use_fallback = use_fallback
+
         
-        # Use fallback if model initialization failed
-        if self.model is None or self.use_fallback:
-            logger.info("Using fallback text generation")
-            self.model = FallbackGenerator()
+
     
     def _create_generation_prompt(self, 
                                  research_topic: str, 
@@ -257,35 +228,9 @@ class ResearchDraftGenerator:
             return response.text
         except Exception as e:
             logger.error(f"Error generating outline: {str(e)}")
+            return
             
-            # Fallback outline generator
-            outline = f"# Outline for Research Paper on {research_topic}\n\n"
-            
-            for section in sections:
-                outline += f"## {section}\n"
-                
-                if section == "Abstract":
-                    outline += "- Summary of research problem and context\n"
-                    outline += "- Brief overview of methodology\n"
-                    outline += "- Key findings or expected outcomes\n"
-                    outline += "- Significance and implications\n\n"
-                elif section == "Introduction":
-                    outline += "- Background and context\n"
-                    outline += "- Problem statement\n"
-                    outline += "- Research significance\n"
-                    outline += "- Research questions/objectives\n"
-                    outline += "- Paper structure overview\n\n"
-                elif section == "Literature Review":
-                    outline += "- Theoretical foundations\n"
-                    outline += "- Current state of research\n"
-                    outline += "- Analysis of methodological approaches\n"
-                    outline += "- Identification of research gaps\n\n"
-                else:
-                    outline += "- Key points for this section\n"
-                    outline += "- Important sub-topics to address\n"
-                    outline += "- Connection to research objectives\n\n"
-            
-            return outline
+
     
     async def generate_title_suggestions(self, 
                                   research_topic: str,
@@ -313,14 +258,6 @@ class ResearchDraftGenerator:
         except Exception as e:
             logger.error(f"Error generating title suggestions: {str(e)}")
             
-            # Fallback title suggestions
-            return [
-                f"Advances in {research_topic}: A Comprehensive Review",
-                f"Understanding {research_topic}: Mechanisms and Applications",
-                f"Novel Approaches to {research_topic}: Implications for Future Research",
-                f"{research_topic} in Context: A Systematic Analysis",
-                f"Exploring the Frontiers of {research_topic}: Challenges and Opportunities"
-            ]
     
     async def refine_section(self,
                       section_text: str,

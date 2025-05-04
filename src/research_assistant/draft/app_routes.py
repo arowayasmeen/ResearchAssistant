@@ -9,6 +9,9 @@ from research_assistant.draft.templates import ResearchTemplates
 # Create Blueprint for draft preparation routes
 draft_bp = Blueprint('draft', __name__, url_prefix='/api/draft')
 
+# Create Blueprint for search routes
+search_bp = Blueprint('search', __name__, url_prefix='/api/search')
+
 # Initialize components
 generator = ResearchDraftGenerator(use_fallback=False)
 formatter = LaTeXFormatter(use_fallback=False)

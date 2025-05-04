@@ -4,7 +4,7 @@ import json
 
 def test_title_generation_api():
     """Test the title generation endpoint"""
-    url = "http://localhost:5000/draft/generate-titles"
+    url = "http://localhost:5000/api/draft/generate-titles"
     
     # Define the request payload
     payload = {

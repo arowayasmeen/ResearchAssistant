@@ -7,6 +7,8 @@ import sys
 import subprocess
 import time
 
+
+
 # Add the project root to the Python path to ensure imports work correctly
 sys.path.insert(0, os.path.abspath('.'))
 
@@ -89,6 +91,7 @@ def start_api_server():
     return api_process
 
 
+
 def main():
     """
     Main function to run the ResearchAssistant application.
@@ -108,6 +111,7 @@ def main():
     print("To use the UI, manually open the file:")
     print("  file://" + os.path.abspath("ui\index.html"))
     print("\nPress Ctrl+C to stop the application")
+
 
     try:
         # Wait for the API server process to finish
