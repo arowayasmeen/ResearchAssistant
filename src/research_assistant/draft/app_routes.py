@@ -2,16 +2,16 @@ from flask import Blueprint, request, jsonify
 import asyncio
 from typing import Dict, Any
 
-from research_assistant.draft_preparation.generator import ResearchDraftGenerator
-from research_assistant.draft_preparation.formatter import LaTeXFormatter
-from research_assistant.draft_preparation.templates import ResearchTemplates
+from research_assistant.draft.generator import ResearchDraftGenerator
+from research_assistant.draft.formatter import LaTeXFormatter
+from research_assistant.draft.templates import ResearchTemplates
 
 # Create Blueprint for draft preparation routes
 draft_bp = Blueprint('draft', __name__, url_prefix='/api/draft')
 
 # Initialize components
-generator = ResearchDraftGenerator()
-formatter = LaTeXFormatter()
+generator = ResearchDraftGenerator(use_fallback=False)
+formatter = LaTeXFormatter(use_fallback=False)
 
 @draft_bp.route('/generate-section', methods=['POST'])
 async def generate_section():
