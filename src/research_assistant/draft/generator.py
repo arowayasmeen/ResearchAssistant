@@ -149,7 +149,7 @@ class ResearchDraftGenerator:
             logger.error(f"Error generating {section_type}: {str(e)}")
             return f"Error generating {section_type}. Please try again."
     
-    async def generate_full_paper(self,
+    async def generate_paper(self,
                            research_topic: str,
                            literature_summary: Dict[str, Any] = None,
                            research_gaps: List[Dict[str, str]] = None,

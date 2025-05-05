@@ -1,4 +1,4 @@
-# ResearchAssistant
+# ResearchVoyager
 
 We aim to advance the Auto-research framework by developing a comprehensive Research Writing Assistant that streamlines the scientific research process. This system supports literature retrieval, gap analysis, idea brainstorming, summarization, passage generation, and proofreading, enhancing productivity without replacing human authorship.
 
@@ -36,6 +36,7 @@ GOOGLE_API_KEY=your_api_key_here
 ```
 
 You can get a SerpAPI key by signing up at [serpapi.com](https://serpapi.com).
+You can get a GoogleAPI key by signing up at https://aistudio.google.com/apikey 
 
 ## (Optional) Install the Research-Assistant package in development mode if you want to edit
 ```bash
