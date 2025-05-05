@@ -1,4 +1,4 @@
-# ResearchAssistant
+# ResearchVoyager 
 
 We aim to advance the Auto-research framework by developing a comprehensive Research Writing Assistant that streamlines the scientific research process. This system supports literature retrieval, gap analysis, idea brainstorming, summarization, passage generation, and proofreading, enhancing productivity without replacing human authorship.
 
