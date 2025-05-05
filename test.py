@@ -13,15 +13,14 @@ async def test_title_generator():
     research_topic = "The Impact of Artificial Intelligence on Education"
    
     # Generate title suggestions
-    print("Generating title suggestions...")
-    titles = await generator.generate_title_suggestions(
+    print("Generating outline...")
+    outline = await generator.generate_outline(
         research_topic=research_topic,
-        count=7  # Let's get 7 suggestions
+        paper_type = 'standard'
     )
    
-    print("\n==== GENERATED TITLE SUGGESTIONS ====\n")
-    for i, title in enumerate(titles, 1):
-        print(f"{i}. {title}")
+    print("\n==== outline ====\n")
+    print({outline})
     print("\n===================================\n")
 
 

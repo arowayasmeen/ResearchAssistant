@@ -1,38 +1,37 @@
+import asyncio
+import os
+from src.research_assistant.draft.generator import ResearchDraftGenerator
 
-import requests
-import json
+async def test_api_functionality():
+    # Initialize the generator
+    generator = ResearchDraftGenerator()
+   
+    # Define a research topic
+    research_topic = "The Impact of Artificial Intelligence on Education"
+    paper_type = "standard"
+   
+    # Test generate_outline functionality
+    print("Generating outline...")
+    outline = await generator.generate_outline(
+        research_topic=research_topic,
+        paper_type=paper_type
+    )
+   
+    print("\n==== OUTLINE ====\n")
+    print(outline)
+    print("\n===================================\n")
 
-def test_title_generation_api():
-    """Test the title generation endpoint"""
-    url = "http://localhost:5000/api/draft/generate-titles"
-    
-    # Define the request payload
-    payload = {
-        "research_topic": "The Impact of Artificial Intelligence on Education",
-        "count": 5
-    }
-    
-    # Make the API request
-    print(f"Sending POST request to {url}...")
-    try:
-        response = requests.post(url, json=payload)
-        
-        # Check if the request was successful
-        if response.status_code == 200:
-            data = response.json()
-            
-            print("\n==== API RESPONSE ====\n")
-            print(f"Success: {data['success']}")
-            print("\nGenerated Titles:")
-            for i, title in enumerate(data['titles'], 1):
-                print(f"{i}. {title}")
-            print("\n=====================\n")
-        else:
-            print(f"Request failed with status code: {response.status_code}")
-            print(f"Response: {response.text}")
-    
-    except Exception as e:
-        print(f"Error: {str(e)}")
+    # Test generate_title_suggestions functionality
+    print("Generating title suggestions...")
+    titles = await generator.generate_title_suggestions(
+        research_topic=research_topic,
+        count=3
+    )
+   
+    print("\n==== TITLES ====\n")
+    for i, title in enumerate(titles, 1):
+        print(f"{i}. {title}")
+    print("\n===================================\n")
 
 if __name__ == "__main__":
-    test_title_generation_api()
+    asyncio.run(test_api_functionality())

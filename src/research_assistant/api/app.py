@@ -68,8 +68,45 @@ async def generate_titles():
             'error': str(e)
         }), 500
     
+
+@draft_bp.route('/generate-outline', methods=['POST'])
+@async_route
+async def generate_outline():
+    """Generate potential paper outline based on the research topic and paper type."""
+    try:
+        data = request.json
+        research_topic = data.get('research_topic')
+        paper_type = data.get('paper_type', 'standard')  # Default to 'standard' if not provided
+
+        if not research_topic:
+            return jsonify({
+                'success': False,
+                'error': 'Missing required field: research_topic'
+            }), 400
+
+        # Generate outline using the updated method
+        outline = await generator.generate_outline(
+            research_topic=research_topic,
+            paper_type=paper_type
+        )
+
+        return jsonify({
+            'success': True,
+            'outline': outline
+        })
+
+    except Exception as e:
+        import traceback
+        print(f"Outline generation error: {e}")
+        print(traceback.format_exc())
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+    
     
 @draft_bp.route('/generate-section', methods=['POST'])
+@async_route  # Add this decorator
 async def generate_section():
     """Generate a specific section of a research paper."""
     try:
@@ -108,7 +145,9 @@ async def generate_section():
             'error': str(e)
         }), 500
 
+# Fix the generate_paper route
 @draft_bp.route('/generate-paper', methods=['POST'])
+@async_route  # Add this decorator
 async def generate_paper():
     """Generate a complete research paper."""
     try:
@@ -155,54 +194,9 @@ async def generate_paper():
             'error': str(e)
         }), 500
 
-@draft_bp.route('/format-latex', methods=['POST'])
-def format_latex():
-    """Convert paper content to LaTeX format."""
-    try:
-        data = request.json
-        
-        # Validate required fields
-        required_fields = ['paper_data', 'metadata']
-        for field in required_fields:
-            if field not in data:
-                return jsonify({
-                    'success': False,
-                    'error': f'Missing required field: {field}'
-                }), 400
-        
-        # Extract data
-        paper_data = data['paper_data']
-        metadata = data['metadata']
-        literature = data.get('literature', [])
-        template_type = metadata.get('template_type', 'article')
-        
-        # Initialize formatter with template type
-        formatter = LaTeXFormatter(template_type=template_type)
-        
-        # Generate LaTeX document
-        latex_document = formatter.create_complete_document(
-            paper_data=paper_data,
-            metadata=metadata,
-            literature=literature
-        )
-        
-        # Generate bibliography
-        bibliography = formatter.generate_bibliography()
-        
-        # Return LaTeX content
-        return jsonify({
-            'success': True,
-            'latex': latex_document,
-            'bibliography': bibliography
-        })
-    
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
-
+# Fix the refine_section route
 @draft_bp.route('/refine-section', methods=['POST'])
+@async_route  # Add this decorator
 async def refine_section():
     """Refine a specific section based on feedback."""
     try:
