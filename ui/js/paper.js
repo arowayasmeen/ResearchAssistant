@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     suggestionItem.className = 'suggestion-item';
                     suggestionItem.style.padding = '15px';
                     suggestionItem.style.margin = '10px 0';
-                    suggestionItem.style.backgroundColor = '#f9f6f0';
+                    suggestionItem.style.backgroundColor = '#e6f2ff';
                     suggestionItem.style.borderRadius = '10px';
                     suggestionItem.style.cursor = 'pointer';
                     suggestionItem.style.transition = 'background-color 0.3s';
@@ -262,11 +262,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     // Hover effect
                     suggestionItem.addEventListener('mouseover', function() {
-                        this.style.backgroundColor = '#efe8d9';
+                        this.style.backgroundColor = '#e6f2ff';
                     });
                     
                     suggestionItem.addEventListener('mouseout', function() {
-                        this.style.backgroundColor = '#f9f6f0';
+                        this.style.backgroundColor = '#3a8bbd';
                     });
                     
                     suggestionItem.addEventListener('click', function() {
@@ -351,7 +351,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Style and display controls
             outlineArea.style.display = 'block';
             outlineArea.readOnly = true;
-            outlineArea.style.backgroundColor = '#f9f6f0';
+            outlineArea.style.backgroundColor = '#e6f2ff';
         }
     });
 
@@ -396,7 +396,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Save outline button
     saveOutlineButton.addEventListener('click', function() {
         outlineArea.readOnly = true;
-        outlineArea.style.backgroundColor = '#f9f6f0';
+        outlineArea.style.backgroundColor ="rgb(203, 207, 207)";
         saveOutlineButton.style.display = 'none';
         editOutlineButton.style.display = 'inline-block';
         

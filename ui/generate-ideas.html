@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResearchAssistant - Idea Generation</title>
+    <title>ResearchVoyager - Idea Generation</title>
     <link rel="stylesheet" href="css/ideas.css">
 
 </head>
@@ -30,7 +30,8 @@
     </div>
     
     <div class="main-content">
-        <h1 class="logo">ResearchAssistant</h1>
+        <h1 class="logo">ResearchVoyager</h1>
+        <div class="slogan">Navigate the seas of academic knowledge</div>
         
         <div class="topic-header">
             <div class="topic-name">Topic Name</div>
@@ -57,8 +58,8 @@
         </div>
         
         <div style="margin-top: 20px;">
-            <button id="generate-button" class="action-button">Generate Research Ideas</button>
-            <button id="clear-button" class="action-button" style="background-color: #f2e8d8;">Clear All</button>
+            <button id="generate-button" class="nautical-button">Generate Ideas</button>
+            <button id="clear-button" class="nautical-button secondary" style="background-color: #d8e7f2;">Clear All</button>
         </div>
         
         <div id="ideas-container" class="ideas-container">
@@ -262,7 +263,7 @@
             const pageMap = {
                 "Home": "index.html",
                 "Literature Review": "literature-review.html",
-                "Generate Ideas": "idea-generation.html",
+                "Generate Ideas": "generate-ideas.html",
                 "Prepare a Draft": "draft-preparation.html"
             };
 
@@ -281,19 +282,19 @@
             
             uploadArea.addEventListener('dragover', function(e) {
                 e.preventDefault();
-                this.style.borderColor = '#d6a76b';
-                this.style.backgroundColor = '#f9f6f0';
+                this.style.borderColor = '#3a8bbd';
+                this.style.backgroundColor = '#e6f2ff';
             });
             
             uploadArea.addEventListener('dragleave', function(e) {
                 e.preventDefault();
-                this.style.borderColor = '#e0c8a0';
+                this.style.borderColor = '#3a8bbd';
                 this.style.backgroundColor = 'transparent';
             });
             
             uploadArea.addEventListener('drop', function(e) {
                 e.preventDefault();
-                this.style.borderColor = '#e0c8a0';
+                this.style.borderColor = '#3a8bbd';
                 this.style.backgroundColor = 'transparent';
                 
                 const files = e.dataTransfer.files;

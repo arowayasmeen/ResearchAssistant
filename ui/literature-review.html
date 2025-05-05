@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResearchAssistant - Literature Review</title>
+    <title>ResearchVoyager - Literature Review</title>
     <link rel="stylesheet" href="css/lit.css">
     
 </head>
@@ -28,7 +28,8 @@
     </div>
 </div>
     <div class="main-content">
-        <h1 class="logo">ResearchAssistant</h1>
+        <h1 class="logo">ResearchVoyager</h1>
+        <div class="slogan">Navigate the seas of academic knowledge</div>
 
         <div class="topic-header">
             <div class="topic-name">Topic Name</div>
@@ -161,44 +162,44 @@
             function getBackupResults(query) {
                 return [
                     { 
-                        title: `${query}: Advancements in neural networks and transfer learning approaches`,
-                        authors: "Smith J., Johnson M.",
-                        year: "2023",
-                        venue: "Journal of AI Research",
+                        title: `A survey on evaluation of ${query}`,
+                        authors: "Chang Y, Wang X, Wang J, Wu Y, Yang L, Zhu K, Chen H, Yi X, Wang C, Wang Y, Ye W",
+                        year: "2024",
+                        venue: " ACM transactions on intelligent systems and technology",
                         score: 95,
-                        link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}`
+                        link: `https://dl.acm.org/doi/pdf/10.1145/3641289`
                     },
                     { 
-                        title: `Current state and future perspectives of ${query}`,
-                        authors: "Williams A., Brown R.",
-                        year: "2022",
-                        venue: "IEEE Transactions",
-                        score: 87,
-                        link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+review`
-                    },
-                    { 
-                        title: `Meta-analysis of ${query} methodologies: A systematic review`,
-                        authors: "Garcia L., et al.",
-                        year: "2021",
+                        title: `A comprehensive overview of ${query}`,
+                        authors: "Naveed H, Khan AU, Qiu S, Saqib M, Anwar S, Usman M, Akhtar N, Barnes N, Mian A",
+                        year: "2023",
                         venue: "arXiv",
+                        score: 87,
+                        link: `https://arxiv.org/pdf/2307.06435`
+                    },
+                    { 
+                        title: `${query} in medicine`,
+                        authors: "Thirunavukarasu AJ, Ting DS, Elangovan K, Gutierrez L, Tan TF, Ting DS",
+                        year: "2023",
+                        venue: "Nature medicine",
                         score: 82,
-                        link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+meta+analysis`
+                        link: `https://www.nature.com/articles/s41591-023-02448-8.pdf`
                     },
                     { 
-                        title: `Experimental evaluation of ${query} systems`,
-                        authors: "Chen P., Wang Y.",
-                        year: "2020",
-                        venue: "Conference on Computer Vision",
+                        title: `A watermark for ${query}`,
+                        authors: "Kirchenbauer J, Geiping J, Wen Y, Katz J, Miers I, Goldstein T.",
+                        year: "2023",
+                        venue: "International Conference on Machine Learning",
                         score: 72,
-                        link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+experimental`
+                        link: `https://proceedings.mlr.press/v202/kirchenbauer23a/kirchenbauer23a.pdf`
                     },
                     { 
-                        title: `${query} in real-world applications: A case study`,
-                        authors: "Kim H., Lee S.",
-                        year: "2021",
-                        venue: "Applied Sciences",
+                        title: `Welcome to the era of chatgpt et al. the prospects of ${query}`,
+                        authors: "Teubner T, Flath CM, Weinhardt C, Van Der Aalst W, Hinz O.",
+                        year: "2023",
+                        venue: "Business & Information Systems Engineering",
                         score: 65,
-                        link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+case+study`
+                        link: `https://link.springer.com/content/pdf/10.1007/s12599-023-00795-x.pdf`
                     }
                 ];
             }

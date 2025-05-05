@@ -6,7 +6,7 @@
 
 
 .section-title {
-    color: #4a3a2a;
+    color: #0a4d7c;
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 15px;
@@ -18,7 +18,7 @@
     padding: 20px;
     border-radius: 20px;
     border: none;
-    background-color: #f2e8d8;
+    background-color: #e6f2ff;
     font-size: 16px;
     color: #666;
     resize: none;
@@ -26,11 +26,11 @@
     outline: none;
 }
 
-.search-engines {
+/* .search-engines {
     margin-bottom: 20px;
-}
+} */
 
-.checkbox-container {
+/* .checkbox-container {
     display: inline-block;
     margin-right: 20px;
 }
@@ -45,9 +45,9 @@
     cursor: pointer;
     vertical-align: middle;
     margin-right: 8px;
-}
+} */
 
-.checkbox-container input:checked + .custom-checkbox::after {
+/* .checkbox-container input:checked + .custom-checkbox::after {
     content: "";
     position: absolute;
     width: 10px;
@@ -65,12 +65,12 @@
 .checkbox-label {
     vertical-align: middle;
     cursor: pointer;
-}
+} */
 
 .search-button {
     padding: 10px 25px;
-    background-color: #e0c8a0;
-    color: #4a3a2a;
+    background-color: #3a8bbd;
+    color: white;
     border: none;
     border-radius: 30px;
     font-size: 14px;
@@ -81,7 +81,7 @@
 }
 
 .search-button:hover {
-    background-color: #d6a76b;
+    background-color: #0a4d7c;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
@@ -101,25 +101,25 @@
 }
 
 .results-table th {
-    background-color: #f2e8d8;
-    color: #4a3a2a;
+    background-color: #e6f2ff;
+    color: #0a4d7c;
     padding: 15px;
     text-align: left;
-    border-bottom: 1px solid #e0c8a0;
+    border-bottom: 1px solid #e6f2ff;
 }
 
 .results-table td {
     padding: 15px;
-    border-bottom: 1px solid #f2e8d8;
-    color: #555;
+    border-bottom: 1px solid #d8e6f2;
+    color: #555555;
 }
 
 .results-table tr:nth-child(even) {
-    background-color: #f9f6f0;
+    background-color: #f0f6f9;
 }
 
 .results-table tr:hover {
-    background-color: #f2e8d8;
+    background-color: #d8eef2;
 }
 
 .loading {
@@ -130,12 +130,12 @@
 }
 
 .paper-link {
-    color: #6b5d4d;
+    color: #4d636b;
     text-decoration: none;
     transition: color 0.2s;
 }
 
 .paper-link:hover {
-    color: #d6a76b;
+    color: #6bb4d6;
     text-decoration: underline;
 }
