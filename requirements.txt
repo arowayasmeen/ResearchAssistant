@@ -7,3 +7,4 @@ scikit-learn==1.6.1
 sentence_transformers==4.0.2
 google-genai==1.11.0
 google-generativeai==0.8.5
+logger==1.4

@@ -299,51 +299,52 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
         // Generate outline button
-    generateOutlineButton.addEventListener('click', async function() {
-        const title = titleDisplay.textContent;
-        const topic = topicName.textContent;
-        const paperType = paperTemplateSelect.value;
+// Generate outline button
+generateOutlineButton.addEventListener('click', async function() {
+    const title = titleDisplay.textContent;
+    const topic = topicName.textContent;
+    const paperType = paperTemplateSelect.value;
+    
+    if (!topic) {
+        alert('Please enter a research topic first');
+        return;
+    }
+    
+    // Clear existing outline
+    outlineArea.value = '';
+    
+    // Show loading indicator
+    const loader = showLoading(draftSection, 'Generating outline...');
+    
+    try {
+
         
-        if (!topic) {
-            alert('Please enter a research topic first');
-            return;
-        }
+        console.log('Sending request to generate outline for topic:', topic);
+        console.log('Paper type:', paperType);
         
-        // Clear existing outline
-        outlineArea.value = '';
+        // Call the correct endpoint with the correct parameters
+        const response = await fetch(`${API_BASE_URL}/generate-outline`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                research_topic: topic,
+                paper_type: paperType
+            })
+        });
         
-        // Show loading indicator
-        const loader = showLoading(draftSection, 'Generating outline...');
+        // Log the raw response for debugging
+        const rawResponse = await response.text();
+        console.log('Raw API response:', rawResponse);
         
-        try {
-            // Call the correct endpoint with the correct parameters
-            const response = await fetch(`${API_BASE_URL}/generate-outline`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    research_topic: topic,
-                    paper_type: paperType
-                })
-            });
-            
-            const data = await response.json();
-            
-            if (data.success) {
-                // The API returns an 'outline' field, not 'content'
-                outlineArea.value = data.outline;
-                updateDocumentEditor('Outline', data.outline);
-            } else {
-                // Handle API error
-                console.error('API Error:', data.error);
-                alert(`Failed to generate outline: ${data.error}`);
-            }
-        } catch (error) {
-            console.error('Error generating outline:', error);
-            alert('Error connecting to the outline generation service');
-        } finally {
-            hideLoading(loader);
+        // Parse the JSON response
+        const data = JSON.parse(rawResponse);
+        
+        if (data.success) {
+            // The API returns an 'outline' field, not 'content'
+            outlineArea.value = data.outline;
+            updateDocumentEditor('Outline', data.outline);
             
             // Save outline to local storage
             localStorage.setItem('paperOutline', outlineArea.value);
@@ -352,8 +353,23 @@ document.addEventListener('DOMContentLoaded', function() {
             outlineArea.style.display = 'block';
             outlineArea.readOnly = true;
             outlineArea.style.backgroundColor = '#e6f2ff';
+            
+            // Show draft section if it's hidden
+            if (draftSection.style.display === 'none') {
+                draftSection.style.display = 'block';
+            }
+        } else {
+            // Handle API error
+            console.error('API Error:', data.error);
+            alert(`Failed to generate outline: ${data.error}`);
         }
-    });
+    } catch (error) {
+        console.error('Error generating outline:', error);
+        alert('Error connecting to the outline generation service. Please check the console for details.');
+    } finally {
+        hideLoading(loader);
+    }
+});
 
     // Function to update the document editor with new content
     function updateDocumentEditor(sectionTitle, content) {
