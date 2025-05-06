@@ -3,138 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResearchAssistant - Menu</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        }
-        
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background-color: #fff;
-            padding: 20px;
-        }
-        
-        .logo {
-            color: #6b5d4d;
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 30px;
-        }
-        
-        .question-text {
-            font-size: 32px;
-            color: #3a3a3a;
-            font-weight: bold;
-            margin-bottom: 60px;
-            text-align: center;
-        }
-        
-        .topic-name {
-            color: #d6a76b;
-        }
-        
-        .icons-container {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-        
-        .icon-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            height: 165px; /* Fixed height to accommodate icon + button */
-        }
-        
-        .icon {
-            width: 100px;
-            height: 100px;
-            background-color: #e0c8a0;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .icon:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        
-        .icon svg {
-            width: 50px;
-            height: 50px;
-            fill: #6b5d4d;
-        }
-        
-        .action-button {
-            background-color: #000;
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 30px;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            opacity: 0;
-            visibility: hidden;
-            height: 45px; /* Fixed height to prevent layout shift */
-        }
-        
-        .action-button:hover {
-            background-color: #333;
-            transform: translateY(-2px);
-        }
-    </style>
+    <title>ResearchVoyager - Menu</title>
+    <link rel="stylesheet" href="css/menu.css">
+    
 </head>
 <body>
-    <h1 class="logo">ResearchAssistant</h1>
-    <h2 class="question-text">What do you like to do about <span class="topic-name" id="displayTopicName">Topic Name</span>?</h2>
-    
-    <div class="icons-container">
-        <div class="icon-wrapper">
-            <div class="icon" id="literature-review-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1v5h5v10H6V3h7z"/>
-                    <path d="M8 12h8v1H8zm0 2h8v1H8zm0 2h5v1H8z"/>
-                </svg>
+    <div class="main-content">
+        <h1 class="logo">ResearchVoyager</h1>
+        <h2 class="question-text">Which port would you like to sail to for <span class="topic-name" id="displayTopicName">Topic Name</span>?</h2>
+        
+        <div class="icons-container">
+            <div class="icon-wrapper">
+                <div class="icon" id="literature-review-icon">
+                    <!-- Telescope image -->
+                    <img src="images/spyglass.png" alt="spyglass" class="icon-image">
+                </div>
+                <button class="action-button" id="literature-review-button">Explore Literature</button>
             </div>
-            <button class="action-button" id="literature-review-button">Do Literature Review</button>
+            
+            <div class="icon-wrapper">
+                <div class="icon" id="generate-ideas-icon">
+                    <!-- Ship's Wheel/Helm image -->
+                    <img src="images/helm.png" alt="helm" class="icon-image">
+                </div>
+                <button class="action-button" id="generate-ideas-button">Navigate Ideas</button>
+            </div>
+            
+            <div class="icon-wrapper">
+                <div class="icon" id="prepare-draft-icon">
+                    <!-- Quill and Paper image -->
+                    <img src="images/quill.png" alt="Quillr" class="icon-image">
+                </div>
+                <button class="action-button" id="prepare-draft-button">Chart Your Paper</button>
+            </div>
         </div>
         
-        <div class="icon-wrapper">
-            <div class="icon" id="generate-ideas-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
-                    <path d="M12 6a1 1 0 0 0-1 1v5a1 1 0 0 0 .55.89l4 2a1 1 0 1 0 .9-1.78L13 11.28V7a1 1 0 0 0-1-1z"/>
-                </svg>
-            </div>
-            <button class="action-button" id="generate-ideas-button">Generate Ideas</button>
-        </div>
-        
-        <div class="icon-wrapper">
-            <div class="icon" id="prepare-draft-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V5h14v14z"/>
-                    <path d="M7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/>
-                </svg>
-            </div>
-            <button class="action-button" id="prepare-draft-button">Prepare a draft</button>
-        </div>
+    </div>
+    <div class="wave-decoration">
+        <div class="wave"></div>
     </div>
 
     <script>
@@ -147,7 +53,7 @@
             
             // Set up icon hover effects and button display
             setupIconInteractions('literature-review-icon', 'literature-review-button', 'literature-review.html');
-            setupIconInteractions('generate-ideas-icon', 'generate-ideas-button', 'idea-generation.html');
+            setupIconInteractions('generate-ideas-icon', 'generate-ideas-button', 'generate-ideas.html');
             setupIconInteractions('prepare-draft-icon', 'prepare-draft-button', 'draft-preparation.html');
             
             function setupIconInteractions(iconId, buttonId, targetPage) {

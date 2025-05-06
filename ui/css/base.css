@@ -1,0 +1,339 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+    
+body {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #e6f2ff; /* Light ocean blue background */
+}
+
+.logo {
+    color: #0a4d7c; /* Deep ocean blue */
+    font-size: 36px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.logo::after {
+    content: "⚓"; /* Anchor emoji */
+    font-size: 24px;
+    position: absolute;
+    margin-left: 10px;
+    top: 5px;
+}
+
+.slogan {
+    color: #3a8bbd; /* Medium ocean blue */
+    font-size: 16px;
+    font-style: italic;
+    margin-bottom: 30px;
+}
+
+.main-content {
+    flex: 1;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    overflow-y: auto;
+    background-image: linear-gradient(to bottom, #ffffff, #f0f8ff);
+}
+
+.topic-header {
+    margin-bottom: 30px;
+}
+
+.topic-suffix {
+    color: #0a4d7c; /* Deep ocean blue */
+    font-size: 24px;
+    font-weight: bold;
+    display: inline;
+}
+
+.topic-name {
+    color: #3a8bbd; /* Medium ocean blue */
+    font-size: 24px;
+    font-weight: bold;
+    display: inline;
+    margin-right: 10px;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 68px;
+    background-color: #0a4d7c; /* Deep ocean blue */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-icon {
+    width: 36px;
+    height: 36px;
+    background-color: #8ecae6; /* Light ocean blue */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.sidebar-icon:hover, .sidebar-icon.active-icon {
+    width: 42px;
+    height: 42px;
+    background-color: #3a8bbd; /* Medium ocean blue */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+.sidebar-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: #0a4d7c; /* Deep ocean blue */
+    transition: all 0.3s ease;
+}
+
+.sidebar-icon:hover svg, .sidebar-icon.active-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: #fff;
+}
+
+.tooltip {
+    visibility: hidden;
+    position: absolute;
+    left: 50px;
+    background-color: #0a4d7c; /* Deep ocean blue */
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    font-size: 14px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.sidebar-icon:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Buttons */
+.nautical-button {
+    padding: 10px 20px;
+    background-color: #3a8bbd; /* Medium ocean blue */
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.nautical-button:hover {
+    background-color: #0a4d7c; /* Deep ocean blue */
+    box-shadow: 0 4px 8px rgba(10, 77, 124, 0.3);
+    transform: translateY(-2px);
+}
+
+.nautical-button.secondary {
+    background-color: #8ecae6; /* Light ocean blue */
+    color: #0a4d7c; /* Deep ocean blue */
+}
+
+.nautical-button.secondary:hover {
+    background-color: #63a8cc; /* Medium-light ocean blue */
+    box-shadow: 0 4px 8px rgba(10, 77, 124, 0.2);
+}
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+/* Template Selection */
+.template-card.selected {
+    border: 2px solid #0a4d7c; /* Deep ocean blue */
+    background-color: #e6f2ff;
+    position: relative;
+}
+
+.template-card.selected::after {
+    content: "✓";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #0a4d7c;
+    font-weight: bold;
+}
+
+/* Home Page Input Styles */
+.research-input {
+    width: 100%;
+    padding: 20px;
+    border-radius: 50px;
+    border: none;
+    background-color: #e6f2ff; /* Light ocean blue */
+    font-size: 16px;
+    color: #0a4d7c; /* Deep ocean blue */
+    outline: none;
+    box-shadow: 0 2px 5px rgba(10, 77, 124, 0.1);
+}
+
+.research-input:focus {
+    box-shadow: 0 4px 10px rgba(10, 77, 124, 0.2);
+}
+
+.submit-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #3a8bbd; /* Medium ocean blue */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.submit-button.active {
+    background-color: #0a4d7c; /* Deep ocean blue */
+}
+
+.submit-button.active:hover {
+    width: 46px;
+    height: 46px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(-50%) scale(1.05);
+}
+
+.submit-button svg {
+    width: 20px;
+    height: 20px;
+    fill: white;
+}
+
+.welcome-message {
+    font-size: 36px;
+    color: #0a4d7c; /* Deep ocean blue */
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+/* Menu Page Styles */
+.action-button {
+    background-color: #0a4d7c; /* Deep ocean blue */
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 30px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+    height: 45px; /* Fixed height to prevent layout shift */
+}
+
+.action-button:hover {
+    background-color: #073f68; /* Darker ocean blue */
+    transform: translateY(-2px);
+}
+
+.icon {
+    width: 100px;
+    height: 100px;
+    background-color: #8ecae6; /* Light ocean blue */
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.icon:hover {
+    transform: scale(1.1);
+    background-color: #3a8bbd; /* Medium ocean blue */
+    box-shadow: 0 4px 12px rgba(10, 77, 124, 0.3);
+}
+
+.icon svg {
+    width: 50px;
+    height: 50px;
+    fill: #0a4d7c; /* Deep ocean blue */
+    transition: fill 0.3s ease;
+}
+
+.icon:hover svg {
+    fill: white;
+}
+
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .logo {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-size: 28px;
+    }
+    
+    .slogan {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    
+    .welcome-message {
+        font-size: 28px;
+        margin-bottom: 30px;
+    }
+}
+
+/* Wave decoration at the bottom */
+.wave-decoration {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background-color: transparent;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: 100px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity="0.25" fill="%238ecae6" class="shape-fill"></path><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity="0.5" fill="%238ecae6" class="shape-fill"></path><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="%238ecae6" class="shape-fill"></path></svg>');
+    background-repeat: repeat-x;
+    background-size: 1200px 100px;
+    animation: wave 25s linear infinite;
+}

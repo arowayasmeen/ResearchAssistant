@@ -3,285 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResearchAssistant - Literature Review</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        }
-        
-        body {
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-        
-        .sidebar {
-            width: 68px;
-            background-color: #6b5d4d;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-        }
-        
-        .main-content {
-            flex: 1;
-            background-color: #fff;
-            display: flex;
-            flex-direction: column;
-            padding: 40px;
-            overflow-y: auto;
-        }
-        
-        .logo {
-            color: #6b5d4d;
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 30px;
-        }
-        
-        .topic-header {
-            margin-bottom: 40px;
-        }
-        
-        .topic-suffix {
-            color: #4a3a2a;
-            font-size: 24px;
-            font-weight: bold;
-            display: inline;
-        }
-        
-        .topic-name {
-            color: #d6a76b;
-            font-size: 24px;
-            font-weight: bold;
-            display: inline;
-            margin-left: 10px;
-        }
-        
-        .section-title {
-            color: #4a3a2a;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        
-        .research-textarea {
-            width: 100%;
-            height: 80px;
-            padding: 20px;
-            border-radius: 20px;
-            border: none;
-            background-color: #f2e8d8;
-            font-size: 16px;
-            color: #666;
-            resize: none;
-            margin-bottom: 30px;
-            outline: none;
-        }
-        
-        .search-engines {
-            margin-bottom: 20px;
-        }
-        
-        .checkbox-container {
-            display: inline-block;
-            margin-right: 20px;
-        }
-        
-        .custom-checkbox {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            background-color: #f2e8d8;
-            border-radius: 4px;
-            position: relative;
-            cursor: pointer;
-            vertical-align: middle;
-            margin-right: 8px;
-        }
-        
-        .checkbox-container input:checked + .custom-checkbox::after {
-            content: "";
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #d6a76b;
-            border-radius: 2px;
-            top: 4px;
-            left: 4px;
-        }
-        
-        .checkbox-container input {
-            display: none;
-        }
-        
-        .checkbox-label {
-            vertical-align: middle;
-            cursor: pointer;
-        }
-        
-        .search-button {
-            padding: 10px 25px;
-            background-color: #e0c8a0;
-            color: #4a3a2a;
-            border: none;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            float: right;
-            transition: all 0.3s ease;
-        }
-        
-        .search-button:hover {
-            background-color: #d6a76b;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-        
-        .sidebar-icon {
-            width: 36px;
-            height: 36px;
-            background-color: #e0c8a0;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        
-        .sidebar-icon:hover {
-            width: 42px;
-            height: 42px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .sidebar-icon svg {
-            width: 20px;
-            height: 20px;
-            fill: #6b5d4d;
-            transition: all 0.3s ease;
-        }
-        
-        .sidebar-icon:hover svg {
-            width: 24px;
-            height: 24px;
-        }
-        
-        .tooltip {
-            visibility: hidden;
-            position: absolute;
-            left: 50px;
-            background-color: #111;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
-            white-space: nowrap;
-            font-size: 14px;
-            z-index: 1;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .sidebar-icon:hover .tooltip {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .results-table {
-            width: 100%;
-            margin-top: 30px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        
-        .results-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .results-table th {
-            background-color: #f2e8d8;
-            color: #4a3a2a;
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #e0c8a0;
-        }
-        
-        .results-table td {
-            padding: 15px;
-            border-bottom: 1px solid #f2e8d8;
-            color: #555;
-        }
-        
-        .results-table tr:nth-child(even) {
-            background-color: #f9f6f0;
-        }
-        
-        .results-table tr:hover {
-            background-color: #f2e8d8;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 20px;
-            font-style: italic;
-            color: #888;
-        }
-        
-        .paper-link {
-            color: #6b5d4d;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        
-        .paper-link:hover {
-            color: #d6a76b;
-            text-decoration: underline;
-        }
-    </style>
+    <title>ResearchVoyager - Literature Review</title>
+    <link rel="stylesheet" href="css/lit.css">
+    
 </head>
-<body>
-    <div class="sidebar">
-        <div class="sidebar-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-            </svg>
-            <span class="tooltip">Home</span>
-        </div>
-        <!-- <div class="sidebar-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1v5h5v10H6V3h7z"/>
-                <path d="M8 12h8v1H8zm0 2h8v1H8zm0 2h5v1H8z"/>
-            </svg>
-            <span class="tooltip">Do Literature Review</span>
-        </div> -->
-        <div class="sidebar-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
-                <path d="M12 6a1 1 0 0 0-1 1v5a1 1 0 0 0 .55.89l4 2a1 1 0 1 0 .9-1.78L13 11.28V7a1 1 0 0 0-1-1z"/>
-            </svg>
-            <span class="tooltip">Generate Ideas</span>
-        </div>
-        <div class="sidebar-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V5h14v14z"/>
-                <path d="M7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/>
-            </svg>
-            <span class="tooltip">Prepare a Draft</span>
-        </div>
+<div class="sidebar">
+    <div class="sidebar-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+        <span class="tooltip">Home</span>
     </div>
+    <div class="sidebar-icon">
+        <img src="images/spyglass.png" alt="spyglass" class="icon-image">
+        <span class="tooltip">Literature Review</span>
+    </div> 
+    <div class="sidebar-icon">
+        <img src="images/helm.png" alt="helm" class="icon-image">
+        <span class="tooltip">Generate Ideas</span>
+    </div>
+    <div class="sidebar-icon">
+        <img src="images/quill.png" alt="quill" class="icon-image">
+        <span class="tooltip">Prepare a Draft</span>
+    </div>
+</div>
     <div class="main-content">
-        <h1 class="logo">ResearchAssistant</h1>
+        <h1 class="logo">ResearchVoyager</h1>
+        <div class="slogan">Navigate the seas of academic knowledge</div>
 
         <div class="topic-header">
             <div class="topic-name">Topic Name</div>
@@ -414,44 +162,44 @@
             function getBackupResults(query) {
                 return [
                     { 
-                        title: `${query}: Advancements in neural networks and transfer learning approaches`,
-                        authors: "Smith J., Johnson M.",
-                        year: "2023",
-                        venue: "Journal of AI Research",
+                        title: `A survey on evaluation of ${query}`,
+                        authors: "Chang Y, Wang X, Wang J, Wu Y, Yang L, Zhu K, Chen H, Yi X, Wang C, Wang Y, Ye W",
+                        year: "2024",
+                        venue: " ACM transactions on intelligent systems and technology",
                         score: 95,
-                        link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}`
+                        link: `https://dl.acm.org/doi/pdf/10.1145/3641289`
                     },
                     { 
-                        title: `Current state and future perspectives of ${query}`,
-                        authors: "Williams A., Brown R.",
-                        year: "2022",
-                        venue: "IEEE Transactions",
-                        score: 87,
-                        link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+review`
-                    },
-                    { 
-                        title: `Meta-analysis of ${query} methodologies: A systematic review`,
-                        authors: "Garcia L., et al.",
-                        year: "2021",
+                        title: `A comprehensive overview of ${query}`,
+                        authors: "Naveed H, Khan AU, Qiu S, Saqib M, Anwar S, Usman M, Akhtar N, Barnes N, Mian A",
+                        year: "2023",
                         venue: "arXiv",
+                        score: 87,
+                        link: `https://arxiv.org/pdf/2307.06435`
+                    },
+                    { 
+                        title: `${query} in medicine`,
+                        authors: "Thirunavukarasu AJ, Ting DS, Elangovan K, Gutierrez L, Tan TF, Ting DS",
+                        year: "2023",
+                        venue: "Nature medicine",
                         score: 82,
-                        link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+meta+analysis`
+                        link: `https://www.nature.com/articles/s41591-023-02448-8.pdf`
                     },
                     { 
-                        title: `Experimental evaluation of ${query} systems`,
-                        authors: "Chen P., Wang Y.",
-                        year: "2020",
-                        venue: "Conference on Computer Vision",
+                        title: `A watermark for ${query}`,
+                        authors: "Kirchenbauer J, Geiping J, Wen Y, Katz J, Miers I, Goldstein T.",
+                        year: "2023",
+                        venue: "International Conference on Machine Learning",
                         score: 72,
-                        link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+experimental`
+                        link: `https://proceedings.mlr.press/v202/kirchenbauer23a/kirchenbauer23a.pdf`
                     },
                     { 
-                        title: `${query} in real-world applications: A case study`,
-                        authors: "Kim H., Lee S.",
-                        year: "2021",
-                        venue: "Applied Sciences",
+                        title: `Welcome to the era of chatgpt et al. the prospects of ${query}`,
+                        authors: "Teubner T, Flath CM, Weinhardt C, Van Der Aalst W, Hinz O.",
+                        year: "2023",
+                        venue: "Business & Information Systems Engineering",
                         score: 65,
-                        link: `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}+case+study`
+                        link: `https://link.springer.com/content/pdf/10.1007/s12599-023-00795-x.pdf`
                     }
                 ];
             }
@@ -548,23 +296,22 @@
                 exportOptions.style.display = 'none';
             });
             
-            // Add navigation between pages when appropriate
-            const homeIcon = document.querySelector('.sidebar-icon:first-child');
-            homeIcon.addEventListener('click', function() {
-                // Navigate to home page
-                window.location.href = 'index.html';
-            });
-            
-            const secondSidebarIcon = document.querySelector('.sidebar-icon:nth-child(2)');
-            secondSidebarIcon.addEventListener('click', function() {
-                // Navigate to ideas page
-                window.location.href = 'idea-generation.html';
-            });
-            
-            const thirdSidebarIcon = document.querySelector('.sidebar-icon:nth-child(3)');
-            thirdSidebarIcon.addEventListener('click', function() {
-                // Navigate to draft page
-                window.location.href = 'draft-preparation.html';
+            // Map tooltips (or any identifier) to page URLs
+            const pageMap = {
+                "Home": "index.html",
+                "Literature Review": "literature-review.html",
+                "Generate Ideas": "generate-ideas.html",
+                "Prepare a Draft": "draft-preparation.html"
+            };
+
+            // Select all sidebar icons
+            document.querySelectorAll('.sidebar-icon').forEach(icon => {
+                const tooltip = icon.querySelector('.tooltip');
+                if (tooltip && pageMap[tooltip.textContent]) {
+                    icon.addEventListener('click', () => {
+                        window.location.href = pageMap[tooltip.textContent];
+                    });
+                }
             });
         });
     </script>

@@ -3,277 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResearchAssistant - Draft Preparation</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        }
-        
-        body {
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-        
-        .sidebar {
-            width: 68px;
-            background-color: #6b5d4d;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-        }
-        
-        .main-content {
-            flex: 1;
-            background-color: #fff;
-            display: flex;
-            flex-direction: column;
-            padding: 40px;
-            overflow-y: auto;
-        }
-        
-        .logo {
-            color: #6b5d4d;
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 30px;
-        }
-        
-        .research-header {
-            margin-bottom: 40px;
-        }
-        
-        .topic-suffix {
-            color: #4a3a2a;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        
-        .topic-name {
-            color: #d6a76b;
-            font-size: 24px;
-            font-weight: bold;
-            display: inline;
-            margin-right: 10px;
-        }
-        
-        .section-title {
-            color: #4a3a2a;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            margin-top: 30px;
-        }
-        
-        .sidebar-icon {
-            width: 36px;
-            height: 36px;
-            background-color: #e0c8a0;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        
-        .sidebar-icon:hover {
-            width: 42px;
-            height: 42px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .sidebar-icon svg {
-            width: 20px;
-            height: 20px;
-            fill: #6b5d4d;
-            transition: all 0.3s ease;
-        }
-        
-        .sidebar-icon:hover svg {
-            width: 24px;
-            height: 24px;
-        }
-        
-        .tooltip {
-            visibility: hidden;
-            position: absolute;
-            left: 50px;
-            background-color: #111;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
-            white-space: nowrap;
-            font-size: 14px;
-            z-index: 1;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .sidebar-icon:hover .tooltip {
-            visibility: visible;
-            opacity: 1;
-        }
-        
-        .action-button {
-            padding: 10px 25px;
-            background-color: #e0c8a0;
-            color: #4a3a2a;
-            border: none;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-right: 10px;
-            margin-top: 10px;
-        }
-        
-        .action-button:hover {
-            background-color: #d6a76b;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-        
-        .input-field {
-            width: 100%;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #e0c8a0;
-            font-size: 16px;
-            margin-bottom: 20px;
-            outline: none;
-        }
-        
-        .input-field:focus {
-            border-color: #d6a76b;
-            box-shadow: 0 0 5px rgba(214, 167, 107, 0.3);
-        }
-        
-        .button-container {
-            display: flex;
-            margin-top: 10px;
-        }
-        
-        .title-buttons {
-            display: flex;
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .draft-section {
-            margin-top: 40px;
-        }
-        
-        .outline-area {
-            width: 100%;
-            min-height: 300px;
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid #e0c8a0;
-            font-size: 16px;
-            margin-bottom: 20px;
-            outline: none;
-            display: none;
-        }
-        
-        .outline-area:focus {
-            border-color: #d6a76b;
-            box-shadow: 0 0 5px rgba(214, 167, 107, 0.3);
-        }
-        
-        .paper-section {
-            margin-top: 40px;
-            display: none;
-        }
-        
-        .latex-editor {
-            width: 100%;
-            min-height: 400px;
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid #e0c8a0;
-            font-size: 14px;
-            font-family: monospace;
-            margin-bottom: 20px;
-            outline: none;
-            white-space: pre-wrap;
-            overflow-y: auto;
-            background-color: #f9f9f9;
-        }
-        
-        .latex-editor:focus {
-            border-color: #d6a76b;
-            box-shadow: 0 0 5px rgba(214, 167, 107, 0.3);
-        }
-        
-        .preview-section {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .pdf-preview {
-            width: 100%;
-            height: 600px;
-            border: 1px solid #e0c8a0;
-            border-radius: 10px;
-            background-color: #f5f5f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-        
-        .pdf-preview iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        
-        .preview-placeholder {
-            text-align: center;
-            color: #888;
-        }
-        
-        .tab-container {
-            display: flex;
-            margin-bottom: 20px;
-        }
-        
-        .tab {
-            padding: 10px 20px;
-            background-color: #f2e8d8;
-            border: 1px solid #e0c8a0;
-            border-bottom: none;
-            border-radius: 10px 10px 0 0;
-            margin-right: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            color: #6b5d4d;
-        }
-        
-        .tab.active {
-            background-color: #d6a76b;
-            color: white;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-    </style>
+    <title>ResearchVoyager - Draft Preparation</title>
+    <link rel="stylesheet" href="css/paper.css">
 </head>
 <body>
     <div class="sidebar">
@@ -284,778 +15,174 @@
             <span class="tooltip">Home</span>
         </div>
         <div class="sidebar-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1v5h5v10H6V3h7z"/>
-                <path d="M8 12h8v1H8zm0 2h8v1H8zm0 2h5v1H8z"/>
-            </svg>
-            <span class="tooltip">Do Literature Review</span>
-        </div>
+            <img src="images/spyglass.png" alt="spyglass" class="icon-image">
+            <span class="tooltip">Literature Review</span>
+        </div> 
         <div class="sidebar-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
-                <path d="M12 6a1 1 0 0 0-1 1v5a1 1 0 0 0 .55.89l4 2a1 1 0 1 0 .9-1.78L13 11.28V7a1 1 0 0 0-1-1z"/>
-            </svg>
+            <img src="images/helm.png" alt="helm" class="icon-image">
             <span class="tooltip">Generate Ideas</span>
         </div>
-        <!-- <div class="sidebar-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V5h14v14z"/>
-                <path d="M7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/>
-            </svg>
+        <div class="sidebar-icon">
+            <img src="images/quill.png" alt="quill" class="icon-image">
             <span class="tooltip">Prepare a Draft</span>
-        </div> -->
+        </div>
     </div>
-    
-    <div class="main-content">
-        <h1 class="logo">ResearchAssistant</h1>
-        
-        <div class="research-header">
-            <h2>Prepare a Research Paper Draft on <span class="topic-name">Topic Name</span></h2>
-        </div>
-        
-        <div class="paper-title-section">
-            <div class="section-title">Paper Title</div>
-            <div id="title-display"></div>
-            
-            <div class="title-buttons">
-                <button id="brainstorm-button" class="action-button">Brainstorm Paper Title Ideas?</button>
-                <button id="enter-title-button" class="action-button">Enter a Paper Title</button>
-            </div>
-            
-            <div id="title-input-container" style="display: none;">
-                <input type="text" id="title-input" class="input-field" placeholder="Enter your paper title here...">
-                <button id="save-title-button" class="action-button">Save Title</button>
-            </div>
-            
-            <div id="title-suggestions" style="display: none; margin-top: 20px;">
-                <div class="section-title">Suggested Titles</div>
-                <div id="suggestions-container">
-                    <!-- Title suggestions will be added here -->
-                </div>
-                <button id="refresh-titles-button" class="action-button" style="margin-top: 10px;">Refresh Suggestions</button>
-            </div>
-        </div>
 
-        <!-- Author information form -->
-        <div id="author-info-section" style="margin-top: 20px; border-top: 1px solid #e0c8a0; padding-top: 20px;">
-            <div class="section-title" style="font-size: 16px;">Author Information</div>
-            <div style="display: flex; gap: 20px; margin-top: 10px;">
-                <div style="flex: 1;">
-                    <label for="author-name" style="display: block; margin-bottom: 5px; font-weight: bold; color: #6b5d4d;">Author Name:</label>
-                    <input type="text" id="author-name" class="input-field" style="margin-bottom: 10px;" placeholder="Enter your name...">
-                </div>
-                <div style="flex: 1;">
-                    <label for="author-institution" style="display: block; margin-bottom: 5px; font-weight: bold; color: #6b5d4d;">Institution:</label>
-                    <input type="text" id="author-institution" class="input-field" style="margin-bottom: 10px;" placeholder="Enter your institution...">
-                </div>
-            </div>
-            <button id="update-author-info-button" class="action-button" style="margin-top: 0;">Update Author Information</button>
-        </div>
-        
-        <div class="draft-section" id="draft-section" style="display: none;">
-            <div class="section-title">Paper Outline</div>
-            <textarea id="outline-area" class="outline-area" placeholder="Your paper outline will appear here..."></textarea>
-            
-            <div class="button-container">
-                <button id="generate-outline-button" class="action-button">Generate Outline</button>
-                <button id="edit-outline-button" class="action-button">Edit Outline</button>
-                <button id="save-outline-button" class="action-button" style="display: none;">Save Outline</button>
-                <button id="generate-paper-button" class="action-button" style="background-color: #d6a76b; color: white;">Generate Full Paper</button>
+    <div class="main-container">
+        <!-- Fixed Header -->
+        <div class="fixed-header">
+            <h1 class="logo">ResearchVoyager<span class="logo-emoji"></span></h1>
+            <div class="slogan">Navigate the seas of academic knowledge</div>
+            <div class="research-header">
+                <h2>Prepare a Research Paper Draft on <span class="topic-name">Chemistry</span></h2>
             </div>
         </div>
         
-        <div class="paper-section" id="paper-section">
-            <div class="section-title">Research Paper Draft</div>
-            
-            <div class="tab-container">
-                <div class="tab active" data-tab="latex">LaTeX Source</div>
-                <div class="tab" data-tab="preview">PDF Preview</div>
-            </div>
-            
-            <div class="tab-content active" id="latex-tab">
-                <textarea id="latex-editor" class="latex-editor" placeholder="LaTeX source will appear here..."></textarea>
-                <div class="button-container">
-                    <button id="edit-latex-button" class="action-button">Edit LaTeX</button>
-                    <button id="save-latex-button" class="action-button" style="display: none;">Save Changes</button>
-                    <button id="compile-button" class="action-button">Compile to PDF</button>
-                </div>
-            </div>
-            
-            <div class="tab-content" id="preview-tab">
-                <div class="pdf-preview" id="pdf-preview">
-                    <div class="preview-placeholder" id="preview-placeholder">
-                        <p>PDF preview will appear here after compilation</p>
+        <!-- Content Area with Left and Right Panes -->
+        <div class="content-area">
+            <!-- Left Pane: Brainstorm and Author Info -->
+            <div class="left-pane">
+                <div class="paper-title-section">
+                    <div class="section-title">Paper Title</div>
+                    <div id="title-display"></div>
+
+                    <div class="title-buttons">
+                        <button id="brainstorm-button" class="nautical-button">Brainstorm Paper Title Ideas</button>
+                        <button id="enter-title-button" class="nautical-button secondary">Enter a Paper Title</button>
                     </div>
-                    <!-- PDF iframe will be injected here -->
+
+                    <div id="title-input-container" style="display: none;">
+                        <input type="text" id="title-input" class="research-input" style="margin-top: 10px; background-color: white;" placeholder="Enter your paper title here...">
+                        <button id="save-title-button" class="nautical-button">Save Title</button>
+                    </div>
+
+                    <div id="title-suggestions" style="display: none; margin-top: 20px;">
+                        <div class="section-title">Suggested Titles</div>
+                        <div id="suggestions-container"></div>
+                        <button id="refresh-titles-button" class="nautical-button secondary" style="margin-top: 10px;">Refresh Suggestions</button>
+                    </div>
                 </div>
-                <div class="button-container">
-                    <button id="download-pdf-button" class="action-button">Download PDF</button>
+
+                <!-- Author information form -->
+                <div id="author-info-section">
+                    <div class="section-title">Author Information</div>
+                    <div class="author-form">
+                        <div class="form-group">
+                            <label for="author-name" class="form-label">Author Name:</label>
+                            <input type="text" id="author-name" class="input-field" placeholder="Enter your name...">
+                        </div>
+                        <div class="form-group">
+                            <label for="author-institution" class="form-label">Institution:</label>
+                            <input type="text" id="author-institution" class="input-field" placeholder="Enter your institution...">
+                        </div>
+                    </div>
+                    <button id="update-author-info-button" class="nautical-button">Update Author Information</button>
+                </div>
+
+                <!-- Draft Section -->
+                <div class="draft-section" id="draft-section" style="display: none;">
+                    <div class="section-title">Paper Outline</div>
+                    <textarea id="outline-area" class="outline-area" placeholder="Your paper outline will appear here..."></textarea>
+
+                    <div class="button-container">
+                        <button id="generate-outline-button" class="nautical-button">Generate Outline</button>
+                        <button id="edit-outline-button" class="nautical-button secondary">Edit Outline</button>
+                        <button id="save-outline-button" class="nautical-button" style="display: none;">Save Outline</button>
+                        <button id="generate-paper-button" class="nautical-button" style="background-color: #0a4d7c; color: white;">Generate Full Paper</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Pane: Editor -->
+            <div class="right-pane">
+                <!-- LaTeX Section -->
+                <div class="latex-section" id="paper-section" style="display: none;">
+                    <div class="section-title">Research Paper Draft</div>
+                    
+                    <div class="tab-container">
+                        <div class="tab active" data-tab="doc">Doc Editor</div>
+                        <div class="tab" data-tab="latex">LaTeX Source</div>
+                        <div class="tab" data-tab="preview">PDF Preview</div>
+                    </div>
+                    
+                    <!-- Document Editor Section -->
+                    <div class="tab-content active" id="doc-tab">
+                        <div class="document-editor-container">
+                            <div id="document-editor" contenteditable="true" class="document-editor">
+                                <h2>Start Writing</h2>
+                                <p>This is your editable paper preview. You can apply outline data or LaTeX source here.</p>
+                            </div>
+                            <div class="editor-footer">
+                                <button class="secondary-button">Export</button>
+                                <button class="primary-button">Save</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LaTeX Editor Section -->
+                    <div class="tab-content" id="latex-tab">
+                        <textarea id="latex-editor" class="latex-editor" placeholder="LaTeX source will appear here..."></textarea>
+                        <div class="button-container">
+                            <button id="edit-latex-button" class="action-button">Edit LaTeX</button>
+                            <button id="save-latex-button" class="action-button" style="display: none;">Save Changes</button>
+                            <button id="compile-button" class="action-button">Compile to PDF</button>
+                        </div>
+                    </div>
+
+                    <!-- Preview Section -->
+                    <div class="tab-content" id="preview-tab">
+                        <div class="pdf-preview" id="pdf-preview">
+                            <div class="preview-placeholder" id="preview-placeholder">
+                                <p>PDF preview will appear here after compilation</p>
+                            </div>
+                        </div>
+                        <div class="button-container">
+                            <button id="download-pdf-button" class="action-button">Download PDF</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
+    <script src="js/latex.js"></script>
+    <script src="js/paper.js"></script>
     <script>
+        // Add JavaScript for collapsible sections and tab switching
         document.addEventListener('DOMContentLoaded', function() {
-            // Get elements
-            const topicName = document.querySelector('.topic-name');
-            const brainstormButton = document.getElementById('brainstorm-button');
-            const enterTitleButton = document.getElementById('enter-title-button');
-            const titleInputContainer = document.getElementById('title-input-container');
-            const titleInput = document.getElementById('title-input');
-            const saveTitleButton = document.getElementById('save-title-button');
-            const titleSuggestions = document.getElementById('title-suggestions');
-            const suggestionsContainer = document.getElementById('suggestions-container');
-            const refreshTitlesButton = document.getElementById('refresh-titles-button');
-            const titleDisplay = document.getElementById('title-display');
-            const draftSection = document.getElementById('draft-section');
-            const outlineArea = document.getElementById('outline-area');
-            const generateOutlineButton = document.getElementById('generate-outline-button');
-            const editOutlineButton = document.getElementById('edit-outline-button');
-            const saveOutlineButton = document.getElementById('save-outline-button');
-            const generatePaperButton = document.getElementById('generate-paper-button');
-            const paperSection = document.getElementById('paper-section');
-            const latexEditor = document.getElementById('latex-editor');
-            const editLatexButton = document.getElementById('edit-latex-button');
-            const saveLatexButton = document.getElementById('save-latex-button');
-            const compileButton = document.getElementById('compile-button');
-            const pdfPreview = document.getElementById('pdf-preview');
-            const previewPlaceholder = document.getElementById('preview-placeholder');
-            const downloadPdfButton = document.getElementById('download-pdf-button');
-            const tabs = document.querySelectorAll('.tab');
-            const tabContents = document.querySelectorAll('.tab-content');
-            const authorNameInput = document.getElementById('author-name');
-            const authorInstitutionInput = document.getElementById('author-institution');
-            const updateAuthorInfoButton = document.getElementById('update-author-info-button');
+            const toggleLatexSection = document.getElementById('toggle-latex-section');
+            const latexSectionContent = document.getElementById('latex-section-content');
             
-            // Set default author info
-            let authorName = localStorage.getItem('authorName') || 'Author Name';
-            let authorInstitution = localStorage.getItem('authorInstitution') || 'Institution';
-            
-            // Update author inputs with stored values
-            authorNameInput.value = authorName !== 'Author Name' ? authorName : '';
-            authorInstitutionInput.value = authorInstitution !== 'Institution' ? authorInstitution : '';
-            
-            // Update author info button click
-            updateAuthorInfoButton.addEventListener('click', function() {
-                authorName = authorNameInput.value.trim() || 'Author Name';
-                authorInstitution = authorInstitutionInput.value.trim() || 'Institution';
-                
-                localStorage.setItem('authorName', authorName);
-                localStorage.setItem('authorInstitution', authorInstitution);
-                
-                // Update LaTeX content with new author info
-                updateAuthorInfoInLatex();
-                
-                // Show notification
-                showNotification('Author information updated!');
-                
-                // Recompile to update PDF
-                compileLatex();
-            });
-            
-            // Function to update author info in LaTeX source
-            function updateAuthorInfoInLatex() {
-                const latexContent = latexEditor.value;
-                
-                // Update \author{...} in LaTeX
-                const updatedLatex = latexContent.replace(/\\author{[^}]*}/, `\\author{${authorName}}`);
-                
-                // Store the updated LaTeX
-                latexEditor.value = updatedLatex;
-                localStorage.setItem('paperLatex', updatedLatex);
-            }
-            
-            // Function to show notification
-            function showNotification(message) {
-                const notification = document.createElement('div');
-                notification.textContent = message;
-                notification.style.position = 'fixed';
-                notification.style.top = '20px';
-                notification.style.left = '50%';
-                notification.style.transform = 'translateX(-50%)';
-                notification.style.padding = '10px 20px';
-                notification.style.backgroundColor = '#4CAF50';
-                notification.style.color = 'white';
-                notification.style.borderRadius = '5px';
-                notification.style.zIndex = '1000';
-                document.body.appendChild(notification);
-                
-                setTimeout(function() {
-                    notification.style.opacity = '0';
-                    notification.style.transition = 'opacity 0.5s';
-                    setTimeout(function() {
-                        document.body.removeChild(notification);
-                    }, 500);
-                }, 3000);
-            }
-            
-            // Load topic name from local storage
-            const storedTopicName = localStorage.getItem('topicName');
-            if (storedTopicName) {
-                topicName.textContent = storedTopicName;
-            }
-            
-            // Load saved title if exists
-            const savedTitle = localStorage.getItem('paperTitle');
-            if (savedTitle) {
-                titleDisplay.textContent = savedTitle;
-                draftSection.style.display = 'block';
-            }
-            
-            // Load saved LaTeX if exists
-            const savedLatex = localStorage.getItem('paperLatex');
-            if (savedLatex) {
-                latexEditor.value = savedLatex;
-                paperSection.style.display = 'block';
-                latexEditor.readOnly = true;
-            }
-            
-            // Tab functionality
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    // Remove active class from all tabs
-                    tabs.forEach(t => t.classList.remove('active'));
-                    // Add active class to clicked tab
-                    this.classList.add('active');
-                    
-                    // Hide all tab content
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    
-                    // Show corresponding tab content
-                    const tabId = this.getAttribute('data-tab');
-                    document.getElementById(tabId + '-tab').classList.add('active');
+            if (toggleLatexSection && latexSectionContent) {
+                toggleLatexSection.addEventListener('click', function() {
+                    latexSectionContent.classList.toggle('collapsed');
+                    toggleLatexSection.classList.toggle('collapsed');
                 });
-            });
-            
-            // Brainstorm button click
-            brainstormButton.addEventListener('click', function() {
-                titleInputContainer.style.display = 'none';
-                titleSuggestions.style.display = 'block';
-                
-                // Generate mock title suggestions based on topic
-                generateTitleSuggestions(topicName.textContent);
-            });
-            
-            // Enter title button click
-            enterTitleButton.addEventListener('click', function() {
-                titleSuggestions.style.display = 'none';
-                titleInputContainer.style.display = 'block';
-            });
-            
-            // Save title button click
-            saveTitleButton.addEventListener('click', function() {
-                const title = titleInput.value.trim();
-                if (title) {
-                    titleDisplay.textContent = title;
-                    localStorage.setItem('paperTitle', title);
-                    titleInputContainer.style.display = 'none';
-                    draftSection.style.display = 'block';
-                } else {
-                    alert('Please enter a title');
-                }
-            });
-            
-            // Refresh title suggestions
-            refreshTitlesButton.addEventListener('click', function() {
-                generateTitleSuggestions(topicName.textContent);
-            });
-            
-            // Generate title suggestions
-            function generateTitleSuggestions(topic) {
-                suggestionsContainer.innerHTML = '';
-                
-                // Mock title suggestions (would be AI-generated in a real app)
-                const suggestions = [
-                    `Advances in ${topic}: A Comprehensive Review`,
-                    `The Impact of ${topic} on Modern Research`,
-                    `Exploring New Frontiers in ${topic}`,
-                    `${topic}: Challenges and Opportunities`,
-                    `A Novel Approach to ${topic} Research`
-                ];
-                
-                suggestions.forEach(suggestion => {
-                    const suggestionItem = document.createElement('div');
-                    suggestionItem.className = 'suggestion-item';
-                    suggestionItem.style.padding = '15px';
-                    suggestionItem.style.margin = '10px 0';
-                    suggestionItem.style.backgroundColor = '#f9f6f0';
-                    suggestionItem.style.borderRadius = '10px';
-                    suggestionItem.style.cursor = 'pointer';
-                    
-                    suggestionItem.textContent = suggestion;
-                    
-                    suggestionItem.addEventListener('click', function() {
-                        titleDisplay.textContent = suggestion;
-                        localStorage.setItem('paperTitle', suggestion);
-                        titleSuggestions.style.display = 'none';
-                        draftSection.style.display = 'block';
+            }
+
+            // Map tooltips (or any identifier) to page URLs
+            const pageMap = {
+                "Home": "index.html",
+                "Literature Review": "literature-review.html",
+                "Generate Ideas": "generate-ideas.html",
+                "Prepare a Draft": "draft-preparation.html"
+            };
+
+            // Select all sidebar icons
+            document.querySelectorAll('.sidebar-icon').forEach(icon => {
+                const tooltip = icon.querySelector('.tooltip');
+                if (tooltip && pageMap[tooltip.textContent]) {
+                    icon.addEventListener('click', () => {
+                        window.location.href = pageMap[tooltip.textContent];
                     });
-                    
-                    suggestionsContainer.appendChild(suggestionItem);
-                });
-            }
-            
-            // Generate outline button
-            generateOutlineButton.addEventListener('click', function() {
-                const title = titleDisplay.textContent;
-                if (!title) {
-                    alert('Please enter a paper title first');
-                    return;
                 }
-                
-                // Generate mock outline (would be AI-generated in a real app)
-                const outline = generateMockOutline(title, topicName.textContent);
-                
-                outlineArea.value = outline;
-                outlineArea.style.display = 'block';
-                localStorage.setItem('paperOutline', outline);
             });
             
-            // Edit outline button
-            editOutlineButton.addEventListener('click', function() {
-                outlineArea.readOnly = false;
-                outlineArea.style.backgroundColor = '#fff';
-                editOutlineButton.style.display = 'none';
-                saveOutlineButton.style.display = 'inline-block';
-            });
+
             
-            // Save outline button
-            saveOutlineButton.addEventListener('click', function() {
-                outlineArea.readOnly = true;
-                outlineArea.style.backgroundColor = '#f9f6f0';
-                saveOutlineButton.style.display = 'none';
-                editOutlineButton.style.display = 'inline-block';
-                
-                localStorage.setItem('paperOutline', outlineArea.value);
-            });
-            
-            // Generate full paper button
-            generatePaperButton.addEventListener('click', function() {
-                const title = titleDisplay.textContent;
-                const outline = outlineArea.value;
-                
-                if (!outline) {
-                    alert('Please generate an outline first');
-                    return;
-                }
-                
-                // Generate LaTeX document based on outline
-                const latexDoc = generateLaTeXPaper(title, outline, topicName.textContent);
-                
-                latexEditor.value = latexDoc;
-                paperSection.style.display = 'block';
-                latexEditor.readOnly = true;
-                
-                localStorage.setItem('paperLatex', latexDoc);
-                
-                // Scroll to paper section
-                paperSection.scrollIntoView({ behavior: 'smooth' });
-            });
-            
-            // Edit LaTeX button
-            editLatexButton.addEventListener('click', function() {
-                latexEditor.readOnly = false;
-                latexEditor.style.backgroundColor = '#fff';
-                editLatexButton.style.display = 'none';
-                saveLatexButton.style.display = 'inline-block';
-            });
-            
-            // Save LaTeX button
-            saveLatexButton.addEventListener('click', function() {
-                latexEditor.readOnly = true;
-                latexEditor.style.backgroundColor = '#f9f9f9';
-                saveLatexButton.style.display = 'none';
-                editLatexButton.style.display = 'inline-block';
-                
-                // Save the updated LaTeX
-                localStorage.setItem('paperLatex', latexEditor.value);
-                
-                // Automatically compile after saving
-                compileLatex();
-                
-                // Show notification
-                const notification = document.createElement('div');
-                notification.textContent = 'Changes saved and compiled!';
-                notification.style.position = 'fixed';
-                notification.style.top = '20px';
-                notification.style.left = '50%';
-                notification.style.transform = 'translateX(-50%)';
-                notification.style.padding = '10px 20px';
-                notification.style.backgroundColor = '#4CAF50';
-                notification.style.color = 'white';
-                notification.style.borderRadius = '5px';
-                notification.style.zIndex = '1000';
-                document.body.appendChild(notification);
-                
-                setTimeout(function() {
-                    notification.style.opacity = '0';
-                    notification.style.transition = 'opacity 0.5s';
-                    setTimeout(function() {
-                        document.body.removeChild(notification);
-                    }, 500);
-                }, 3000);
-            });
-            
-            // Compile to PDF button
-            compileButton.addEventListener('click', function() {
-                compileLatex();
-            });
-            
-            // Function to compile LaTeX to PDF
-            function compileLatex() {
-                // Show a loading indicator
-                previewPlaceholder.innerHTML = '<p>Compiling LaTeX to PDF...</p>';
-                previewPlaceholder.style.display = 'block';
-                
-                // Simulate compilation delay
-                setTimeout(function() {
-                    // Hide placeholder
-                    previewPlaceholder.style.display = 'none';
-                    
-                    // Create a simulated PDF viewer (in a real app, this would be an iframe to a real PDF)
-                    const pdfViewer = document.createElement('div');
-                    pdfViewer.style.width = '100%';
-                    pdfViewer.style.height = '100%';
-                    pdfViewer.style.backgroundColor = 'white';
-                    pdfViewer.style.overflow = 'auto';
-                    pdfViewer.style.padding = '40px';
-                    pdfViewer.style.boxSizing = 'border-box';
-                    
-                    // Get the current LaTeX content
-                    const latexContent = latexEditor.value;
-                    
-                    // Parse the title and topic from the LaTeX
-                    let title = titleDisplay.textContent;
-                    let topic = topicName.textContent;
-                    
-                    // Try to extract title from LaTeX
-                    const titleMatch = latexContent.match(/\\title{([^}]+)}/);
-                    if (titleMatch && titleMatch[1]) {
-                        title = titleMatch[1];
-                    }
-                    
-                    // Generate HTML representation of the LaTeX
-                    // This is a simplified parser that attempts to convert basic LaTeX to HTML
-                    let htmlContent = `
-                        <div style="font-family: serif; max-width: 800px; margin: 0 auto; line-height: 1.5;">
-                            <h1 style="text-align: center; margin-bottom: 30px;">${title}</h1>
-                            <p style="text-align: center; margin-bottom: 40px;">${authorName}<br>${authorInstitution}<br>${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                    `;
-                    
-                    // Extract abstract
-                    const abstractMatch = latexContent.match(/\\begin{abstract}([\s\S]*?)\\end{abstract}/);
-                    if (abstractMatch && abstractMatch[1]) {
-                        const abstractContent = abstractMatch[1].trim();
-                        htmlContent += `
-                            <h2 style="margin-top: 20px;">Abstract</h2>
-                            <p style="text-align: justify;">${abstractContent}</p>
-                        `;
-                    }
-                    
-                    // Process sections
-                    const sectionMatches = latexContent.matchAll(/\\section{([^}]+)}([\s\S]*?)(?=\\section{|\\subsection{|\\begin{thebibliography}|\\end{document})/g);
-                    let sectionNumber = 1;
-                    
-                    for (const match of sectionMatches) {
-                        const sectionTitle = match[1];
-                        let sectionContent = match[2].trim();
-                        
-                        htmlContent += `
-                            <h2 style="margin-top: 30px;">${sectionNumber}. ${sectionTitle}</h2>
-                        `;
-                        
-                        // Process subsections for this section
-                        const subsectionMatches = sectionContent.matchAll(/\\subsection{([^}]+)}([\s\S]*?)(?=\\subsection{|$)/g);
-                        let subsectionNumber = 1;
-                        let hasSubsections = false;
-                        
-                        // Extract content before first subsection
-                        const beforeSubsection = sectionContent.split(/\\subsection{/)[0].trim();
-                        if (beforeSubsection) {
-                            htmlContent += `<p style="text-align: justify;">${parseLatexContent(beforeSubsection)}</p>`;
-                        }
-                        
-                        for (const subMatch of subsectionMatches) {
-                            hasSubsections = true;
-                            const subsectionTitle = subMatch[1];
-                            const subsectionContent = subMatch[2].trim();
-                            
-                            htmlContent += `
-                                <h3 style="margin-top: 20px;">${sectionNumber}.${subsectionNumber} ${subsectionTitle}</h3>
-                                <p style="text-align: justify;">${parseLatexContent(subsectionContent)}</p>
-                            `;
-                            
-                            subsectionNumber++;
-                        }
-                        
-                        // If no subsections were found, add the section content directly
-                        if (!hasSubsections && !beforeSubsection) {
-                            htmlContent += `<p style="text-align: justify;">${parseLatexContent(sectionContent)}</p>`;
-                        }
-                        
-                        sectionNumber++;
-                    }
-                    
-                    // Extract bibliography
-                    const bibMatch = latexContent.match(/\\begin{thebibliography}{[^}]*}([\s\S]*?)\\end{thebibliography}/);
-                    if (bibMatch && bibMatch[1]) {
-                        const bibContent = bibMatch[1].trim();
-                        const bibItems = bibContent.matchAll(/\\bibitem{[^}]*}([\s\S]*?)(?=\\bibitem{|$)/g);
-                        
-                        htmlContent += `<h2 style="margin-top: 30px;">References</h2>`;
-                        
-                        for (const item of bibItems) {
-                            const citation = item[1].trim();
-                            htmlContent += `<p style="text-align: left; margin-left: 40px; text-indent: -40px; margin-bottom: 10px;">${parseLatexContent(citation)}</p>`;
-                        }
-                    }
-                    
-                    htmlContent += `</div>`;
-                    
-                    // Set the HTML content
-                    pdfViewer.innerHTML = htmlContent;
-                    
-                    // Clear previous content
-                    pdfPreview.innerHTML = '';
-                    pdfPreview.appendChild(pdfViewer);
-                    
-                    // Store a flag indicating compilation is complete
-                    localStorage.setItem('pdfCompiled', 'true');
-                }, 1000);
-            }
-            
-            // Helper function to parse LaTeX content
-            function parseLatexContent(content) {
-                // Convert basic LaTeX formatting to HTML
-                let parsed = content
-                    // Replace itemize environments
-                    .replace(/\\begin{itemize}([\s\S]*?)\\end{itemize}/g, function(match, items) {
-                        const listItems = items.split('\\item').filter(item => item.trim());
-                        let html = '<ul>';
-                        listItems.forEach(item => {
-                            html += `<li>${item.trim()}</li>`;
-                        });
-                        html += '</ul>';
-                        return html;
-                    })
-                    // Replace text formatting
-                    .replace(/\\textit{([^}]+)}/g, '<i>$1</i>')
-                    .replace(/\\textbf{([^}]+)}/g, '<b>$1</b>')
-                    .replace(/\\emph{([^}]+)}/g, '<em>$1</em>')
-                    // Replace math mode
-                    .replace(/\$([^$]+)\$/g, '$1');
-                
-                return parsed;
-            }
-            
-            // Download PDF button
-            downloadPdfButton.addEventListener('click', function() {
-                const isPdfCompiled = localStorage.getItem('pdfCompiled') === 'true';
-                
-                if (!isPdfCompiled) {
-                    alert('Please compile the LaTeX document first');
-                    return;
-                }
-                
-                // In a real app, this would download the actual PDF
-                alert('In a real application, this would download the compiled PDF file.');
-            });
-            
-            // Load saved outline if exists
-            const savedOutline = localStorage.getItem('paperOutline');
-            if (savedOutline) {
-                outlineArea.value = savedOutline;
-                outlineArea.style.display = 'block';
-                outlineArea.readOnly = true;
-                outlineArea.style.backgroundColor = '#f9f6f0';
-            }
-            
-            // Generate mock outline
-            function generateMockOutline(title, topic) {
-                return `# ${title}
-
-## 1. Abstract
-- Brief overview of the research
-- Key findings and implications
-- Importance in the field of ${topic}
-
-## 2. Introduction
-- Background of ${topic}
-- Problem statement and research gap
-- Research questions and objectives
-- Significance of the study
-
-## 3. Literature Review
-- Historical perspective of ${topic}
-- Current state of research
-- Theoretical frameworks
-- Research gaps identified
-
-## 4. Methodology
-- Research design
-- Data collection methods
-- Analytical approaches
-- Ethical considerations
-
-## 5. Results
-- Key findings
-- Data analysis
-- Statistical significance
-- Visual representations of data
-
-## 6. Discussion
-- Interpretation of results
-- Comparison with existing literature
-- Theoretical and practical implications
-- Limitations of the study
-
-## 7. Conclusion
-- Summary of findings
-- Contribution to the field
-- Recommendations for future research
-
-## 8. References`;
-            }
-            
-            // Generate LaTeX document
-            function generateLaTeXPaper(title, outline, topic) {
-                return `\\documentclass[12pt,a4paper]{article}
-\\usepackage{amsmath}
-\\usepackage{graphicx}
-\\usepackage{hyperref}
-\\usepackage[utf8]{inputenc}
-\\usepackage[margin=1in]{geometry}
-
-\\title{${title}}
-\\author{${authorName}}
-\\date{\\today}
-
-\\begin{document}
-
-\\maketitle
-
-\\begin{abstract}
-This paper explores recent developments in ${topic}, presenting a comprehensive analysis of current trends and future directions. Our findings indicate significant implications for researchers and practitioners in the field.
-\\end{abstract}
-
-\\section{Introduction}
-The field of ${topic} has seen remarkable growth in recent years. This paper aims to address the current research gaps and provide valuable insights into this evolving domain.
-
-\\subsection{Background}
-${topic} emerged as a critical area of study in recent decades, with various applications across multiple disciplines.
-
-\\subsection{Research Gap}
-Despite extensive research, significant gaps remain in our understanding of ${topic}, particularly regarding [specific aspect].
-
-\\subsection{Research Objectives}
-This study aims to:
-\\begin{itemize}
-    \\item Analyze current trends in ${topic}
-    \\item Identify key challenges in the field
-    \\item Propose innovative solutions to address existing limitations
-\\end{itemize}
-
-\\section{Literature Review}
-Previous studies in ${topic} have established a foundation for understanding key concepts. Authors such as Smith (2023) and Johnson (2024) have contributed significantly to theoretical frameworks in this area.
-
-\\subsection{Historical Perspective}
-The evolution of ${topic} can be traced back to pioneering work by [early researchers], who established the fundamental principles that guide modern research.
-
-\\subsection{Current State of Research}
-Recent studies have expanded our understanding through empirical investigations and theoretical advancements. Notable contributions include [specific advances].
-
-\\subsection{Theoretical Frameworks}
-Several theoretical models have been proposed to explain ${topic}, including:
-\\begin{itemize}
-    \\item [Theory 1]
-    \\item [Theory 2]
-    \\item [Theory 3]
-\\end{itemize}
-
-\\section{Methodology}
-This research employs a mixed-methods approach to investigate ${topic}.
-
-\\subsection{Research Design}
-We utilized a sequential explanatory design, combining quantitative data collection with qualitative follow-up to provide deeper insights.
-
-\\subsection{Data Collection}
-Data was gathered through:
-\\begin{itemize}
-    \\item Surveys of [population]
-    \\item In-depth interviews with [experts]
-    \\item Analysis of [secondary data sources]
-\\end{itemize}
-
-\\subsection{Analytical Approach}
-The data was analyzed using [specific statistical methods] for quantitative components and [qualitative analysis approach] for interview data.
-
-\\section{Results}
-Our analysis revealed several significant findings regarding ${topic}.
-
-\\subsection{Key Finding 1}
-[Description of first major finding]
-
-\\subsection{Key Finding 2}
-[Description of second major finding]
-
-\\subsection{Statistical Analysis}
-Statistical tests confirmed the significance of our findings ($p < 0.05$), with effect sizes ranging from [range].
-
-\\section{Discussion}
-The results of this study provide valuable insights into ${topic} and extend previous research in several important ways.
-
-\\subsection{Interpretation of Results}
-Our findings suggest that [interpretation], which challenges/supports existing theories about ${topic}.
-
-\\subsection{Theoretical and Practical Implications}
-This research has implications for both theory development and practical applications in ${topic}. Theoretically, it contributes to [specific theoretical contribution]. Practically, these findings can inform [practical applications].
-
-\\subsection{Limitations}
-Several limitations should be acknowledged, including [limitations]. These limitations provide avenues for future research.
-
-\\section{Conclusion}
-This study has expanded our understanding of ${topic} through [summary of approach]. The findings highlight the importance of [key insights] and suggest new directions for research and practice.
-
-\\subsection{Summary of Findings}
-The key findings of this research include:
-\\begin{itemize}
-    \\item [Key finding 1 summary]
-    \\item [Key finding 2 summary]
-    \\item [Key finding 3 summary]
-\\end{itemize}
-
-\\subsection{Contributions to the Field}
-This research contributes to the field of ${topic} by [specific contributions].
-
-\\subsection{Future Research Directions}
-Future studies should explore [suggested research directions] to further advance our understanding of ${topic}.
-
-\\begin{thebibliography}{99}
-\\bibitem{smith2023} Smith, J. (2023). \\textit{Title of Smith's work}. Journal of ${topic}, 45(2), 112-128.
-\\bibitem{johnson2024} Johnson, M. (2024). \\textit{Title of Johnson's work}. In Advances in ${topic} (pp. 78-96). Publisher Name.
-\\end{thebibliography}
-
-\\end{document}`;
-            }
-            
-            // Navigation between pages
-            const homeIcon = document.querySelector('.sidebar-icon:nth-child(1)');
-            homeIcon.addEventListener('click', function() {
-                window.location.href = 'index.html';
-            });
-            
-            const literatureReviewIcon = document.querySelector('.sidebar-icon:nth-child(2)');
-            literatureReviewIcon.addEventListener('click', function() {
-                window.location.href = 'literature-review.html';
-            });
-            
-            const ideaGenerationIcon = document.querySelector('.sidebar-icon:nth-child(3)');
-            ideaGenerationIcon.addEventListener('click', function() {
-                window.location.href = 'idea-generation.html';
-            });
+            // Make paper section visible by default for testing
+            document.getElementById('paper-section').style.display = 'block';
         });
-    </script>
     </script>
 </body>
 </html>

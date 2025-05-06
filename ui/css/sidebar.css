@@ -1,0 +1,136 @@
+.sidebar {
+    width: 68px;
+    background-color: #0a4d7c; /* Deep ocean blue */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-icon {
+    width: 36px;
+    height: 36px;
+    background-color: #8ecae6; /* Light ocean blue */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.sidebar-icon:hover {
+    width: 42px;
+    height: 42px;
+    background-color: #3a8bbd; /* Medium ocean blue */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+.sidebar-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: #0a4d7c; /* Deep ocean blue */
+    transition: all 0.3s ease;
+}
+
+.sidebar-icon:hover svg {
+    width: 24px;
+    height: 24px;
+    fill: #fff;
+}
+
+.tooltip {
+    visibility: hidden;
+    position: absolute;
+    left: 50px;
+    background-color: #0a4d7c; /* Deep ocean blue */
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    font-size: 14px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.sidebar-icon:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Nautical icon styles */
+.sidebar-icon.home {
+    margin-bottom: 30px;
+}
+
+.sidebar-icon.active {
+    background-color: #3a8bbd; /* Medium ocean blue */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-icon.active svg {
+    fill: #fff;
+}
+
+/* Nautical divider */
+.sidebar-divider {
+    width: 40px;
+    height: 2px;
+    background-color: #8ecae6;
+    margin: 10px 0 20px 0;
+    opacity: 0.5;
+}
+
+/* Custom sidebar icon styles */
+.sidebar-icon.literature-review,
+.sidebar-icon.generate-ideas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-image {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .content-area {
+        flex-direction: column;
+    }
+
+    .left-pane, .right-pane {
+        flex: none;
+        width: 100%;
+        min-width: 100%;
+        border-right: none;
+    }
+
+    .left-pane {
+        border-bottom: 1px solid #e6f2ff;
+    }
+}
+
+@media (max-width: 768px) {
+    .author-form {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .fixed-header {
+        padding: 10px;
+    }
+    
+    .logo {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+}

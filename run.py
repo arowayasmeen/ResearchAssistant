@@ -7,6 +7,8 @@ import sys
 import subprocess
 import time
 
+
+
 # Add the project root to the Python path to ensure imports work correctly
 sys.path.insert(0, os.path.abspath('.'))
 
@@ -52,41 +54,41 @@ def start_api_server():
     Start the API server in a new process.
     """
     print("Starting API server...")
-    # Use Python executable that's running this script
     python_exec = sys.executable
 
-    # Use subprocess to start the server in the background
     api_process = subprocess.Popen(
         [python_exec, "src/research_assistant/api/app.py"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        text=True
+        text=True,
+        encoding='utf-8'  # <-- Add this line to avoid decode issues
     )
-    
+
     # Wait a bit for the server to start
     time.sleep(2)
 
-    # Check if the server start successfully
-    for _ in range(10): # wait for up to 10 seconds
+    # Check if the server started successfully
+    for _ in range(10):
         try:
             import requests
             response = requests.get("http://localhost:5000/")
-            if response.status_code == 404: # The server is running but no root route defined
+            if response.status_code == 404:
                 print("API server started successfully on http://localhost:5000")
                 return api_process
         except:
             time.sleep(1)
 
-    # if we get here, the server did not start successfully
+    # If we get here, the server did not start successfully
     print("API server output:")
     for line in api_process.stdout.readlines():
         print(line.strip())
     print("API server errors")
     for line in api_process.stderr.readlines():
         print(line.strip())
-    
+
     print("Warning: API server might not have started properly.")
     return api_process
+
 
 
 def main():
@@ -108,6 +110,7 @@ def main():
     print("To use the UI, manually open the file:")
     print("  file://" + os.path.abspath("ui/index.html"))
     print("\nPress Ctrl+C to stop the application")
+
 
     try:
         # Wait for the API server process to finish
