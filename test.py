@@ -20,7 +20,7 @@ async def test_paper():
     )
    
     print("\n==== paper ====\n")
-    print({paper})
+    print(paper)
     print("\n===================================\n")
 
 

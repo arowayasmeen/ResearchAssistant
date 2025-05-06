@@ -1,8 +1,3 @@
-"""
-Draft preparation module for ResearchAssistant.
-Handles AI-based generation of formal research paper content.
-"""
-
 import os
 import logging
 from typing import Dict, List, Any, Optional
@@ -24,6 +19,7 @@ try:
 except Exception as e:
     logger.error(f"Failed to initialize Google Generative AI: {str(e)}")
     model = None
+
 
 
 class ResearchDraftGenerator:
@@ -143,8 +139,11 @@ class ResearchDraftGenerator:
         
         try:
             logger.info(f"Generating {section_type} section")
-            response = await self.model.generate_content_async(prompt)
-            return response.text
+            if self.model: #check if model exists
+                response = await self.model.generate_content_async(prompt)
+                return response.text
+            else:
+                raise Exception("Google Generative AI model is not initialized.")
         except Exception as e:
             logger.error(f"Error generating {section_type}: {str(e)}")
             return f"Error generating {section_type}. Please try again."
@@ -224,11 +223,16 @@ class ResearchDraftGenerator:
         """
         
         try:
-            response = await self.model.generate_content_async(outline_prompt)
-            return response.text
+            logger.info(f"Generating outline")
+            if self.model: #check if model exists
+                response = await self.model.generate_content_async(outline_prompt)
+                return response.text
+            else:
+                raise Exception("Google Generative AI model is not initialized.")
         except Exception as e:
             logger.error(f"Error generating outline: {str(e)}")
-            return
+            # Return a default error message instead of None
+            return f"Error generating outline for {research_topic}. Please check API configuration and try again."
             
 
     
@@ -252,12 +256,16 @@ class ResearchDraftGenerator:
         """
         
         try:
-            response = await self.model.generate_content_async(prompt)
-            titles = [line.strip() for line in response.text.split('\n') if line.strip()]
-            return titles[:count]  # Limit to requested count
+            logger.info(f"Generating title suggestions")
+            if self.model: #check if model exists
+                response = await self.model.generate_content_async(prompt)
+                titles = [line.strip() for line in response.text.split('\n') if line.strip()]
+                return titles[:count]  # Limit to requested count
+            else:
+                raise Exception("Google Generative AI model is not initialized.")
         except Exception as e:
             logger.error(f"Error generating title suggestions: {str(e)}")
-            
+            return [f"Error generating titles for {research_topic}"]
     
     async def refine_section(self,
                       section_text: str,
@@ -287,8 +295,12 @@ class ResearchDraftGenerator:
         """
         
         try:
-            response = await self.model.generate_content_async(refine_prompt)
-            return response.text
+            logger.info(f"Refining section")
+            if self.model: #check if model exists
+                response = await self.model.generate_content_async(refine_prompt)
+                return response.text
+            else:
+                 raise Exception("Google Generative AI model is not initialized.")
         except Exception as e:
             logger.error(f"Error refining section: {str(e)}")
             return section_text  # Return original if refinement fails
