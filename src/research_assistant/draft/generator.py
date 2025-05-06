@@ -82,7 +82,7 @@ class ResearchDraftGenerator:
             genai.configure(api_key=api_key)
             
             # Initialize the model
-            self.model = genai.GenerativeModel('gemini-1.5-pro')
+            self.model = genai.GenerativeModel('gemini-2.0-flash')
             logger.info("Successfully initialized Google Generative AI model")
         except Exception as e:
             logger.error(f"Failed to initialize Google Generative AI: {str(e)}")

@@ -8,6 +8,7 @@ from functools import wraps
 import google.generativeai as genai
 from dotenv import load_dotenv
 import logging
+import time
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -52,15 +53,12 @@ def create_generator():
             logger.error("No Google API key found in environment variables")
             return None
             
-        # Create a client configuration that's specific to this request
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-2.0-flash')
-        logger.info("Successfully initialized Google Generative AI for this request")
-        
-        # Return a new generator instance with this model
+        # We don't need to create a model here - the ResearchDraftGenerator does that internally
+        # Just return a new generator instance
+        logger.info("Creating new ResearchDraftGenerator instance")
         return ResearchDraftGenerator()
     except Exception as e:
-        logger.error(f"Failed to initialize Google Generative AI: {str(e)}")
+        logger.error(f"Failed to initialize generator: {str(e)}")
         return None
 
 # Create Blueprint for draft preparation routes
@@ -157,72 +155,26 @@ async def generate_outline(generator=None):
         }), 500
     
     
-@draft_bp.route('/generate-section', methods=['POST'])
-@async_route
-async def generate_section(generator=None):
-    """Generate a specific section of a research paper."""
-    try:
-        if not generator:
-            return jsonify({
-                'success': False,
-                'error': 'AI model initialization failed'
-            }), 500
-            
-        data = request.json
-        
-        required_fields = ['research_topic', 'section_type']
-        for field in required_fields:
-            if field not in data:
-                return jsonify({
-                    'success': False,
-                    'error': f'Missing required field: {field}'
-                }), 400
-        
-        research_topic = data['research_topic']
-        section_type = data['section_type']
-        literature_summary = data.get('literature_summary', {})
-        research_gaps = data.get('research_gaps', [])
-        
-        # Generate section content with request-specific generator
-        section_content = await generator.generate_section(
-            research_topic=research_topic,
-            section_type=section_type,
-            literature_summary=literature_summary,
-            research_gaps=research_gaps
-        )
-        
-        return jsonify({
-            'success': True,
-            'section_type': section_type,
-            'content': section_content
-        })
-    
-    except Exception as e:
-        import traceback
-        logger.error(f"Section generation error: {e}")
-        logger.error(traceback.format_exc())
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
-
 @draft_bp.route('/generate-paper', methods=['POST'])
 @async_route
 async def generate_paper(generator=None):
     """Generate a complete research paper."""
     try:
         if not generator:
+            logger.error("Generator initialization failed for paper generation")
             return jsonify({
                 'success': False,
                 'error': 'AI model initialization failed'
             }), 500
             
         data = request.json
+        logger.info(f"Received paper generation request with data: {data}")
         
         # Validate required fields
         required_fields = ['research_topic', 'paper_type']
         for field in required_fields:
             if field not in data:
+                logger.error(f"Missing required field: {field}")
                 return jsonify({
                     'success': False,
                     'error': f'Missing required field: {field}'
@@ -235,19 +187,63 @@ async def generate_paper(generator=None):
         research_gaps = data.get('research_gaps', [])
         
         # Get paper structure based on type
+        logger.info(f"Getting paper structure for type: {paper_type}")
         structure = ResearchTemplates.get_paper_structure(paper_type)
         
-        # Generate each section with request-specific generator
+        # Generate each section with request-specific generator, with retry mechanism
         paper_sections = {}
+        logger.info(f"Starting section generation for {len(structure)} sections")
+        
         for section in structure:
-            paper_sections[section] = await generator.generate_section(
-                research_topic=research_topic,
-                literature_summary=literature_summary,
-                research_gaps=research_gaps,
-                section_type=section
-            )
+            for attempt in range(3):  # Try up to 3 times per section
+                try:
+                    logger.info(f"Generating section: {section} (attempt {attempt+1})")
+                    section_content = await generator.generate_section(
+                        research_topic=research_topic,
+                        literature_summary=literature_summary,
+                        research_gaps=research_gaps,
+                        section_type=section
+                    )
+                    
+                    # Verify we got meaningful content
+                    if len(section_content) < 10:  # Very short content may indicate an error
+                        logger.warning(f"Section {section} generated suspiciously short content ({len(section_content)} chars)")
+                        if attempt < 2:  # If not the last attempt
+                            logger.info(f"Retrying section {section} generation...")
+                            time.sleep(2)  # Add a small delay before retry
+                            continue
+                    
+                    paper_sections[section] = section_content
+                    logger.info(f"Successfully generated section: {section} (length: {len(section_content)})")
+                    
+                    # Add a small delay between sections to avoid rate limiting
+                    if section != structure[-1]:  # Not the last section
+                        time.sleep(1)
+                    
+                    break  # Success, exit retry loop
+                    
+                except Exception as section_error:
+                    logger.error(f"Error generating section {section} (attempt {attempt+1}): {str(section_error)}")
+                    if attempt < 2:  # If not the last attempt
+                        time.sleep(3)  # Adding delay between retries
+                    else:
+                        # Last attempt failed
+                        paper_sections[section] = f"Error generating this section after multiple attempts: {str(section_error)}"
+        
+        # Check if we have any successful sections
+        successful_sections = [s for s, content in paper_sections.items() 
+                              if not content.startswith("Error generating")]
+        
+        if not successful_sections:
+            logger.error("Failed to generate any paper sections successfully")
+            return jsonify({
+                'success': False,
+                'error': 'Failed to generate any paper sections',
+                'sections': paper_sections  # Return the error messages for debugging
+            }), 500
         
         # Return all generated sections
+        logger.info(f"Paper generation complete with {len(successful_sections)} successful sections")
         return jsonify({
             'success': True,
             'paper_type': paper_type,
@@ -256,7 +252,74 @@ async def generate_paper(generator=None):
     
     except Exception as e:
         import traceback
+        error_trace = traceback.format_exc()
         logger.error(f"Paper generation error: {e}")
+        logger.error(error_trace)
+        return jsonify({
+            'success': False,
+            'error': f"Failed to generate paper: {str(e)}",
+            'traceback': error_trace
+        }), 500
+
+@draft_bp.route('/generate-section', methods=['POST'])
+@async_route
+async def generate_section(generator=None):
+    """Generate a single section of a paper - useful for progressive loading."""
+    try:
+        if not generator:
+            return jsonify({
+                'success': False,
+                'error': 'AI model initialization failed'
+            }), 500
+            
+        data = request.json
+        
+        # Validate required fields
+        required_fields = ['research_topic', 'section_type']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({
+                    'success': False,
+                    'error': f'Missing required field: {field}'
+                }), 400
+        
+        # Extract data
+        research_topic = data['research_topic']
+        section_type = data['section_type']
+        literature_summary = data.get('literature_summary', {})
+        research_gaps = data.get('research_gaps', [])
+        
+        # Generate single section with retry mechanism
+        for attempt in range(3):
+            try:
+                logger.info(f"Generating section: {section_type} (attempt {attempt+1})")
+                section_content = await generator.generate_section(
+                    research_topic=research_topic,
+                    literature_summary=literature_summary,
+                    research_gaps=research_gaps,
+                    section_type=section_type
+                )
+                
+                return jsonify({
+                    'success': True,
+                    'section_type': section_type,
+                    'content': section_content
+                })
+                
+            except Exception as e:
+                logger.error(f"Error generating section {section_type} (attempt {attempt+1}): {str(e)}")
+                if attempt < 2:  # If not the last attempt
+                    time.sleep(3)  # Adding delay between retries
+        
+        # If we get here, all attempts failed
+        return jsonify({
+            'success': False,
+            'error': f"Failed to generate section {section_type} after multiple attempts"
+        }), 500
+            
+    except Exception as e:
+        import traceback
+        logger.error(f"Section generation error: {e}")
         logger.error(traceback.format_exc())
         return jsonify({
             'success': False,
